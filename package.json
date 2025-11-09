@@ -1,0 +1,24 @@
+{
+  "name": "terminator-desktop",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/terminator-ssh/terminator-desktop#readme",
+  "bugs": {
+    "url": "https://github.com/terminator-ssh/terminator-desktop/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/terminator-ssh/terminator-desktop.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "main.js",
+  "scripts": {
+    "test": "test",
+    "start": "electron ."
+  },
+  "dependencies": {
+    "electron": "^39.1.1"
+  }
+}

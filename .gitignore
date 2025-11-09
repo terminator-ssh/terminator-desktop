@@ -1,0 +1,55 @@
+#  ! Файл сгенерирован ИИ ! #
+
+# Node.js
+# Игнорировать папку с установленными зависимостями
+node_modules/
+
+# Игнорировать историю команд npm
+.npm-history
+.node_repl_history
+
+# Игнорировать кэш и артефакты сборки npm
+npm-debug.log*
+.npmrc
+*.tgz
+
+# Electron-specific
+# Игнорировать временные файлы и кэш Electron Fiddle или других инструментов разработки
+.electron-fiddle/
+
+# Build artifacts
+# Игнорировать папки, генерируемые инструментами сборки (например, electron-builder, electron-packager, electron-forge)
+dist/
+out/
+release/
+build/
+package/
+packaged/
+installer/
+
+# Отладочные логи
+logs/
+*.log
+
+# Environment variables
+# Игнорировать файлы с переменными окружения (если используются)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE and OS specific files
+# Игнорировать файлы конфигурации редакторов (например, VS Code)
+.vscode/
+
+# Игнорировать системные файлы macOS
+.DS_Store
+# Игнорировать системные файлы Windows
+Thumbs.db
+# Игнорировать системные файлы Linux
+ehthumbs.db
+*.stackdump
+
+# Coverage directory (если вы используете тестирование с покрытием кода)
+coverage/
