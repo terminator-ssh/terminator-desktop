@@ -6,14 +6,18 @@
     <link rel="stylesheet" href="src/styles/style.css">
 </head>
 <body>
-    <h1>Hello World!</h1>
+    <h1>Девтулы включаются на CTRL+SHIFT+I</h1>
     <p>Мы используем Node.js <span id="node-version"></span>, Chromium <span id="chrome-version"></span>, и Electron <span id="electron-version"></span>.</p>
     
     <a href="src/pages/tools_termius.html">Tools</a>
     <a href="src/pages/signup.html">Сайн ап</a>
     <a href="src/pages/login.html">Лог ин</a>
-    
-    
-    <script src="script.js"></script>
+
+
+    <!-- Вот это наш терминал. Перемести куда нужно. -->
+    <div id="terminal-container"></div>
+
+    <script src="renderer.js"></script>
+    <!-- Товарищ! Удостоверься, что путь к скрипту верен! -->
 </body>
 </html>
