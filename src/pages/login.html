@@ -3,85 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Вход - SSH Client</title>
     <link rel="stylesheet" href="../styles/style.css">
+    <title>Регистрация</title>
 </head>
-<body class="auth-page">
-    <div class="auth-container">
-        <div class="auth-header">
-            <div class="logo">
-                <div class="logo-icon">⚡</div>
-                <h1>Terminator SSH Client</h1>
-            </div>
-            <p class="auth-subtitle">Войдите в свою учетную запись</p>
-        </div>
-
-        <form class="auth-form" id="loginForm">
-            <div class="form-group">
-                <label for="loginEmail">Электронная почта</label>
-                <input type="email" id="loginEmail" name="email" required placeholder="your@email.com">
-            </div>
-            
-            <div class="form-group">
-                <label for="loginPassword">Пароль</label>
-                <input type="password" id="loginPassword" name="password" required placeholder="Введите ваш пароль">
-            </div>
-
-            <!-- <div class="form-options">
-                <label class="checkbox-label">
-                    <input type="checkbox" id="rememberMe">
-                    <span class="checkmark"></span>
-                    Запомнить меня
-                </label>
-                <a href="#" class="forgot-password">Забыли пароль?</a>
-            </div> -->
-
-            <button type="submit" class="btn-auth-primary">
-                Войти
-            </button>
-        </form>
-
-        <!-- <div class="auth-divider">
-            <span>или войдите с помощью</span>
-        </div>
-
-        <div class="social-auth">
-            <button class="btn-social" id="googleLogin">
-                <span class="social-icon">🔍</span>
-                Google
-            </button>
-            <button class="btn-social" id="githubLogin">
-                <span class="social-icon">🐙</span>
-                GitHub
-            </button>
-        </div> -->
-
-        <div class="auth-footer">
-            <p>Нет аккаунта? <a href="signup.html" class="auth-link">Зарегистрируйтесь</a></p>
-        </div>
-    </div>
-
-    <script>
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            // Здесь будет вызов Electron API для входа
-            console.log('Вход с:', { email, password });
-            
-            // Временная заглушка
-            window.location.href = 'tools_termius.html'
-        });
-        
-        // document.getElementById('googleLogin').addEventListener('click', function() {
-        //     console.log('Google OAuth login');
-        // });
-        
-        // document.getElementById('githubLogin').addEventListener('click', function() {
-        //     console.log('GitHub OAuth login');
-        // });
-    </script>
+<body>
+    <form action="" method="post">
+        <label for="">Логин</label>
+        <input type="text" name="login" id="login">
+        <label for="">Пароль</label>
+        <input type="password" name="password" id="password">
+        <input type="submit" value="Регистрация">
+        <a href="signup.html">Страница входа</a>
+    </form>
 </body>
 </html>

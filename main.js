@@ -3,8 +3,8 @@ const { app, BrowserWindow } = require('electron');
 function createWindow() {
   // Создаем окно браузера
   const win = new BrowserWindow({
-    width: 900,
-    height: 800,
+    width: 800,
+    height: 600,
     webPreferences: {
       nodeIntegration: true // Позволяет использовать Node.js в рендерере (хотя лучше использовать preload скрипт)
     }
