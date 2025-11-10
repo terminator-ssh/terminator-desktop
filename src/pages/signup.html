@@ -3,109 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Регистрация - SSH Client</title>
     <link rel="stylesheet" href="../styles/style.css">
+    <title>Регистрация</title>
 </head>
-<body class="auth-page">
-    <div class="auth-container">
-        <div class="auth-header">
-            <div class="logo">
-                <div class="logo-icon">⚡</div>
-                <h1>Terminator SSH Client</h1>
-            </div>
-            <p class="auth-subtitle">Создайте новую учетную запись</p>
-        </div>
+<body>
+    <form action="" method="post">
+        <label for="">Почта</label>
+        <input type="email" name="email" id="email">
+        <label for="">Пароль</label>
+        <input type="password" name="password" id="password">
+        <label for="">ну нужна наверна</label>
+        <input type="checkbox" name="" id="">
+        <input type="submit" value="Регистрация">
+        <a href="login.html">Уже есть учетная запись?</a>
+    </form>
+    
 
-        <form class="auth-form" id="registerForm">
-            <div class="form-group">
-                <label for="username">Имя пользователя</label>
-                <input type="text" id="username" name="username" required placeholder="Введите имя пользователя">
-            </div>
-            
-            <div class="form-group">
-                <label for="email">Электронная почта</label>
-                <input type="email" id="email" name="email" required placeholder="your@email.com">
-            </div>
-            
-            <div class="form-group">
-                <label for="password">Пароль</label>
-                <input type="password" id="password" name="password" required placeholder="Создайте надежный пароль">
-                <div class="password-hint">Минимум 8 символов, включая цифры и буквы</div>
-            </div>
-            
-            <div class="form-group">
-                <label for="confirmPassword">Подтвердите пароль</label>
-                <input type="password" id="confirmPassword" name="confirmPassword" required placeholder="Повторите ваш пароль">
-            </div>
-
-            <!-- <label class="checkbox-label terms-checkbox">
-                <input type="checkbox" id="agreeTerms" required>
-                <span class="checkmark"></span>
-                Я соглашаюсь с <a href="#" class="inline-link">Условиями обслуживания</a> и <a href="#" class="inline-link">Политикой конфиденциальности</a>
-            </label> -->
-
-            <button type="submit" class="btn-auth-primary">
-                Создать аккаунт
-            </button>
-        </form>
-
-        <!-- <div class="auth-divider">
-            <span>или зарегистрируйтесь с помощью</span>
-        </div>
-
-        <div class="social-auth">
-            <button class="btn-social" id="googleSignUp">
-                <span class="social-icon">🔍</span>
-                Google
-            </button>
-            <button class="btn-social" id="githubSignUp">
-                <span class="social-icon">🐙</span>
-                GitHub
-            </button>
-        </div> -->
-
-        <div class="auth-footer">
-            <p>Уже есть аккаунт? <a href="login.html" class="auth-link">Войдите</a></p>
-        </div>
-    </div>
-
-    <script>
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
-            const username = document.getElementById('username').value;
-            const email = document.getElementById('email').value;
-            
-            if (password !== confirmPassword) {
-                alert('Пароли не совпадают!');
-                return;
-            }
-            
-            if (password.length < 8) {
-                alert('Пароль должен содержать минимум 8 символов!');
-                return;
-            }
-            
-            // if (!document.getElementById('agreeTerms').checked) {
-            //     alert('Необходимо принять условия соглашения!');
-            //     return;
-            // }
-            
-            // Здесь будет вызов Electron API для регистрации
-            console.log('Регистрация с:', { username, email, password });
-            
-            window.location.href = 'tools_termius.html'
-        });
-        
-        // document.getElementById('googleSignUp').addEventListener('click', function() {
-        //     console.log('Регистрация через Google');
-        // });
-        
-        // document.getElementById('githubSignUp').addEventListener('click', function() {
-        //     console.log('Регистрация через GitHub');
-        // });
-    </script>
+    
 </body>
 </html>
