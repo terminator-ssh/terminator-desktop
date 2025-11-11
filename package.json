@@ -1,24 +1,47 @@
 {
   "name": "terminator-desktop",
-  "version": "1.0.0",
-  "description": "",
-  "homepage": "https://github.com/terminator-ssh/terminator-desktop#readme",
-  "bugs": {
-    "url": "https://github.com/terminator-ssh/terminator-desktop/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/terminator-ssh/terminator-desktop.git"
-  },
-  "license": "ISC",
-  "author": "",
-  "type": "commonjs",
-  "main": "main.js",
-  "scripts": {
-    "test": "test",
-    "start": "electron ."
-  },
+  "version": "0.1.0",
+  "main": "main/main.js", 
+  "private": true,
   "dependencies": {
-    "electron": "^39.1.1"
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^13.5.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "electron": "electron .",
+    "electron-dev": "ELECTRON_IS_DEV=true electron .",
+    "build-electron": "npm run build && electron-builder"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "electron": "^39.1.2",
+    "electron-builder": "^26.0.12"
   }
 }

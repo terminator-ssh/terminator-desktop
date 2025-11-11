@@ -1,55 +1,23 @@
-#  ! Файл сгенерирован ИИ ! #
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
-# Node.js
-# Игнорировать папку с установленными зависимостями
-node_modules/
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
 
-# Игнорировать историю команд npm
-.npm-history
-.node_repl_history
+# testing
+/coverage
 
-# Игнорировать кэш и артефакты сборки npm
-npm-debug.log*
-.npmrc
-*.tgz
+# production
+/build
 
-# Electron-specific
-# Игнорировать временные файлы и кэш Electron Fiddle или других инструментов разработки
-.electron-fiddle/
-
-# Build artifacts
-# Игнорировать папки, генерируемые инструментами сборки (например, electron-builder, electron-packager, electron-forge)
-dist/
-out/
-release/
-build/
-package/
-packaged/
-installer/
-
-# Отладочные логи
-logs/
-*.log
-
-# Environment variables
-# Игнорировать файлы с переменными окружения (если используются)
-.env
+# misc
+.DS_Store
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
 
-# IDE and OS specific files
-# Игнорировать файлы конфигурации редакторов (например, VS Code)
-.vscode/
-
-# Игнорировать системные файлы macOS
-.DS_Store
-# Игнорировать системные файлы Windows
-Thumbs.db
-# Игнорировать системные файлы Linux
-ehthumbs.db
-*.stackdump
-
-# Coverage directory (если вы используете тестирование с покрытием кода)
-coverage/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
