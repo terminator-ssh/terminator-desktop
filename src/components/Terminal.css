@@ -1,0 +1,14 @@
+.terminal-container {
+  padding: 20px;
+  height: 100vh;
+  background-color: #1e1e1e;
+}
+
+.terminal {
+  height: 100%;
+  width: 100%;
+}
+
+.xterm {
+  padding: 10px;
+}

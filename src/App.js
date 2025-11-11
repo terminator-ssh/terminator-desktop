@@ -1,4 +1,5 @@
 import logo from './logo.svg';
+import XTerminal from './components/Terminal';
 import './App.css';
 
 function App() {
@@ -18,6 +19,12 @@ function App() {
           Learn React
         </a>
       </header>
+
+      <main>
+        <XTerminal />
+      </main>
+
+      
     </div>
   );
 }
