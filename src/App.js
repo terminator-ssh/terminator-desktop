@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+import logo from './logo.webp';
 import XTerminal from './components/Terminal';
 import './App.css';
 
@@ -6,6 +6,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        {/* Шалость удалась) */}
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code>src/App.js</code> and save to reload.
@@ -24,7 +25,6 @@ function App() {
        <div>
         <XTerminal />
        </div>
-        
       </main>
 
       

@@ -10,7 +10,6 @@ function createWindow() {
     width: 1200,
     height: 800,
     webPreferences: {
-      // enableRemoteModule: false, // Что ты?
       // Указываем путь к скрипту preload, который будет иметь доступ к IPC и DOM
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
@@ -69,11 +68,10 @@ function createWindow() {
 
 
   if (isDev) {
-    mainWindow.loadURL('http://localhost:3000');
     mainWindow.webContents.openDevTools();
-  } else {
-    mainWindow.loadFile(path.join(__dirname, '../build/index.html'));
   }
+  // else { mainWindow.loadFile(path.join(__dirname, '../build/index.html'));  }
+  mainWindow.loadURL('http://localhost:3000');
 }
 
 app.whenReady().then(createWindow);
