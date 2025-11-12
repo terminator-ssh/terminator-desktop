@@ -21,7 +21,10 @@ function App() {
       </header>
 
       <main>
+       <div>
         <XTerminal />
+       </div>
+        
       </main>
 
       
