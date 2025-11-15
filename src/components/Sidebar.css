@@ -1,0 +1,42 @@
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 200px; 
+    background-color: #1f2b47; 
+    color: white;
+    padding-top: 20px;
+    box-sizing: border-box;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    margin-bottom: 10px;
+}
+
+.sidebar button {
+    width: 100%;
+    padding: 10px 15px;
+    background-color: transparent;
+    border: none;
+    color: white;
+    text-align: left;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.sidebar button:hover {
+    background-color: #5484a3;
+}
+
+.sidebar button.active {
+    background-color: #5484a3;
+    color: #282c34;
+    font-weight: bold;
+}

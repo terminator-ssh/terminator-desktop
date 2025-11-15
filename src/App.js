@@ -1,33 +1,28 @@
 import logo from './logo.webp';
 import XTerminal from './components/Terminal';
+import Sidebar from './components/Sidebar';
+import HostsPanel from './components/hostsPanel/HostsPanel'
 import './App.css';
+import { useState } from 'react';
 
 function App() {
+  const [activeView, setActiveView] = useState('hosts')
+
   return (
     <div className="App">
-      <header className="App-header">
-        {/* Шалость удалась) */}
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <header>Terminator SSH!</header>
+      <div className="app-layout">
+        <Sidebar activeView={activeView} onSelectView={setActiveView} />
 
-      <main>
-       <div>
-        <XTerminal />
-       </div>
-      </main>
-
-      
+        <main className="main-content">
+          {activeView === 'hosts' && <HostsPanel />}
+          {activeView === 'terminal' && <div>Terminal Panel?</div>}
+          {activeView === 'keychain' && <div>Тут пока ничего нет... </div>}
+        </main>
+      </div>
+      <footer>
+        <XTerminal/>
+      </footer>
     </div>
   );
 }
