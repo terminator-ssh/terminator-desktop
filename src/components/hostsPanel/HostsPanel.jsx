@@ -1,6 +1,8 @@
 //  Это будет основной компонент для панели подключений. Он будет содержать логику и рендеринг формы для создания новых подключений и списка существующих.
 import React from 'react';
 import ConnectionItem from './ConnectionItem';
+// import ConnectionForm from './ConnectionForm';
+import ConnectionForm2 from './ConnectionForm2';
 // import './css/HostsPanel.css';
 
 
@@ -40,6 +42,7 @@ const HostsPanel = () => {
                     <span>Port</span>
                     <span>User</span>
                     <span>Actions</span>
+                    <ConnectionForm2 />
                 </div>
                 
                 <div className='hosts-body'>

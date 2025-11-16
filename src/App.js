@@ -16,12 +16,13 @@ function App() {
 
         <main className="main-content">
           {activeView === 'hosts' && <HostsPanel />}
-          {activeView === 'terminal' && <div>Terminal Panel?</div>}
+          {activeView === 'terminal' && <XTerminal/>}
           {activeView === 'keychain' && <div>Тут пока ничего нет... </div>}
         </main>
       </div>
       <footer>
-        <XTerminal/>
+        {/*  Line 1:8:  'logo' is defined but never used  no-unused-vars */}
+        <img src={logo} className="App-logo" alt="logo" />
       </footer>
     </div>
   );

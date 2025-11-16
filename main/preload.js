@@ -12,6 +12,11 @@ contextBridge.exposeInMainWorld('electronAPI', {
   writeToPty: (data) => ipcRenderer.invoke('write-to-pty', data),
   resizePty: (cols, rows) => ipcRenderer.invoke('resize-pty', { cols, rows }),
   onPtyData: (callback) => ipcRenderer.on('pty-data', callback),
-  killPty: () => ipcRenderer.invoke('kill-pty')
+  killPty: () => ipcRenderer.invoke('kill-pty'),
+  
+  // Апишечка для стореджа на клиенте
+  // getStore: (key) => ipcRenderer.invoke('get-store', key),
+  // setStore: (key, value) => ipcRenderer.invoke('set-store', key, value),
+  // сторедж идет нахер
 });
 

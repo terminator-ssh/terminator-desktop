@@ -1,0 +1,87 @@
+
+import React, { useState } from 'react';
+import XTerminal from '../Terminal';
+
+const SSHConnectionForm = () => {
+  const [formData, setFormData] = useState({
+    host: '',
+    port: '22',
+    username: '',
+    password: '',
+    // privateKey: ''
+  });
+
+  const [isTerminalVisible, setTerminalVisible] = useState(false) 
+  const removeTerminal = (e) => {setTerminalVisible(false)}
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSave = (e) => {
+    e.preventDefault();
+    // removeTerminal();
+    console.log('SSH Connection Data:', formData);
+    // Здесь будет логика установки SSH соединения
+    setTerminalVisible(false)
+  };
+
+    const handleConnect = (e) => {
+    e.preventDefault();
+    setTerminalVisible(false)
+    console.log('SSH Connection Data:', formData);
+    // Здесь будет логика установки SSH соединения
+    setTerminalVisible(true)
+  };
+
+  return (
+    <div>
+      <h2>SSH Подключение</h2>
+      <form>
+        <div>
+          <label>Хост:</label>
+          <input type="text" name="host" value={formData.host} onChange={handleChange} placeholder="example.com" required/>
+        </div>
+
+        <div>
+          <label>Порт:</label>
+          <input type="number" name="port" value={formData.port} onChange={handleChange} placeholder="22"/>
+        </div>
+
+        <div>
+          <label>Имя пользователя:</label>
+          <input type="text" name="username" value={formData.username} onChange={handleChange} placeholder="user" required/>
+        </div>
+
+        <div>
+          <label>Пароль:</label>
+          <input type="password" name="password" value={formData.password} onChange={handleChange} placeholder="••••••••"/>
+        </div>
+
+        {/* <div>
+          <label>Приватный ключ:</label>
+          <textarea name="privateKey" value={formData.privateKey} onChange={handleChange} placeholder="-----BEGIN PRIVATE KEY-----..." rows="4"/>
+        </div> */}
+
+        <button type="submit" onClick={handleSave}>Сохранить</button>
+        <button type="submit" onClick={handleConnect}>Подключиться</button>
+      </form>
+            
+        {/* Условный рендеринг: 
+          Если componentProps не null, отображаем NewComponent и передаем ему пропсы 
+      */}
+      {isTerminalVisible && (
+        <XTerminal
+          host={formData.host}
+          port={formData.port}
+          username={formData.username}
+          />
+      )}
+    </div>
+  );
+};
+
+export default SSHConnectionForm;

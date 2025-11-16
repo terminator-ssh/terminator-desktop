@@ -4,12 +4,23 @@ import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import "@xterm/xterm/css/xterm.css";
 import "./Terminal.css"
+import { wait } from "@testing-library/user-event/dist/utils";
 
-const XTerminal = () => {
+
+function XTerminal(props){
   const terminalRef = useRef(null);
   const terminal = useRef(null);
   const fitAddon = useRef(null);
   const [isInitialized, setIsInitialized] = useState(false);
+  
+  let command = 'ssh ' +  props.username + '@' + props.host + ' \r\n';
+
+  //   if (props){
+  //   host= props.host;
+  //   port= props.port;
+  //   username= props.username
+  //   password= props.password
+  // }
 
   useEffect(() => {
     // Инициализация терминала
@@ -55,7 +66,7 @@ const XTerminal = () => {
           terminal.current.cols,
           terminal.current.rows
         );
-
+        
         // Оиз пту в наш терминал
         window.electronAPI.onPtyData((event, data) => terminal.current.write(data));
 
@@ -64,6 +75,7 @@ const XTerminal = () => {
 
         // Обработка изменения размера
         terminal.current.onResize(({ cols, rows }) => window.electronAPI.resizePty(cols, rows));
+        window.electronAPI.writeToPty(command)
 
       } catch (error) {
         // нейрогенеренный обработчик ошибки
