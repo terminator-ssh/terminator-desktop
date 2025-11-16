@@ -37,6 +37,8 @@ const SSHConnectionForm = () => {
     setTerminalVisible(true)
   };
 
+  const getKeyPath = (keyPath) => { return keyPath.split('\\')[2]}
+
   return (
     <div>
       <h2>SSH Подключение</h2>
@@ -61,10 +63,10 @@ const SSHConnectionForm = () => {
           <input type="password" name="password" value={formData.password} onChange={handleChange} placeholder="••••••••"/>
         </div>
 
-        {/* <div>
+        <div>
           <label>Приватный ключ:</label>
-          <textarea name="privateKey" value={formData.privateKey} onChange={handleChange} placeholder="-----BEGIN PRIVATE KEY-----..." rows="4"/>
-        </div> */}
+          <input type="file" name="privateKey" value={formData.privateKey} onChange={handleChange}/>
+        </div>  
 
         <button type="submit" onClick={handleSave}>Сохранить</button>
         <button type="submit" onClick={handleConnect}>Подключиться</button>
@@ -78,6 +80,7 @@ const SSHConnectionForm = () => {
           host={formData.host}
           port={formData.port}
           username={formData.username}
+          keyName = {getKeyPath(formData.privateKey)}
           />
       )}
     </div>

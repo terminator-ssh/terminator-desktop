@@ -4,7 +4,6 @@ import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
 import "@xterm/xterm/css/xterm.css";
 import "./Terminal.css"
-import { wait } from "@testing-library/user-event/dist/utils";
 
 
 function XTerminal(props){
@@ -13,8 +12,11 @@ function XTerminal(props){
   const fitAddon = useRef(null);
   const [isInitialized, setIsInitialized] = useState(false);
   
-  let command = 'ssh ' +  props.username + '@' + props.host + ' \r\n';
-
+ 
+  const dir = window.electronAPI.currentDir();
+  console.log(props.keyName);
+  const command = 'ssh -i ' + dir + '/ssh/' + props.keyName + ' ' +  props.username + '@' + props.host + ' \r\n';
+ // ssh -i /path/to/private/key username@host
   //   if (props){
   //   host= props.host;
   //   port= props.port;
@@ -75,6 +77,7 @@ function XTerminal(props){
 
         // Обработка изменения размера
         terminal.current.onResize(({ cols, rows }) => window.electronAPI.resizePty(cols, rows));
+        console.log(command);
         window.electronAPI.writeToPty(command)
 
       } catch (error) {
@@ -96,5 +99,6 @@ function XTerminal(props){
     </div>
   );
 };
+async function getDir() { return await window.electronAPI.getDirectory();}
 
 export default XTerminal;
