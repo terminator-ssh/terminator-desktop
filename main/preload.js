@@ -18,5 +18,19 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // getStore: (key) => ipcRenderer.invoke('get-store', key),
   // setStore: (key, value) => ipcRenderer.invoke('set-store', key, value),
   // сторедж идет нахер
+
+
+  // Функции для работы со Сториджем
+
+  getAllConnections: () => {
+    const connections = localStorage.getItem('connections');
+    if (connections) {
+      return JSON.parse(connections);
+    }
+    return [];
+  },
+
+  saveAllConnections: (connectionsArray) => { localStorage.setItem('connections', JSON.stringify(connectionsArray)); },
+  clearAllConnections: () => { localStorage.setItem('connections', []); }
 });
 

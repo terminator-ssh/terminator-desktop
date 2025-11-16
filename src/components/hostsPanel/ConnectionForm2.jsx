@@ -8,36 +8,50 @@ const SSHConnectionForm = () => {
     port: '22',
     username: '',
     password: '',
-    // privateKey: ''
+    privateKeyPath: ''
   });
 
+  const prepareFormData = () => { // ТУДУ: исправить это всё
+    return {
+        host: formData.host,
+        port: formData.port,
+        username: formData.username,
+        password: formData.password,
+        privateKeyPath: getKeyPath(formData.privateKeyPath)
+        // privateKeyPath: formData.privateKeyPath.replace('C:\\fakepath\\', '')
+    }
+  }
+  const getKeyPath = (keyPath) => { if (keyPath) return keyPath.split('\\')[2]; else return []}
+
   const [isTerminalVisible, setTerminalVisible] = useState(false) 
-  const removeTerminal = (e) => {setTerminalVisible(false)}
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
-    });
+      [e.target.name]: e.target.value,
+    });console.log(formData)
   };
 
+  const handleRemoveTerminal = (e) => {
+    e.preventDefault();
+    setTerminalVisible(false)
+  };
   const handleSave = (e) => {
     e.preventDefault();
-    // removeTerminal();
-    console.log('SSH Connection Data:', formData);
-    // Здесь будет логика установки SSH соединения
-    setTerminalVisible(false)
+    const currentConnections = window.electronAPI.getAllConnections();
+    currentConnections.push(prepareFormData());
+    console.log(prepareFormData());
+    window.electronAPI.saveAllConnections(currentConnections);
   };
 
     const handleConnect = (e) => {
     e.preventDefault();
     setTerminalVisible(false)
-    console.log('SSH Connection Data:', formData);
-    // Здесь будет логика установки SSH соединения
+    console.log('handleConnect:', formData);
     setTerminalVisible(true)
   };
 
-  const getKeyPath = (keyPath) => { return keyPath.split('\\')[2]}
+ 
 
   return (
     <div>
@@ -65,9 +79,10 @@ const SSHConnectionForm = () => {
 
         <div>
           <label>Приватный ключ:</label>
-          <input type="file" name="privateKey" value={formData.privateKey} onChange={handleChange}/>
+          <input type="file" name="privateKeyPath" value={formData.privateKeyPath} onChange={handleChange}/>
         </div>  
 
+        <button type="submit" onClick={handleRemoveTerminal}>удалить терминал нахрен</button>        {/* Служебная кнопка */}      
         <button type="submit" onClick={handleSave}>Сохранить</button>
         <button type="submit" onClick={handleConnect}>Подключиться</button>
       </form>
@@ -80,7 +95,7 @@ const SSHConnectionForm = () => {
           host={formData.host}
           port={formData.port}
           username={formData.username}
-          keyName = {getKeyPath(formData.privateKey)}
+          keyName = {getKeyPath(formData.privateKeyPath)}
           />
       )}
     </div>

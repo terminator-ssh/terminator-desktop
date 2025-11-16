@@ -32,7 +32,10 @@ const HostsPanel = () => {
     return (
         <div className="hosts-panel">
             <div className='panel-header'>
-                <button className='newHostBtn' onClick={(connection)=>handleCreateConnection(connection)}>New Host</button>
+                {/* кнопка, которая будет выводить модалку с формой на экран? */}
+                <button className='newHostBtn' onClick={(connection)=>handleCreateConnection(connection)}>New Host</button> 
+                <button onClick={console.log(window.electronAPI.getAllConnections())} >все коннекты в консоль </button>
+                <button onClick={window.electronAPI.clearAllConnections()} >сжечь все коннекты к чертям</button>
             </div>
             <div className="hosts-list">
 
@@ -42,7 +45,8 @@ const HostsPanel = () => {
                     <span>Port</span>
                     <span>User</span>
                     <span>Actions</span>
-                    <ConnectionForm2 />
+                    <ConnectionForm2 /> {/* <-- Вот наша форма */}
+                    
                 </div>
                 
                 <div className='hosts-body'>
