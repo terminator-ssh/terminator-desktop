@@ -22,7 +22,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "electron": "electron .",
-    "electron-dev": "ELECTRON_IS_DEV=true electron .",
+    "electron-dev": "cross-env ELECTRON_IS_DEV=true electron .",
     "build-electron": "npm run build && electron-builder"
   },
   "eslintConfig": {

@@ -1,12 +1,10 @@
 .sidebar {
     display: flex;
     flex-direction: column;
-    gap: 10px;
     width: 200px; 
     background-color: #1f2b47; 
     color: white;
-    padding-top: 20px;
-    box-sizing: border-box;
+    height: auto;
 }
 
 .sidebar ul {
@@ -17,6 +15,8 @@
 
 .sidebar li {
     margin-bottom: 10px;
+    border: 1px solid;
+    border-color: rgb(255, 255, 255);
 }
 
 .sidebar button {
@@ -25,7 +25,7 @@
     background-color: transparent;
     border: none;
     color: white;
-    text-align: left;
+    text-align: center;
     font-size: 1.1em;
     cursor: pointer;
     transition: background-color 0.2s ease-in-out;

@@ -59,7 +59,7 @@ const SSHConnectionForm = () => {
   return (
     <div>
       <h2>SSH Подключение</h2>
-      <form>
+      <form className='newHostForm'>
         <div>
           <label>Название:</label>
           <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="" required/>

@@ -1,0 +1,10 @@
+.hosts-header {
+    margin-left: 200px;
+    width: 91%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background-color: #1e2a40;
+    color: #ffffff;
+}

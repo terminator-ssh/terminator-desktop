@@ -3,7 +3,7 @@ import React, { useState , useEffect} from 'react';
 import ConnectionItem from './ConnectionItem';
 // import ConnectionForm from './ConnectionForm';
 import ConnectionForm2 from './ConnectionForm2';
-// import './css/HostsPanel.css';
+import './css/HostsPanel.css';
 
 // const mockConnection = [
 //     { name: 'My Server', host: '192.168.1.100', port: '22', user: 'root' },
@@ -69,15 +69,13 @@ const HostsPanel = () => {
                 {/* <button onClick={window.electronAPI.clearAllConnections()} >сжечь все коннекты к чертям</button> */}
             </div>
             <div className="hosts-list">
-
+                <ConnectionForm2 onUpdate={getConnectionList}/> {/* <-- Вот наша форма */}
                 <div className="hosts-header">
                     <span>Name</span>
                     <span>Host</span>
                     <span>Port</span>
                     <span>User</span>
                     <span>Actions</span>
-                    <ConnectionForm2 onUpdate={getConnectionList}/> {/* <-- Вот наша форма */}
-                    
                 </div>
                 
                 <div className='hosts-body'>
