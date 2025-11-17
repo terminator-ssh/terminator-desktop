@@ -94,9 +94,7 @@ const SSHConnectionForm = () => {
         <button type="submit" onClick={handleConnect}>Подключиться</button>
       </form>
             
-        {/* Условный рендеринг: 
-          Если componentProps не null, отображаем NewComponent и передаем ему пропсы 
-      */}
+        {/* Условный рендеринг:  */}
       {isTerminalVisible && (
         <XTerminal
           host={formData.host}
