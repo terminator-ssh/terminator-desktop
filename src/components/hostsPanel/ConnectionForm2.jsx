@@ -43,7 +43,7 @@ const SSHConnectionForm = () => {
     const currentConnections = window.electronAPI.getAllConnections();
     if (formData in currentConnections) alert('Replace it?')
     currentConnections.push(prepareFormData());
-    console.log(prepareFormData());
+    console.log(currentConnections);
     window.electronAPI.saveAllConnections(currentConnections);
   };
 

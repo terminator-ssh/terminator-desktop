@@ -1,6 +1,6 @@
 const { contextBridge, ipcRenderer } = require('electron');
-const os = require('os');
-const path = require('path');
+// const os = require('os');
+// const path = require('path');
 
 contextBridge.exposeInMainWorld('electronAPI', {
   platform: process.platform,
@@ -19,7 +19,6 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // setStore: (key, value) => ipcRenderer.invoke('set-store', key, value),
   // сторедж идет нахер
 
-
   // Функции для работы со Сториджем
 
   getAllConnections: () => {
@@ -30,7 +29,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     return [];
   },
 
-  saveAllConnections: (connectionsArray) => { localStorage.setItem('connections', JSON.stringify(connectionsArray)); },
-  clearAllConnections: () => { localStorage.setItem('connections', []); }
+  saveAllConnections: (connectionsArray) => { console.log(connectionsArray); localStorage.setItem('connections', JSON.stringify(connectionsArray)); },
+  clearAllConnections: () => { localStorage.setItem('connections', []); },
+
 });
 

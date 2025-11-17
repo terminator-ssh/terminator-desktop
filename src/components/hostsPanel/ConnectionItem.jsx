@@ -9,7 +9,7 @@ const ConnectionItem = ({connection, onConnect, onEdit, onDelete}) => {
                 <span><strong>Name: </strong>{connection.name}</span>
                 <span><strong>Host: </strong>{connection.host}</span>
                 <span><strong>Port: </strong>{connection.port}</span>
-                <span><strong>User: </strong>{connection.user}</span>
+                <span><strong>User: </strong>{connection.username}</span>
             </div>
             
                 <button className="conn-item-connect" onClick={() => {onConnect(connection)}}>
