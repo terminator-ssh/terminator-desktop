@@ -4,6 +4,7 @@ import XTerminal from '../Terminal';
 
 const SSHConnectionForm = () => {
   const [formData, setFormData] = useState({
+    name: '',
     host: '',
     port: '22',
     username: '',
@@ -13,6 +14,7 @@ const SSHConnectionForm = () => {
 
   const prepareFormData = () => { // ТУДУ: исправить это всё
     return {
+        name: formData.name,
         host: formData.host,
         port: formData.port,
         username: formData.username,
@@ -39,6 +41,7 @@ const SSHConnectionForm = () => {
   const handleSave = (e) => {
     e.preventDefault();
     const currentConnections = window.electronAPI.getAllConnections();
+    if (formData in currentConnections) alert('Replace it?')
     currentConnections.push(prepareFormData());
     console.log(prepareFormData());
     window.electronAPI.saveAllConnections(currentConnections);
@@ -57,6 +60,10 @@ const SSHConnectionForm = () => {
     <div>
       <h2>SSH Подключение</h2>
       <form>
+        <div>
+          <label>Название:</label>
+          <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="" required/>
+        </div>
         <div>
           <label>Хост:</label>
           <input type="text" name="host" value={formData.host} onChange={handleChange} placeholder="example.com" required/>
