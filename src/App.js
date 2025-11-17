@@ -10,11 +10,11 @@ function App() {
 
   return (
     <div className="App">
-      <header>Terminator SSH!</header>
       <div className="app-layout">
         <Sidebar activeView={activeView} onSelectView={setActiveView} />
 
         <main className="main-content">
+          <h1>Terminator SSH</h1>
           {activeView === 'hosts' && <HostsPanel />}
           {activeView === 'terminal' && <XTerminal/>}
           {activeView === 'keychain' && <div>Тут пока ничего нет... </div>}

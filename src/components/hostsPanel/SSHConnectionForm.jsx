@@ -1,8 +1,9 @@
 
 import React, { useState } from 'react';
 import XTerminal from '../Terminal';
+import "./css/SSHConnectionForm.css";
 
-const SSHConnectionForm = () => {
+const SSHConnectionForm = ({ onUpdate }) => {
   const [formData, setFormData] = useState({
     name: '',
     host: '',
@@ -45,6 +46,7 @@ const SSHConnectionForm = () => {
     currentConnections.push(prepareFormData());
     console.log(currentConnections);
     window.electronAPI.saveAllConnections(currentConnections);
+    if (onUpdate) onUpdate();
   };
 
     const handleConnect = (e) => {
@@ -94,9 +96,7 @@ const SSHConnectionForm = () => {
         <button type="submit" onClick={handleConnect}>Подключиться</button>
       </form>
             
-        {/* Условный рендеринг: 
-          Если componentProps не null, отображаем NewComponent и передаем ему пропсы 
-      */}
+        {/* Условный рендеринг:  */}
       {isTerminalVisible && (
         <XTerminal
           host={formData.host}

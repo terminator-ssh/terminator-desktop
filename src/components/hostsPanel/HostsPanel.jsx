@@ -2,7 +2,7 @@
 import React, { useState , useEffect} from 'react';
 import ConnectionItem from './ConnectionItem';
 // import ConnectionForm from './ConnectionForm';
-import ConnectionForm2 from './ConnectionForm2';
+import SSHConnectionForm from './SSHConnectionForm';
 import './css/HostsPanel.css';
 
 // const mockConnection = [
@@ -15,18 +15,19 @@ import './css/HostsPanel.css';
 const HostsPanel = () => {
     const [connectionList, setConnectionList] = useState([])
     const [updateList, setUpdateList] = useState(true)
+    const [isFormOpen, setIsFormOpen] = useState(false)
     
     const getConnectionList = () => {
         setUpdateList(true)
         const storedConnections = localStorage.getItem('connections');
         console.log(storedConnections);
         if (storedConnections) {
-        try {
-            const parsedConnections = JSON.parse(storedConnections);
-            setConnectionList(parsedConnections);
-        } catch (error) {
-            console.error("Ошибка при попытке парсить JSON", error);
-        }
+            try {
+                const parsedConnections = JSON.parse(storedConnections);
+                setConnectionList(parsedConnections);
+            } catch (error) {
+                console.error("Ошибка при попытке парсить JSON", error);
+            }
         }
         setUpdateList(false)
     }
@@ -62,14 +63,29 @@ const HostsPanel = () => {
 
     return (
         <div className="hosts-panel">
-            <div className='panel-header'>
-                {/* кнопка, которая будет выводить модалку с формой на экран? */}
-                <button className='newHostBtn' onClick={(connection)=>handleCreateConnection(connection)}>New Host</button> 
+            <div className='hosts-panel__header'>
+                {/* кнопка, которая будет выводить модалку с формой на экран! Ну почти модалку */}
+                <button 
+                    className='hosts-panel__new-host-btn' 
+                    onClick={() => setIsFormOpen(!isFormOpen)}>
+                    {isFormOpen ? 'Close Form' : 'New Host'}
+                </button> 
+                
+                {/* Почти модалка. */}
+                {isFormOpen && (
+                    <div className="hosts-panel__dropdown-form">
+                        <SSHConnectionForm 
+                            onUpdate={getConnectionList}
+                            onSuccess={() => setIsFormOpen(false)}
+                        />
+                    </div>
+                )}
+
                 <button onClick={console.log(handleCheck())} >все коннекты в консоль </button>
                 {/* <button onClick={window.electronAPI.clearAllConnections()} >сжечь все коннекты к чертям</button> */}
             </div>
-            <div className="hosts-list">
-                <ConnectionForm2 onUpdate={getConnectionList}/> {/* <-- Вот наша форма */}
+
+            <div className="hosts-panel__hosts-list">
                 <div className="hosts-header">
                     <span>Name</span>
                     <span>Host</span>
@@ -78,7 +94,7 @@ const HostsPanel = () => {
                     <span>Actions</span>
                 </div>
                 
-                <div className='hosts-body'>
+                <div className='hosts-panel__hosts-body'>
                     {connectionList.map(connection => (
                         <ConnectionItem key={connection.name} connection={connection} onConnect={handleConnect} onEdit={() => handleEditConnection(connection)} onDelete={() => handleDeleteConnection(connection.name)}
                         />
