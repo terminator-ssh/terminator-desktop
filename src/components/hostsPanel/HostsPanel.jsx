@@ -23,6 +23,7 @@ const HostsPanel = () => {
         console.log(storedConnections);
         if (storedConnections) {
             try {
+                console.log(storedConnections)
                 const parsedConnections = JSON.parse(storedConnections);
                 setConnectionList(parsedConnections);
             } catch (error) {
@@ -37,7 +38,7 @@ const HostsPanel = () => {
     }, []); // Только при монтировании в дом
 
     function handleCheck() {
-       return window.electronAPI.getAllConnections()
+        return window.electronAPI.getAllConnections()
     }
 
     const handleConnect = (connection) => {

@@ -22,15 +22,23 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // Функции для работы со Сториджем
 
   getAllConnections: () => {
+    console.log('GETALL')
     const connections = localStorage.getItem('connections');
-    if (connections) {
+    console.log(connections)
+    if (!connections) { return []; }
+    try {
       return JSON.parse(connections);
+    } catch (error) {
+      console.error('Jib,rf j,hf,jnrb lfyys[ kjrfkmyjuj [hfybkbof', error);
+      return [];
     }
-    return [];
+    
   },
 
   saveAllConnections: (connectionsArray) => { console.log(connectionsArray); localStorage.setItem('connections', JSON.stringify(connectionsArray)); },
-  clearAllConnections: () => { localStorage.setItem('connections', []); },
+  // clearAllConnections: () => { localStorage.setItem('connections', []); },
 
 });
+
+console.log('Preload script loaded');
 
