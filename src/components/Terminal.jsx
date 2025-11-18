@@ -5,11 +5,24 @@ import { FitAddon } from "@xterm/addon-fit";
 import "@xterm/xterm/css/xterm.css";
 import "./Terminal.css"
 
-const XTerminal = () => {
+
+function XTerminal(props){
   const terminalRef = useRef(null);
   const terminal = useRef(null);
   const fitAddon = useRef(null);
   const [isInitialized, setIsInitialized] = useState(false);
+  
+ 
+  const dir = window.electronAPI.currentDir();
+  console.log(props.keyName);
+  const command = 'ssh -i ' + dir + '/ssh/' + props.keyName + ' ' +  props.username + '@' + props.host + ' \r\n';
+ // ssh -i /path/to/private/key username@host
+  //   if (props){
+  //   host= props.host;
+  //   port= props.port;
+  //   username= props.username
+  //   password= props.password
+  // }
 
   useEffect(() => {
     // Инициализация терминала
@@ -55,7 +68,7 @@ const XTerminal = () => {
           terminal.current.cols,
           terminal.current.rows
         );
-
+        
         // Оиз пту в наш терминал
         window.electronAPI.onPtyData((event, data) => terminal.current.write(data));
 
@@ -64,6 +77,8 @@ const XTerminal = () => {
 
         // Обработка изменения размера
         terminal.current.onResize(({ cols, rows }) => window.electronAPI.resizePty(cols, rows));
+        console.log(command);
+        window.electronAPI.writeToPty(command)
 
       } catch (error) {
         // нейрогенеренный обработчик ошибки
@@ -84,5 +99,6 @@ const XTerminal = () => {
     </div>
   );
 };
+async function getDir() { return await window.electronAPI.getDirectory();}
 
 export default XTerminal;

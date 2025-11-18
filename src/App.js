@@ -1,33 +1,29 @@
 import logo from './logo.webp';
 import XTerminal from './components/Terminal';
+import Sidebar from './components/Sidebar';
+import HostsPanel from './components/hostsPanel/HostsPanel'
 import './App.css';
+import { useState } from 'react';
 
 function App() {
+  const [activeView, setActiveView] = useState('hosts')
+
   return (
     <div className="App">
-      <header className="App-header">
-        {/* Шалость удалась) */}
+      <div className="app-layout">
+        <Sidebar activeView={activeView} onSelectView={setActiveView} />
+
+        <main className="main-content">
+          <h1>Terminator SSH</h1>
+          {activeView === 'hosts' && <HostsPanel />}
+          {activeView === 'terminal' && <XTerminal/>}
+          {activeView === 'keychain' && <div>Тут пока ничего нет... </div>}
+        </main>
+      </div>
+      <footer>
+        {/*  Line 1:8:  'logo' is defined but never used  no-unused-vars */}
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-
-      <main>
-       <div>
-        <XTerminal />
-       </div>
-      </main>
-
-      
+      </footer>
     </div>
   );
 }

@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
+const fs = require('fs')
 const path = require('path');
 const pty = require('node-pty');
 const isDev = process.env.ELECTRON_IS_DEV === 'true';
@@ -66,6 +67,25 @@ function createWindow() {
     return { success: true };
   });
 
+  // Обработчики IPC для файловой системы
+  ipcMain.handle('save-file', async (e, buffer, fileName, targetDir) => {
+    try {
+      // console.log('IPC_SAVE_FILE')
+      // const fileName = path.basename(file); // а можно захэшировать в фарш
+      const rootDir = process.cwd();
+      console.log(rootDir)
+      targetDir = path.join(rootDir, targetDir);
+      // Нужно ли проверять наличие папки?
+      const targetPath = path.join(targetDir, fileName);
+
+      fs.writeFileSync(targetPath, Buffer.from(buffer));
+      // console.log('IPC_SAVE_FILE: DONE')
+      
+      return { success: true, file: targetPath};   
+    } catch (error) {
+      return {success: false, error: error.message};
+    }
+  });
 
   if (isDev) {
     mainWindow.webContents.openDevTools();
