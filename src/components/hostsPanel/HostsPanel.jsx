@@ -20,10 +20,10 @@ const HostsPanel = () => {
     const getConnectionList = () => {
         setUpdateList(true)
         const storedConnections = localStorage.getItem('connections');
-        console.log(storedConnections);
+        // console.log(storedConnections);
         if (storedConnections) {
             try {
-                console.log(storedConnections)
+                // console.log(storedConnections)
                 const parsedConnections = JSON.parse(storedConnections);
                 setConnectionList(parsedConnections);
             } catch (error) {

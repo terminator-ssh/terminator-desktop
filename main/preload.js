@@ -24,7 +24,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   getAllConnections: () => {
     console.log('GETALL')
     const connections = localStorage.getItem('connections');
-    console.log(connections)
+    // console.log(connections)
     if (!connections) { return []; }
     try {
       return JSON.parse(connections);
@@ -36,14 +36,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
   },
 
   saveAllConnections: (connectionsArray) => {
-      console.log('SAVE'); 
-      console.log(connectionsArray); 
+      // console.log('SAVE'); 
+      // console.log(connectionsArray); 
       localStorage.setItem('connections', JSON.stringify(connectionsArray));
       console.log('SAVED:'); 
-      console.log(localStorage.getItem('connections')); 
+      // console.log(localStorage.getItem('connections')); 
     },
   // clearAllConnections: () => { localStorage.setItem('connections', []); },
-
+  saveFile: (buffer, fileName) => ipcRenderer.invoke('save-file', buffer, fileName, '/ssh/')
 });
 
 console.log('Preload script loaded');

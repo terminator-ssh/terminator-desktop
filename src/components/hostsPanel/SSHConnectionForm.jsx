@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import XTerminal from '../Terminal';
 import "./css/SSHConnectionForm.css";
 
@@ -26,7 +26,32 @@ const SSHConnectionForm = ({ onUpdate }) => {
   }
   const getKeyPath = (keyPath) => { if (keyPath) return keyPath.split('\\')[2]; else return []}
 
+  async function copyKeyToDir(keyFile) {
+    console.log('COPY KEY')
+    console.log(keyFile)
+    if (!keyFile) {
+      alert('Файл не выбран.');
+      return;
+    }
+    try {
+      console.log('SENDING TO API')
+      const arrayBuffer = await keyFile.arrayBuffer();
+      const buffer = new Uint8Array(arrayBuffer);
+      const result = await window.electronAPI.saveFile(buffer,  keyFile.name);
+      if (result.success) {
+        // console.log('success i guess')
+        fileInputRef.current.value = '';
+      } else {
+        alert('Ошибка: ' + result.error);
+      }
+    } catch (error) {
+      alert('Ошибка при сохранении файла');
+    }
+  };
+  
+
   const [isTerminalVisible, setTerminalVisible] = useState(false) 
+  const fileInputRef = useRef(null);
 
   const handleChange = (e) => {
     setFormData({
@@ -43,8 +68,10 @@ const SSHConnectionForm = ({ onUpdate }) => {
     e.preventDefault();
     const currentConnections = window.electronAPI.getAllConnections();
     if (formData in currentConnections) alert('Replace it?')
+    console.log('SAVING STARTED')
+    copyKeyToDir(fileInputRef.current.files[0]);
     currentConnections.push(prepareFormData());
-    console.log(currentConnections);
+    // console.log(currentConnections);
     window.electronAPI.saveAllConnections(currentConnections);
     if (onUpdate) onUpdate();
   };
@@ -88,7 +115,7 @@ const SSHConnectionForm = ({ onUpdate }) => {
 
         <div>
           <label>Приватный ключ:</label>
-          <input type="file" name="privateKeyPath" value={formData.privateKeyPath} onChange={handleChange}/>
+          <input type="file" name="privateKeyPath" value={formData.privateKeyPath} ref={fileInputRef}  onChange={handleChange}/>
         </div>  
 
         <button type="submit" onClick={handleRemoveTerminal}>удалить терминал нахрен</button>        {/* Служебная кнопка */}      
