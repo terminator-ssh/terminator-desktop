@@ -35,7 +35,13 @@ contextBridge.exposeInMainWorld('electronAPI', {
     
   },
 
-  saveAllConnections: (connectionsArray) => { console.log(connectionsArray); localStorage.setItem('connections', JSON.stringify(connectionsArray)); },
+  saveAllConnections: (connectionsArray) => {
+      console.log('SAVE'); 
+      console.log(connectionsArray); 
+      localStorage.setItem('connections', JSON.stringify(connectionsArray));
+      console.log('SAVED:'); 
+      console.log(localStorage.getItem('connections')); 
+    },
   // clearAllConnections: () => { localStorage.setItem('connections', []); },
 
 });

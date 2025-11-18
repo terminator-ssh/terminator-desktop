@@ -8,19 +8,26 @@ const ConnectionItem = ({connection, onConnect, onEdit, onDelete}) => {
     const handleDelete = (connection) => {
         console.log(connection)
             // e.preventDefault();
+            
             let storedConnections = window.electronAPI.getAllConnections();
             // Тут наерное есть какая-то волшебная функция, но я ее не знаю,так что...
-            let index = 0;
-            for (let i = 0; i < storedConnections.length; i++) {
-                const storedConnection = storedConnections[i];
-                if (storedConnection.name == connection.name ) { index = i; break;}
+            
+            for (let index = 0; index < storedConnections.length; index++) {
+                const storedConnection = storedConnections[index];
+                if (storedConnection.name == connection.name ) { 
+                        console.log('DEL ' + index +' FROM')
+                        console.log(storedConnections)
+                        storedConnections.splice(index, 1);
+                        console.log('DONE: ')
+                        console.log(storedConnections) 
+                    
+                    break;
+                }
                 console.log(storedConnection)
             }
-            console.log(index)
-            storedConnections = storedConnections.splice(index);
-            console.log(storedConnections)
 
-            window.electronAPI.saveAllConnections();
+
+            window.electronAPI.saveAllConnections(storedConnections);
             setVisibility(false);
             
             // storedConnections.forEach(storedConnection => {
