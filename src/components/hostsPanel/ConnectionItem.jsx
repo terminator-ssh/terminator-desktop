@@ -1,42 +1,42 @@
-// Компонент для отображения одного созданного подключения со всеми его деталями и кнопками ("Изменить", "Удалить", "Подключиться").
 import React, { useState } from "react"
 import XTerminal from "../Terminal";
 
+// Компонент для отображения одного созданного подключения. Виденье моё и Андрея немного разошлось, нужно уничтожить следы размолвки.
+
 const ConnectionItem = ({connection, onConnect, onEdit, onDelete}) => {
     
-    const [isVisible, setVisibility] = useState(true);
-    const [isTerminalVisible, setTerminalVisible] = useState(false) 
+    const [isVisible, setVisibility] = useState(true); // Видимость всего компонента
+    const [isTerminalVisible, setTerminalVisible] = useState(false) // Видимость терминала, принадлежащего подключению
 
     const handleDelete = (connection) => {
-        console.log(connection)
-            // e.preventDefault();
-            
-            let storedConnections = window.electronAPI.getAllConnections();
-            // Тут наерное есть какая-то волшебная функция, но я ее не знаю,так что...
-            
-            for (let index = 0; index < storedConnections.length; index++) {
-                const storedConnection = storedConnections[index];
-                if (storedConnection.name == connection.name ) { 
-                        console.log('DEL ' + index +' FROM')
-                        console.log(storedConnections)
-                        storedConnections.splice(index, 1);
-                        console.log('DONE: ')
-                        console.log(storedConnections) 
-                    
-                    break;
-                }
-                console.log(storedConnection)
+        
+        // e.preventDefault();
+        
+        let storedConnections = window.electronAPI.getAllConnections();
+
+        // Тут наерное есть какая-то волшебная функция, но я ее не знаю,так что...
+        for (let index = 0; index < storedConnections.length; index++) {
+            const storedConnection = storedConnections[index];
+            if (storedConnection.name == connection.name ) { 
+                    // console.log('DEL ' + index +' FROM')
+                    // console.log(storedConnections)
+                    storedConnections.splice(index, 1);
+                    // console.log('DONE: ')
+                    // console.log(storedConnections) 
+                break;
             }
-
-
-            window.electronAPI.saveAllConnections(storedConnections);
-            setVisibility(false);
+            // console.log(storedConnection)
+        }
+        window.electronAPI.saveAllConnections(storedConnections);
+        setVisibility(false); // триггерит условный рендеринг
     }
 
+    // рендерит терминал
     const handleConnect = () => {
         setTerminalVisible(true);
     } 
 
+    // Если компонент существует и не удален
     if (isVisible){
         return (
             
@@ -68,6 +68,7 @@ const ConnectionItem = ({connection, onConnect, onEdit, onDelete}) => {
             </div>
         )
      } else {
+        // Если компонент удален
         return( <div>DELETED</div>)
      }
 }

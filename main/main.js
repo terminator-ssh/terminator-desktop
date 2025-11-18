@@ -4,6 +4,20 @@ const path = require('path');
 const pty = require('node-pty');
 const isDev = process.env.ELECTRON_IS_DEV === 'true';
 
+/*
+Файл с логикой Electron, именно тут происходит его магия: общение с системой и терминалом.
+
+Как выглядит наш Электрон?
+Из-за того, что Хром и Нода имеют ограничения в работе с ОС, мы не можем взаимодействовать с ней напрямую. 
+За сим, получается такая архитектура, где сверху фронт, а снизу бек:
+- Рекакт-компонет, он же render.js с точки зрения Электрон. Отвечает за UI и ничего не может сам.
+- Мост: файл preload.js, который дает render.js возможность обратиться к мейн-процессу
+- Мейн-процесс: файл main.js (Вы находитесь здесь), который обеспечивает общение с ОС. 
+
+Где-то тут будет АПИ для общения с сервером.
+*/
+
+
 let ptyProcess = null
 
 function createWindow() {
@@ -15,19 +29,19 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
       contextIsolation: true, // ДОЛЖНО БЫТЬ ТРУ ДЛЯ БЕЗОПАСНОСТИ
-      sandbox: false, //Мы же не полезем в Интернет?
+      sandbox: false, //Мы же не полезем в Интернет? 
       webSecurity: true // В проде должно быть ТРУ
     }
-  });
+  }); 
 
 
   // Обработчики IPC для PTY
   ipcMain.handle('create-pty', (event, { cols, rows }) => {
     try {
-      const shell = process.platform === 'win32' ? 'powershell.exe' : 'bash';
+      const shell = process.platform === 'win32' ? 'powershell.exe' : 'bash'; 
       
       ptyProcess = pty.spawn(shell, [], {
-        name: 'xterm-pty-idk',
+        name: 'xterm-pty-idk', // придумать адекватное название
         cols: cols,
         rows: rows,
         cwd: process.cwd(), // Current Working Directory
@@ -43,6 +57,7 @@ function createWindow() {
     }
   });
 
+  // Передаем в терминал
   ipcMain.handle('write-to-pty', (event, data) => {
     if (ptyProcess) {
       ptyProcess.write(data);
@@ -51,6 +66,7 @@ function createWindow() {
     return { success: false };
   });
 
+  // При изменении окна
   ipcMain.handle('resize-pty', (event, { cols, rows }) => {
     if (ptyProcess) {
       ptyProcess.resize(cols, rows);
@@ -73,12 +89,12 @@ function createWindow() {
       // console.log('IPC_SAVE_FILE')
       // const fileName = path.basename(file); // а можно захэшировать в фарш
       const rootDir = process.cwd();
-      console.log(rootDir)
+      // console.log(rootDir)
       targetDir = path.join(rootDir, targetDir);
       // Нужно ли проверять наличие папки?
       const targetPath = path.join(targetDir, fileName);
 
-      fs.writeFileSync(targetPath, Buffer.from(buffer));
+      fs.writeFileSync(targetPath, Buffer.from(buffer)); // Работаем не с файлом,а с буфером - из рендера нельзя передать файл через Мост
       // console.log('IPC_SAVE_FILE: DONE')
       
       return { success: true, file: targetPath};   
@@ -90,12 +106,12 @@ function createWindow() {
   if (isDev) {
     mainWindow.webContents.openDevTools();
   }
-  // else { mainWindow.loadFile(path.join(__dirname, '../build/index.html'));  }
   mainWindow.loadURL('http://localhost:3000');
 }
 
 app.whenReady().then(createWindow);
 
+// Нейронка посоветовала подумать о яблочниках.
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();

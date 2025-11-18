@@ -14,11 +14,11 @@ import './css/HostsPanel.css';
 
 const HostsPanel = () => {
     const [connectionList, setConnectionList] = useState([])
-    const [updateList, setUpdateList] = useState(true)
+    const [updateList, setUpdateList] = useState(true) // Оказался не у дел, кажется?
     const [isFormOpen, setIsFormOpen] = useState(false)
     
     const getConnectionList = () => {
-        setUpdateList(true)
+        setUpdateList(true) // Тут че-то не то, разобраться
         const storedConnections = localStorage.getItem('connections');
         // console.log(storedConnections);
         if (storedConnections) {

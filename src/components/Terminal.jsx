@@ -5,6 +5,7 @@ import { FitAddon } from "@xterm/addon-fit";
 import "@xterm/xterm/css/xterm.css";
 import "./Terminal.css"
 
+/* Компонент терминала. КОМАНДА НА ПОДКЛЮЧЕНИЕ SSH ЗАХАРДКОЖЕНА */
 
 function XTerminal(props){
   const terminalRef = useRef(null);
@@ -14,15 +15,7 @@ function XTerminal(props){
   
  
   const dir = window.electronAPI.currentDir();
-  console.log(props.keyName);
   const command = 'ssh -i ' + dir + '/ssh/' + props.keyName + ' ' +  props.username + '@' + props.host + ' \r\n';
- // ssh -i /path/to/private/key username@host
-  //   if (props){
-  //   host= props.host;
-  //   port= props.port;
-  //   username= props.username
-  //   password= props.password
-  // }
 
   useEffect(() => {
     // Инициализация терминала
@@ -39,7 +32,7 @@ function XTerminal(props){
     fitAddon.current = new FitAddon(); // штуковина, которая подгоняет размер терминала под его контейнер
     terminal.current.loadAddon(fitAddon.current);
 
-    // крепим виртуальный терминал к реальному дому 
+    // крепим виртуальный терминал к реальному дому // Да простит нас Реакт
     if (terminalRef.current) {
       terminal.current.open(terminalRef.current);
       fitAddon.current.fit();
@@ -77,7 +70,9 @@ function XTerminal(props){
 
         // Обработка изменения размера
         terminal.current.onResize(({ cols, rows }) => window.electronAPI.resizePty(cols, rows));
-        console.log(command);
+        
+        // console.log(command);
+        // После инициализации запихиваем команду на подключения с заданными параметрами. Переделать это!
         window.electronAPI.writeToPty(command)
 
       } catch (error) {
@@ -88,7 +83,7 @@ function XTerminal(props){
     };
 
     initPty();
-  }, [isInitialized]);
+  }, [isInitialized]); 
 
   return (
     <div className="terminal-container">

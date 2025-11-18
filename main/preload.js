@@ -1,6 +1,8 @@
 const { contextBridge, ipcRenderer } = require('electron');
-// const os = require('os');
-// const path = require('path');
+
+/*
+ Это наш, с позволения сказать, мост между Рендером и Электроном.
+*/
 
 contextBridge.exposeInMainWorld('electronAPI', {
   platform: process.platform,
@@ -19,10 +21,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // setStore: (key, value) => ipcRenderer.invoke('set-store', key, value),
   // сторедж идет нахер
 
-  // Функции для работы со Сториджем
-
+  /* Функции для работы с ЛокалСториджем */
+  // Получить все коннекты
   getAllConnections: () => {
-    console.log('GETALL')
+    // console.log('GETALL')
     const connections = localStorage.getItem('connections');
     // console.log(connections)
     if (!connections) { return []; }
@@ -35,14 +37,12 @@ contextBridge.exposeInMainWorld('electronAPI', {
     
   },
 
-  saveAllConnections: (connectionsArray) => {
-      // console.log('SAVE'); 
-      // console.log(connectionsArray); 
-      localStorage.setItem('connections', JSON.stringify(connectionsArray));
-      console.log('SAVED:'); 
-      // console.log(localStorage.getItem('connections')); 
-    },
-  // clearAllConnections: () => { localStorage.setItem('connections', []); },
+  // Сохранить все коннекты. Возможно, стоит хранить каждый коннект отдельно? Да не, бред какой-то.
+  saveAllConnections: (connectionsArray) => { localStorage.setItem('connections', JSON.stringify(connectionsArray));  },
+  // clearAllConnections: () => { localStorage.setItem('connections', []); }, // Черная магия лишит тебя всего!
+  
+  /* Функции для работы с ОС */
+  // Сохранить файл в папку ssh/
   saveFile: (buffer, fileName) => ipcRenderer.invoke('save-file', buffer, fileName, '/ssh/')
 });
 
