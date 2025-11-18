@@ -1,9 +1,11 @@
 // Компонент для отображения одного созданного подключения со всеми его деталями и кнопками ("Изменить", "Удалить", "Подключиться").
 import React, { useState } from "react"
+import XTerminal from "../Terminal";
 
 const ConnectionItem = ({connection, onConnect, onEdit, onDelete}) => {
     
     const [isVisible, setVisibility] = useState(true);
+    const [isTerminalVisible, setTerminalVisible] = useState(false) 
 
     const handleDelete = (connection) => {
         console.log(connection)
@@ -29,18 +31,12 @@ const ConnectionItem = ({connection, onConnect, onEdit, onDelete}) => {
 
             window.electronAPI.saveAllConnections(storedConnections);
             setVisibility(false);
-            
-            // storedConnections.forEach(storedConnection => {
-            //     index++;
-            //     if (storedConnection.name == connection.name ) { }
-                
-            // });console.log(storedConnections);
-            // let index = storedConnections.IndexOf(connection);
-            // currentConnections.push(prepareFormData());
-            // console.log(currentConnections);
-            // console.log(index)
-            // window.electronAPI.saveAllConnections(currentConnections);
     }
+
+    const handleConnect = () => {
+        setTerminalVisible(true);
+    } 
+
     if (isVisible){
         return (
             
@@ -52,15 +48,23 @@ const ConnectionItem = ({connection, onConnect, onEdit, onDelete}) => {
                     <span><strong>User: </strong>{connection.username}</span>
                 </div>
                 
-                    <button className="conn-item-connect" onClick={() => {onConnect(connection)}}>
+                    <button className="conn-item-connect" onClick={() => {setTerminalVisible(true);}}>
                         Connect
                     </button>
-                    <button className="conn-item-edit" onClick={() => {onEdit(connection)}}>
+                    <button className="conn-item-edit" onClick={() => {handleConnect(connection)}}>
                         Edit
                     </button>
                     <button className="conn-item-delete" onClick={() => {handleDelete(connection)}}>
                         Delete
                     </button>
+                          {isTerminalVisible && (
+                            <XTerminal
+                            host={connection.host}
+                            port={connection.port}
+                            username={connection.username}
+                            keyName = {connection.privateKeyPath}
+                            />
+                        )}
             </div>
         )
      } else {
