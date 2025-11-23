@@ -35,8 +35,13 @@ function XTerminal(props){
     // крепим виртуальный терминал к реальному дому // Да простит нас Реакт
     if (terminalRef.current) {
       terminal.current.open(terminalRef.current);
-      fitAddon.current.fit();
-      setIsInitialized(true);
+      // Откладываем вызов fit() потому что браузер не успевает прикрепить терминал к ДОМу, из-за чего fit() не может получить его пропы и крашится с ошибкой "dimensions"
+      setTimeout(() => {
+        if (fitAddon.current) {
+          fitAddon.current.fit();
+        }
+        setIsInitialized(true);
+      }, 0); // setTimeout с 0 мс запускает код в следующем цикле событий/рендеринга
     }
 
     return () => {
@@ -94,6 +99,5 @@ function XTerminal(props){
     </div>
   );
 };
-async function getDir() { return await window.electronAPI.getDirectory();}
 
 export default XTerminal;
