@@ -1,9 +1,9 @@
 //  Это будет основной компонент для панели подключений. Он будет содержать логику и рендеринг формы для создания новых подключений и списка существующих.
 import React, { useState , useEffect} from 'react';
-import ConnectionItem from './ConnectionItem';
+import ConnectionItem from '../Connection/Item/Item';
 // import ConnectionForm from './ConnectionForm';
-import SSHConnectionForm from './SSHConnectionForm';
-import './css/HostsPanel.css';
+import SSHConnectionForm from '../Connection/Form/SSHForm';
+import './Panel.css';
 
 // const mockConnection = [
 //     { name: 'My Server', host: '192.168.1.100', port: '22', user: 'root' },
@@ -14,11 +14,11 @@ import './css/HostsPanel.css';
 
 const HostsPanel = () => {
     const [connectionList, setConnectionList] = useState([])
-    // const [updateList, setUpdateList] = useState(true) // Он нужен.
+    const [updateList, setUpdateList] = useState(true)
     const [isFormOpen, setIsFormOpen] = useState(false)
     
     const getConnectionList = () => {
-        // setUpdateList(true) // Тут че-то не то, разобраться
+        setUpdateList(true)
         const storedConnections = localStorage.getItem('connections');
         // console.log(storedConnections);
         if (storedConnections) {
@@ -30,7 +30,7 @@ const HostsPanel = () => {
                 console.error("Ошибка при попытке парсить JSON", error);
             }
         }
-        // setUpdateList(false)
+        setUpdateList(false)
     }
 
     useEffect(() => {
@@ -46,10 +46,11 @@ const HostsPanel = () => {
         getConnectionList();
     }
     
-    // const handleCreateConnection = (connectionData) => {
-    //     console.log("типа создался конекшн: " + connectionData);
-    //     getConnectionList();
-    // }
+    const handleCreateConnection = (connectionData) => {
+        console.log("типа создался конекшн: " + connectionData);
+        getConnectionList();
+
+    }
 
     const handleEditConnection = (connectionData) => {
         console.log("типа изменился конекшн: " + connectionData);
