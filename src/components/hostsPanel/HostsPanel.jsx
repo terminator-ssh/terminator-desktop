@@ -14,11 +14,11 @@ import './css/HostsPanel.css';
 
 const HostsPanel = () => {
     const [connectionList, setConnectionList] = useState([])
-    const [updateList, setUpdateList] = useState(true) // Оказался не у дел, кажется?
+    // const [updateList, setUpdateList] = useState(true) // Он нужен.
     const [isFormOpen, setIsFormOpen] = useState(false)
     
     const getConnectionList = () => {
-        setUpdateList(true) // Тут че-то не то, разобраться
+        // setUpdateList(true) // Тут че-то не то, разобраться
         const storedConnections = localStorage.getItem('connections');
         // console.log(storedConnections);
         if (storedConnections) {
@@ -30,7 +30,7 @@ const HostsPanel = () => {
                 console.error("Ошибка при попытке парсить JSON", error);
             }
         }
-        setUpdateList(false)
+        // setUpdateList(false)
     }
 
     useEffect(() => {
@@ -46,11 +46,10 @@ const HostsPanel = () => {
         getConnectionList();
     }
     
-    const handleCreateConnection = (connectionData) => {
-        console.log("типа создался конекшн: " + connectionData);
-        getConnectionList();
-
-    }
+    // const handleCreateConnection = (connectionData) => {
+    //     console.log("типа создался конекшн: " + connectionData);
+    //     getConnectionList();
+    // }
 
     const handleEditConnection = (connectionData) => {
         console.log("типа изменился конекшн: " + connectionData);

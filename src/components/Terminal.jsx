@@ -88,7 +88,7 @@ function XTerminal(props){
     };
 
     initPty();
-  }, [isInitialized]); 
+  }, [isInitialized, command]); 
 
   return (
     <div className="terminal-container">

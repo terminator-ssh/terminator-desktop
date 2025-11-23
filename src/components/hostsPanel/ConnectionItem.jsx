@@ -17,7 +17,7 @@ const ConnectionItem = ({connection, onConnect, onEdit, onDelete}) => {
         // Тут наерное есть какая-то волшебная функция, но я ее не знаю,так что...
         for (let index = 0; index < storedConnections.length; index++) {
             const storedConnection = storedConnections[index];
-            if (storedConnection.name == connection.name ) { 
+            if (storedConnection.name === connection.name ) { 
                     // console.log('DEL ' + index +' FROM')
                     // console.log(storedConnections)
                     storedConnections.splice(index, 1);
@@ -69,7 +69,7 @@ const ConnectionItem = ({connection, onConnect, onEdit, onDelete}) => {
         )
      } else {
         // Если компонент удален
-        return( <div>DELETED</div>)
+        return( <div></div>)
      }
 }
 
