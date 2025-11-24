@@ -1,7 +1,7 @@
 
 import React, { useRef, useState } from 'react';
-import XTerminal from '../Terminal';
-import "./css/SSHConnectionForm.css";
+import XTerminal from '../../../Terminal/Terminal';
+import "./SSHForm.css";
 
 /* Компонент - Форма Создания одключения. ПЕРЕДЕЛАТЬ этот цирк. */
 

@@ -1,9 +1,9 @@
 //  Это будет основной компонент для панели подключений. Он будет содержать логику и рендеринг формы для создания новых подключений и списка существующих.
 import React, { useState , useEffect} from 'react';
-import ConnectionItem from './ConnectionItem';
+import ConnectionItem from '../Connection/ConnectionItem/ConnectionItem';
 // import ConnectionForm from './ConnectionForm';
-import SSHConnectionForm from './SSHConnectionForm';
-import './css/HostsPanel.css';
+import SSHConnectionForm from '../Connection/Form/SSHForm';
+import './HostsPanel.css';
 
 // const mockConnection = [
 //     { name: 'My Server', host: '192.168.1.100', port: '22', user: 'root' },

@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import XTerminal from "../Terminal";
+import XTerminal from "../../../Terminal/Terminal";
 
 // Компонент для отображения одного созданного подключения. Виденье моё и Андрея немного разошлось, нужно уничтожить следы размолвки.
 
