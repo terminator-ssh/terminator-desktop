@@ -2,7 +2,7 @@
 import React, { useState } from "react"
 import XTerminal from "../../../Terminal/Terminal";
 
-const ConnectionItem = ({connection, onConnect, onEdit, onDelete}) => {
+const ConnectionItem = (connection) => {
     
     const [isVisible, setVisibility] = useState(true);
     const [isTerminalVisible, setTerminalVisible] = useState(false) 
@@ -36,6 +36,11 @@ const ConnectionItem = ({connection, onConnect, onEdit, onDelete}) => {
     const handleConnect = () => {
         setTerminalVisible(true);
     }
+
+    const handleEdit = (connection) => {
+        console.log("Edit connection: " + connection);
+    }
+
 
     if (isVisible){
     return (

@@ -41,27 +41,6 @@ const HostsPanel = () => {
         return window.electronAPI.getAllConnections()
     }
 
-    const handleConnect = (connection) => {
-        console.log("Типа подключился к серверу: " + connection);
-        getConnectionList();
-    }
-    
-    const handleCreateConnection = (connectionData) => {
-        console.log("типа создался конекшн: " + connectionData);
-        getConnectionList();
-
-    }
-
-    const handleEditConnection = (connectionData) => {
-        console.log("типа изменился конекшн: " + connectionData);
-        getConnectionList();
-    }
-
-    const handleDeleteConnection = (connectionData) => {
-        console.log("типа удалился конекшн: " + connectionData);
-        getConnectionList();
-    }
-
     return (
         <div className="hosts-panel">
             <div className='hosts-panel__header'>
@@ -97,7 +76,10 @@ const HostsPanel = () => {
                 
                 <div className='hosts-panel__hosts-body'>
                     {connectionList.map(connection => (
-                        <ConnectionItem key={connection.name} connection={connection} onConnect={handleConnect} onEdit={() => handleEditConnection(connection)} onDelete={() => handleDeleteConnection(connection.name)}
+                        <ConnectionItem key={connection.name} connection={connection} 
+                        onConnect={() => ConnectionItem.handleConnect(connection)} 
+                        onEdit={() => ConnectionItem.handleEditConnection(connection)} 
+                        onDelete={() => ConnectionItem.handleDelete(connection.name)}
                         />
                     ))}
                 </div>
