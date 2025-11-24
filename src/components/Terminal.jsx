@@ -14,8 +14,8 @@ function XTerminal(props){
   const [isInitialized, setIsInitialized] = useState(false);
   
  
-  const dir = window.electronAPI.currentDir();
-  const command = 'ssh -i ' + dir + '/ssh/' + props.keyName + ' ' +  props.username + '@' + props.host + ' \r\n';
+  // const dir = window.electronAPI.currentDir();
+  // const command = 'ssh -i ' + dir + '/ssh/' + props.keyName + ' ' +  props.username + '@' + props.host + ' \r\n';
 
   useEffect(() => {
     // Инициализация терминала
@@ -78,7 +78,8 @@ function XTerminal(props){
         
         // console.log(command);
         // После инициализации запихиваем команду на подключения с заданными параметрами. Переделать это!
-        window.electronAPI.writeToPty(command)
+        // window.electronAPI.writeToPty(command)
+        window.electronAPI.establishSSHConnection( props.username, props.port, props.host,props.keyName, props.password )
 
       } catch (error) {
         // нейрогенеренный обработчик ошибки
@@ -88,7 +89,7 @@ function XTerminal(props){
     };
 
     initPty();
-  }, [isInitialized, command]); 
+  }, [isInitialized]); 
 
   return (
     <div className="terminal-container">

@@ -83,6 +83,24 @@ function createWindow() {
     return { success: true };
   });
 
+   // Сложные Обработчики IPC для PTY
+  ipcMain.handle('connect-ssh',  (e,  userName, port, host, keyName, password) => { // props = [keyName, username, port, host, password , command]
+    console.log('CONNECT IT')
+    console.log(userName, port, host, keyName, password)
+    if (ptyProcess) {
+      let command = 'ssh -i ' + process.cwd() + '/ssh/' + keyName + ' ' +  userName + '@' + host + ' \r\n';
+      console.log(command)
+      ptyProcess.write(command);
+      command = password ;
+      ptyProcess.on('data', (data) => {
+        // Проверяем вывод на наличие ожидаемого маркера
+        if (data.includes('password')) {
+            ptyProcess.write(command + '\r');
+        }
+});
+    }
+  });
+
   // Обработчики IPC для файловой системы
   ipcMain.handle('save-file', async (e, buffer, fileName, targetDir) => {
     try {

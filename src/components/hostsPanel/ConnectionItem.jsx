@@ -63,6 +63,7 @@ const ConnectionItem = ({connection, onConnect, onEdit, onDelete}) => {
                             port={connection.port}
                             username={connection.username}
                             keyName = {connection.privateKeyPath}
+                            password = {connection.password}
                             />
                         )}
             </div>
