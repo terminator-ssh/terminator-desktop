@@ -2,15 +2,12 @@
 import React, { useState , useEffect} from 'react';
 import ConnectionItem from '../Connection/Item/Item';
 // import ConnectionForm from './ConnectionForm';
-import SSHConnectionForm from '../Connection/Form/SSHForm';
+import SSHForm from '../Connection/Form/SSHForm';
 import './Panel.css';
 
 // const mockConnection = [
 //     { name: 'My Server', host: '192.168.1.100', port: '22', user: 'root' },
 // ];
-
-
-
 
 const HostsPanel = () => {
     const [connectionList, setConnectionList] = useState([])
@@ -54,7 +51,7 @@ const HostsPanel = () => {
                 {/* Почти модалка. */}
                 {isFormOpen && (
                     <div className="hosts-panel__dropdown-form">
-                        <SSHConnectionForm 
+                        <SSHForm
                             onUpdate={getConnectionList}
                             onSuccess={() => setIsFormOpen(false)}
                         />
@@ -76,11 +73,7 @@ const HostsPanel = () => {
                 
                 <div className='hosts-panel__hosts-body'>
                     {connectionList.map(connection => (
-                        <ConnectionItem key={connection.name} connection={connection} 
-                        onConnect={() => ConnectionItem.handleConnect(connection)} 
-                        onEdit={() => ConnectionItem.handleEditConnection(connection)} 
-                        onDelete={() => ConnectionItem.handleDelete(connection.name)}
-                        />
+                        <ConnectionItem key={connection.name} connection={connection}/>
                     ))}
                 </div>
             </div>

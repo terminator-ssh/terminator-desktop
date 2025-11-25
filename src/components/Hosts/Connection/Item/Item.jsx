@@ -1,11 +1,13 @@
 // Компонент для отображения одного созданного подключения со всеми его деталями и кнопками ("Изменить", "Удалить", "Подключиться").
 import React, { useState } from "react"
 import XTerminal from "../../../Terminal/Terminal";
+import SSHForm from "../Form/SSHForm";
 
-const ConnectionItem = (connection) => {
+const ConnectionItem = ({connection}) => {
     
     const [isVisible, setVisibility] = useState(true);
-    const [isTerminalVisible, setTerminalVisible] = useState(false) 
+    const [isTerminalVisible, setTerminalVisible] = useState(false)
+    const [isEditing, setIsEditing] = useState(false)
 
     const handleDelete = (connection) => {
         console.log(connection)
@@ -31,14 +33,15 @@ const ConnectionItem = (connection) => {
 
             window.electronAPI.saveAllConnections(storedConnections);
             setVisibility(false);
+
     }
 
     const handleConnect = () => {
         setTerminalVisible(true);
     }
 
-    const handleEdit = (connection) => {
-        console.log("Edit connection: " + connection);
+    const handleEdit = () => {
+        setIsEditing(!isEditing)
     }
 
 
@@ -56,13 +59,19 @@ const ConnectionItem = (connection) => {
                     <button className="conn-item-connect" onClick={() => {setTerminalVisible(true);}}>
                 Connect
             </button>
-                    <button className="conn-item-edit" onClick={() => {handleConnect(connection)}}>
+                    <button className="conn-item-edit" onClick={() => {handleEdit()}}>
                 Edit
             </button>
             <button className="conn-item-delete" onClick={() => {handleDelete(connection)}}>
                 Delete
             </button>
-            
+            {isEditing && (
+                <div className="connection-item__edit-form">
+                    <SSHForm connection={connection}
+                             isEditing={true}
+                    />
+                </div>
+            )}
             {isTerminalVisible && (
             <XTerminal
             host={connection.host}

@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import XTerminal from '../../../Terminal/Terminal';
 import "./SSHForm.css";
 
-const SSHConnectionForm = ({ onUpdate }) => {
+const SSHForm = ({ onUpdate, connection, isEditing }) => {
   const [formData, setFormData] = useState({
     name: '',
     host: '',
@@ -12,7 +12,23 @@ const SSHConnectionForm = ({ onUpdate }) => {
     password: '',
     privateKeyPath: ''
   });
-  
+
+  useEffect(() => {
+      if (isEditing && connection) {
+          setFormData({
+              name: connection.name || '',
+              host: connection.host || '',
+              port: connection.port || '22',
+              username: connection.username || '',
+              password: connection.password || '',
+              privateKeyPath: connection.privateKeyPath || ''
+          });
+      } else if (!isEditing) {
+          setFormData({
+              name: '', host: '', port: '22', username: '', password: '', privateKeyPath: ''
+          });
+      }}, [isEditing, connection]);
+
   const prepareFormData = () => { // ТУДУ: исправить это всё
     return {
         name: formData.name,
@@ -65,14 +81,19 @@ const SSHConnectionForm = ({ onUpdate }) => {
     setTerminalVisible(false)
   };
   const handleSave = (e) => {
-    e.preventDefault();
     const currentConnections = window.electronAPI.getAllConnections();
-    if (formData in currentConnections) alert('Replace it?')
-    console.log('SAVING STARTED')
-    copyKeyToDir(fileInputRef.current.files[0]);
-    currentConnections.push(prepareFormData());
-    // console.log(currentConnections);
-    window.electronAPI.saveAllConnections(currentConnections);
+
+    if (isEditing && connection) {
+      const updatedConnections = currentConnections.map(item =>
+          item.name === connection.name ? prepareFormData() : item
+      );
+      isEditing = false;
+      window.electronAPI.saveAllConnections(updatedConnections);
+    } else {
+      currentConnections.push(prepareFormData());
+      window.electronAPI.saveAllConnections(currentConnections);
+
+    }
     if (onUpdate) onUpdate();
   };
 
@@ -87,17 +108,17 @@ const SSHConnectionForm = ({ onUpdate }) => {
     e.preventDefault();
     console.log('Cancelled');
     if (isEditing) {
-      isEditing(false);
+        isEditing = false;
     } else {
-      
+
     }
   }
  
 
   return (
-    <div>
+    <div className="ssh-form">
       <h2>SSH Подключение</h2>
-      <form className='newHostForm'>
+      <form className='ssh-form__host'>
         <div>
           <label>Название:</label>
           <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="" required/>
@@ -123,14 +144,23 @@ const SSHConnectionForm = ({ onUpdate }) => {
         </div>
 
         <div>
-          <label>Приватный ключ:</label>
-          <input type="file" name="privateKeyPath" value={formData.privateKeyPath} ref={fileInputRef}  onChange={handleChange}/>
-        </div>  
-
-        <button type="submit" onClick={handleRemoveTerminal}>удалить терминал нахрен</button>        {/* Служебная кнопка */}
-        <button type="submit" onClick={handleConnect}>Подключиться</button>
-        <button type="submit" onClick={handleSave}>Сохранить</button>
-        <button type="submit" onClick={handleCancel}>Отмена</button>
+          <label>Приватный ключ: {connection ? connection.privateKeyPath : ''}</label>
+          <input type="file" name="privateKeyPath" ref={fileInputRef}  onChange={handleChange}/>
+        </div>
+        {isEditing && (
+            <div className="ssh-form__edit-host">
+                <button type="submit" onClick={handleSave}>Сохранить</button>
+                <button type="submit" onClick={handleCancel}>Отмена</button>
+            </div>
+        )}
+        {!isEditing && (
+            <div className="ssh-form__new-host">
+                <button type="submit" onClick={handleConnect}>Подключиться</button>
+                <button type="submit" onClick={handleSave}>Сохранить</button>
+                <button type="submit" onClick={handleCancel}>Отмена</button>
+                <button type="submit" onClick={handleRemoveTerminal}>удалить терминал нахрен</button>        {/* Служебная кнопка */}
+            </div>
+        )}
       </form>
             
         {/* Условный рендеринг:  */}
@@ -146,4 +176,4 @@ const SSHConnectionForm = ({ onUpdate }) => {
   );
 };
 
-export default SSHConnectionForm;
+export default SSHForm;
