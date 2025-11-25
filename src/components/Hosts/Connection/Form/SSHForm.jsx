@@ -140,7 +140,6 @@ const SSHForm = ({ onUpdate, connection, isEditing }) => {
         {isEditing && (
             <div className="ssh-form__edit-host">
                 <button type="submit" onClick={handleSave}>Сохранить</button>
-                <button type="submit" onClick={handleCancel}>Отмена</button>
             </div>
         )}
         {!isEditing && (
