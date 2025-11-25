@@ -81,6 +81,7 @@ const SSHForm = ({ onUpdate, connection, isEditing }) => {
     setTerminalVisible(false)
   };
   const handleSave = (e) => {
+    e.preventDefault();
     const currentConnections = window.electronAPI.getAllConnections();
 
     if (isEditing && connection) {
