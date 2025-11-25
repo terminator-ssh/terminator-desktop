@@ -1,9 +1,9 @@
 //  Это будет основной компонент для панели подключений. Он будет содержать логику и рендеринг формы для создания новых подключений и списка существующих.
 import React, { useState , useEffect} from 'react';
-import ConnectionItem from '../Connection/Item/ConnectionItem';
+import ConnectionItem from '../Connection/Item/Item';
 // import ConnectionForm from './ConnectionForm';
 import SSHForm from '../Connection/Form/SSHForm';
-import './HostsPanel.css';
+import './Panel.css';
 
 const HostsPanel = () => {
     const [connectionList, setConnectionList] = useState([])
