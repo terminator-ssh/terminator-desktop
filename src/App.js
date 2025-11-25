@@ -1,7 +1,7 @@
 import logo from './logo.webp';
 import XTerminal from './components/Terminal/Terminal';
 import Sidebar from './components/Sidebar/Sidebar';
-import HostsPanel from './components/Hosts/Panel/Panel'
+import HostsPanel from './components/Hosts/Panel/HostsPanel'
 import './App.css';
 import { useState } from 'react';
 
