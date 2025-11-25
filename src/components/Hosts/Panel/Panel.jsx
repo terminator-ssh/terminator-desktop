@@ -5,10 +5,6 @@ import ConnectionItem from '../Connection/Item/Item';
 import SSHForm from '../Connection/Form/SSHForm';
 import './Panel.css';
 
-// const mockConnection = [
-//     { name: 'My Server', host: '192.168.1.100', port: '22', user: 'root' },
-// ];
-
 const HostsPanel = () => {
     const [connectionList, setConnectionList] = useState([])
     const [updateList, setUpdateList] = useState(true)
