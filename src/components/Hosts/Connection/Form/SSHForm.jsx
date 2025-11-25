@@ -105,17 +105,6 @@ const SSHForm = ({ onUpdate, connection, isEditing }) => {
     setTerminalVisible(true)
   };
 
-  const handleCancel = (e, isEditing) => {
-    e.preventDefault();
-    console.log('Cancelled');
-    if (isEditing) {
-        isEditing = false;
-    } else {
-
-    }
-  }
- 
-
   return (
     <div className="ssh-form">
       <h2>SSH Подключение</h2>
@@ -158,7 +147,6 @@ const SSHForm = ({ onUpdate, connection, isEditing }) => {
             <div className="ssh-form__new-host">
                 <button type="submit" onClick={handleConnect}>Подключиться</button>
                 <button type="submit" onClick={handleSave}>Сохранить</button>
-                <button type="submit" onClick={handleCancel}>Отмена</button>
                 <button type="submit" onClick={handleRemoveTerminal}>удалить терминал нахрен</button>        {/* Служебная кнопка */}
             </div>
         )}
