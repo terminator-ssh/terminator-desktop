@@ -3,7 +3,7 @@ import XTerminal from "../../../Terminal/Terminal";
 
 // Компонент для отображения одного созданного подключения. Виденье моё и Андрея немного разошлось, нужно уничтожить следы размолвки.
 
-const ConnectionItem = ({connection, onConnect, onEdit, onDelete}) => {
+const Item = ({connection, onConnect, onEdit, onDelete}) => {
     
     const [isVisible, setVisibility] = useState(true); // Видимость всего компонента
     const [isTerminalVisible, setTerminalVisible] = useState(false) // Видимость терминала, принадлежащего подключению
@@ -74,4 +74,4 @@ const ConnectionItem = ({connection, onConnect, onEdit, onDelete}) => {
      }
 }
 
-export default ConnectionItem;
+export default Item;

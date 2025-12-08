@@ -1,9 +1,9 @@
 //  Это будет основной компонент для панели подключений. Он будет содержать логику и рендеринг формы для создания новых подключений и списка существующих.
 import React, { useState , useEffect} from 'react';
-import ConnectionItem from '../Connection/ConnectionItem/ConnectionItem';
+import Item from '../Connection/Item/Item';
 // import ConnectionForm from './ConnectionForm';
 import SSHConnectionForm from '../Connection/Form/SSHForm';
-import './HostsPanel.css';
+import './Panel.css';
 
 // const mockConnection = [
 //     { name: 'My Server', host: '192.168.1.100', port: '22', user: 'root' },
@@ -12,7 +12,7 @@ import './HostsPanel.css';
 
 
 
-const HostsPanel = () => {
+const Panel = () => {
     const [connectionList, setConnectionList] = useState([])
     // const [updateList, setUpdateList] = useState(true) // Он нужен.
     const [isFormOpen, setIsFormOpen] = useState(false)
@@ -96,7 +96,7 @@ const HostsPanel = () => {
                 
                 <div className='hosts-panel__hosts-body'>
                     {connectionList.map(connection => (
-                        <ConnectionItem key={connection.name} connection={connection} onConnect={handleConnect} onEdit={() => handleEditConnection(connection)} onDelete={() => handleDeleteConnection(connection.name)}
+                        <Item key={connection.name} connection={connection} onConnect={handleConnect} onEdit={() => handleEditConnection(connection)} onDelete={() => handleDeleteConnection(connection.name)}
                         />
                     ))}
                 </div>
@@ -105,4 +105,4 @@ const HostsPanel = () => {
     );
 };
 
-export default HostsPanel;
+export default Panel;
