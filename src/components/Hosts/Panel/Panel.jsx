@@ -5,13 +5,6 @@ import Item from '../Connection/Item/Item';
 import SSHConnectionForm from '../Connection/Form/SSHForm';
 import './Panel.css';
 
-// const mockConnection = [
-//     { name: 'My Server', host: '192.168.1.100', port: '22', user: 'root' },
-// ];
-
-
-
-
 const Panel = () => {
     const [connectionList, setConnectionList] = useState([])
     // const [updateList, setUpdateList] = useState(true) // Он нужен.
@@ -41,26 +34,6 @@ const Panel = () => {
         return window.electronAPI.getAllConnections()
     }
 
-    const handleConnect = (connection) => {
-        console.log("Типа подключился к серверу: " + connection);
-        getConnectionList();
-    }
-    
-    // const handleCreateConnection = (connectionData) => {
-    //     console.log("типа создался конекшн: " + connectionData);
-    //     getConnectionList();
-    // }
-
-    const handleEditConnection = (connectionData) => {
-        console.log("типа изменился конекшн: " + connectionData);
-        getConnectionList();
-    }
-
-    const handleDeleteConnection = (connectionData) => {
-        console.log("типа удалился конекшн: " + connectionData);
-        getConnectionList();
-    }
-
     return (
         <div className="hosts-panel">
             <div className='hosts-panel__header'>
@@ -76,6 +49,7 @@ const Panel = () => {
                     <div className="hosts-panel__dropdown-form">
                         <SSHConnectionForm 
                             onUpdate={getConnectionList}
+                            isEditing={false}
                             onSuccess={() => setIsFormOpen(false)}
                         />
                     </div>
@@ -96,7 +70,7 @@ const Panel = () => {
                 
                 <div className='hosts-panel__hosts-body'>
                     {connectionList.map(connection => (
-                        <Item key={connection.name} connection={connection} onConnect={handleConnect} onEdit={() => handleEditConnection(connection)} onDelete={() => handleDeleteConnection(connection.name)}
+                        <Item key={connection.name} connection={connection} onUpdate={getConnectionList}
                         />
                     ))}
                 </div>
