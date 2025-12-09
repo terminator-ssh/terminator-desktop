@@ -100,7 +100,7 @@ function createWindow() {
     console.log('CONNECT IT')
     console.log(userName, port, host, keyName, password)
     if (ptyProcess) {
-      commandBuffer = 'ssh -i ' + process.cwd() + '/ssh/' + keyName + ' ' +  userName + '@' + host + ' \r\n';
+      commandBuffer = 'ssh -i ' + process.cwd() + '/ssh/' + keyName + ' ' +  userName + '@' + host + ' \r';
       console.log(commandBuffer)
       ptyProcess.write(commandBuffer);
       isExpectingPassword = true;
