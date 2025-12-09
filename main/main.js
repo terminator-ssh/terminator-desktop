@@ -19,6 +19,8 @@ const isDev = process.env.ELECTRON_IS_DEV === 'true';
 
 
 let ptyProcess = null
+let isExpectingPassword = false;
+let commandBuffer = null;
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
@@ -48,7 +50,17 @@ function createWindow() {
         env: process.env, // переменные окруженя
       });
 
-      ptyProcess.onData((data) => mainWindow.webContents.send('pty-data', data));
+      ptyProcess.onData((data) => {
+         mainWindow.webContents.send('pty-data', data)
+        //  CheckKeyWords(data);
+          // Проверяем вывод на наличие ожидаемого маркера
+          if (isExpectingPassword && (data.includes('password') || data.includes('Passphrase'))){
+            isExpectingPassword = false;
+            ptyProcess.write(commandBuffer + '\r');
+            commandBuffer = '';
+            console.log('password!');
+          }
+      });
       ptyProcess.onExit(() => ptyProcess = null);
 
       return { success: true };
@@ -88,16 +100,11 @@ function createWindow() {
     console.log('CONNECT IT')
     console.log(userName, port, host, keyName, password)
     if (ptyProcess) {
-      let command = 'ssh -i ' + process.cwd() + '/ssh/' + keyName + ' ' +  userName + '@' + host + ' \r\n';
-      console.log(command)
-      ptyProcess.write(command);
-      command = password ;
-      ptyProcess.on('data', (data) => {
-        // Проверяем вывод на наличие ожидаемого маркера
-        if (data.includes('password')) {
-            ptyProcess.write(command + '\r');
-        }
-});
+      commandBuffer = 'ssh -i ' + process.cwd() + '/ssh/' + keyName + ' ' +  userName + '@' + host + ' \r\n';
+      console.log(commandBuffer)
+      ptyProcess.write(commandBuffer);
+      isExpectingPassword = true;
+      commandBuffer = password ;
     }
   });
 
