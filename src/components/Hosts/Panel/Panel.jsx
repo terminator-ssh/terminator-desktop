@@ -1,24 +1,17 @@
 //  Это будет основной компонент для панели подключений. Он будет содержать логику и рендеринг формы для создания новых подключений и списка существующих.
 import React, { useState , useEffect} from 'react';
-import ConnectionItem from './ConnectionItem';
+import Item from '../Connection/Item/Item';
 // import ConnectionForm from './ConnectionForm';
-import SSHConnectionForm from './SSHConnectionForm';
-import './css/HostsPanel.css';
+import SSHConnectionForm from '../Connection/Form/SSHForm';
+import './Panel.css';
 
-// const mockConnection = [
-//     { name: 'My Server', host: '192.168.1.100', port: '22', user: 'root' },
-// ];
-
-
-
-
-const HostsPanel = () => {
+const Panel = () => {
     const [connectionList, setConnectionList] = useState([])
-    const [updateList, setUpdateList] = useState(true) // Оказался не у дел, кажется?
+    // const [updateList, setUpdateList] = useState(true) // Он нужен.
     const [isFormOpen, setIsFormOpen] = useState(false)
     
     const getConnectionList = () => {
-        setUpdateList(true) // Тут че-то не то, разобраться
+        // setUpdateList(true) // Тут че-то не то, разобраться
         const storedConnections = localStorage.getItem('connections');
         // console.log(storedConnections);
         if (storedConnections) {
@@ -30,7 +23,7 @@ const HostsPanel = () => {
                 console.error("Ошибка при попытке парсить JSON", error);
             }
         }
-        setUpdateList(false)
+        // setUpdateList(false)
     }
 
     useEffect(() => {
@@ -39,27 +32,6 @@ const HostsPanel = () => {
 
     function handleCheck() {
         return window.electronAPI.getAllConnections()
-    }
-
-    const handleConnect = (connection) => {
-        console.log("Типа подключился к серверу: " + connection);
-        getConnectionList();
-    }
-    
-    const handleCreateConnection = (connectionData) => {
-        console.log("типа создался конекшн: " + connectionData);
-        getConnectionList();
-
-    }
-
-    const handleEditConnection = (connectionData) => {
-        console.log("типа изменился конекшн: " + connectionData);
-        getConnectionList();
-    }
-
-    const handleDeleteConnection = (connectionData) => {
-        console.log("типа удалился конекшн: " + connectionData);
-        getConnectionList();
     }
 
     return (
@@ -77,6 +49,7 @@ const HostsPanel = () => {
                     <div className="hosts-panel__dropdown-form">
                         <SSHConnectionForm 
                             onUpdate={getConnectionList}
+                            isEditing={false}
                             onSuccess={() => setIsFormOpen(false)}
                         />
                     </div>
@@ -97,7 +70,7 @@ const HostsPanel = () => {
                 
                 <div className='hosts-panel__hosts-body'>
                     {connectionList.map(connection => (
-                        <ConnectionItem key={connection.name} connection={connection} onConnect={handleConnect} onEdit={() => handleEditConnection(connection)} onDelete={() => handleDeleteConnection(connection.name)}
+                        <Item key={connection.name} connection={connection} onUpdate={getConnectionList}
                         />
                     ))}
                 </div>
@@ -106,4 +79,4 @@ const HostsPanel = () => {
     );
 };
 
-export default HostsPanel;
+export default Panel;

@@ -1,12 +1,14 @@
 
-import React, { useRef, useState } from 'react';
-import XTerminal from '../Terminal';
-import "./css/SSHConnectionForm.css";
+import React, {useEffect, useRef, useState} from 'react';
+import XTerminal from '../../../Terminal/Terminal';
+import "./SSHForm.css";
+import item from "../Item/Item";
 
 /* Компонент - Форма Создания одключения. ПЕРЕДЕЛАТЬ этот цирк. */
 
-const SSHConnectionForm = ({ onUpdate }) => {
+const SSHForm = ({ connection, isEditing, onUpdate }) => {
   // Храню все в одной пачке, это было удобно... Но будет ли удобно в будущем?
+
   const [formData, setFormData] = useState({
     name: '',
     host: '',
@@ -15,6 +17,22 @@ const SSHConnectionForm = ({ onUpdate }) => {
     password: '',
     privateKeyPath: ''
   });
+
+    useEffect(() => {
+        if (isEditing && connection) {
+            setFormData({
+                name: connection.name || '',
+                host: connection.host || '',
+                port: connection.port || '22',
+                username: connection.username || '',
+                password: connection.password || '',
+                privateKeyPath: connection.privateKeyPath || ''
+            });
+        } else if (!isEditing) {
+            setFormData({
+                name: '', host: '', port: '22', username: '', password: '', privateKeyPath: ''
+            });
+        }}, [isEditing, connection]);
 
   // 
   const prepareFormData = () => { // ТУДУ: исправить это всё
@@ -65,7 +83,7 @@ const SSHConnectionForm = ({ onUpdate }) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
-    }); // console.log(formData)
+    });
   };
 
   const handleRemoveTerminal = (e) => {
@@ -76,15 +94,21 @@ const SSHConnectionForm = ({ onUpdate }) => {
   // Сохранение подключения.
   const handleSave = (e) => {
     e.preventDefault();
-    
     // Получаем актуальный список подключений
-    const currentConnections = window.electronAPI.getAllConnections(); 
-    // Тут должна быть проверка на уникальность, но мне не платят
-    // console.log('SAVING STARTED')
-    copyKeyToDir(fileInputRef.current.files[0]); // Работа с файликом, сделать обработку "ЕСЛИ успешно то продолжаем"
-    currentConnections.push(prepareFormData()); // пушим новую запись в список
-    // console.log(currentConnections);
-    window.electronAPI.saveAllConnections(currentConnections); // Отправляем новый список на сохранение в главный процесс
+    const currentConnections = window.electronAPI.getAllConnections();
+      // Тут должна быть проверка на уникальность, но мне не платят
+    if (isEditing) {
+        copyKeyToDir(fileInputRef.current.files[0]); // ЕСТЬ ПРОБЛЕМА С ПУТЯМИ, ИСПРАВИТЬ
+
+        const updatedConnections = currentConnections.map(item => item.name === connection.name ? prepareFormData() : item); // Ищем коннект (пока что по имени), как находим - меняем его параметры
+        isEditing = false; // см. ниже
+        window.electronAPI.saveAllConnections(updatedConnections) // см. ниже
+    } else {
+        copyKeyToDir(fileInputRef.current.files[0]); // Работа с файликом, сделать обработку "ЕСЛИ успешно то продолжаем"
+        currentConnections.push(prepareFormData()); // пушим новую запись в список
+        window.electronAPI.saveAllConnections(currentConnections); // Отправляем новый список на сохранение в главный процесс
+    }
+
     if (onUpdate) onUpdate(); //  вызываем обновление списка (странная конструкция, сделать красивее)
   };
 
@@ -127,8 +151,8 @@ const SSHConnectionForm = ({ onUpdate }) => {
         </div>
 
         <div>
-          <label>Приватный ключ:</label>
-          <input type="file" name="privateKeyPath" value={formData.privateKeyPath} ref={fileInputRef}  onChange={handleChange}/>
+          <label>Приватный ключ: {connection ? connection.privateKeyPath : ''}</label>
+          <input type="file" name="privateKeyPath" ref={fileInputRef}  onChange={handleChange}/>
         </div>  
 
         <button type="submit" onClick={handleRemoveTerminal}>удалить терминал нахрен</button>        {/* Служебная кнопка */}      
@@ -149,4 +173,4 @@ const SSHConnectionForm = ({ onUpdate }) => {
   );
 };
 
-export default SSHConnectionForm;
+export default SSHForm;

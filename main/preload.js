@@ -16,6 +16,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
   onPtyData: (callback) => ipcRenderer.on('pty-data', callback),
   killPty: () => ipcRenderer.invoke('kill-pty'),
   
+  establishSSHConnection: ( username, port, host,keyName, password ) => {
+    console.log('BRIDGE')
+    console.log({ username, port, host,keyName, password })
+    ipcRenderer.invoke('connect-ssh',  username, port, host,keyName, password )
+},
+
+
+
   // Апишечка для стореджа на клиенте
   // getStore: (key) => ipcRenderer.invoke('get-store', key),
   // setStore: (key, value) => ipcRenderer.invoke('set-store', key, value),

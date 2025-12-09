@@ -14,8 +14,8 @@ function XTerminal(props){
   const [isInitialized, setIsInitialized] = useState(false);
   
  
-  const dir = window.electronAPI.currentDir();
-  const command = 'ssh -i ' + dir + '/ssh/' + props.keyName + ' ' +  props.username + '@' + props.host + ' \r\n';
+  // const dir = window.electronAPI.currentDir();
+  // const command = 'ssh -i ' + dir + '/ssh/' + props.keyName + ' ' +  props.username + '@' + props.host + ' \r\n';
 
   useEffect(() => {
     // Инициализация терминала
@@ -35,8 +35,13 @@ function XTerminal(props){
     // крепим виртуальный терминал к реальному дому // Да простит нас Реакт
     if (terminalRef.current) {
       terminal.current.open(terminalRef.current);
-      fitAddon.current.fit();
-      setIsInitialized(true);
+      // Откладываем вызов fit() потому что браузер не успевает прикрепить терминал к ДОМу, из-за чего fit() не может получить его пропы и крашится с ошибкой "dimensions"
+      setTimeout(() => {
+        if (fitAddon.current) {
+          fitAddon.current.fit();
+        }
+        setIsInitialized(true);
+      }, 0); // setTimeout с 0 мс запускает код в следующем цикле событий/рендеринга
     }
 
     return () => {
@@ -73,7 +78,8 @@ function XTerminal(props){
         
         // console.log(command);
         // После инициализации запихиваем команду на подключения с заданными параметрами. Переделать это!
-        window.electronAPI.writeToPty(command)
+        // window.electronAPI.writeToPty(command)
+        window.electronAPI.establishSSHConnection( props.username, props.port, props.host,props.keyName, props.password )
 
       } catch (error) {
         // нейрогенеренный обработчик ошибки
@@ -94,6 +100,5 @@ function XTerminal(props){
     </div>
   );
 };
-async function getDir() { return await window.electronAPI.getDirectory();}
 
 export default XTerminal;

@@ -1,0 +1,21 @@
+/* 
+Высота и ширина обязательно должны быть заданы для .terminal-container и .terminal,
+поскольку это требуется для функции  fitAddon.current.fit();
+ */
+.terminal-container {
+  padding: 20px;
+  width: 100%;
+  height: 100vh;
+  background-color: #1e1e1e;
+}
+
+.terminal {
+  height: 100%;
+  width: 100%;
+  text-align: left;
+  overflow: hidden;
+}
+
+.xterm {
+  padding: 10px;
+}
