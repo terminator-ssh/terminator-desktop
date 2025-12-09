@@ -26,7 +26,11 @@ function XTerminal(props){
       theme: {
         background: '#1e1e1e',
         foreground: '#ffffff'
-      }
+      },
+
+      // disableStdin: false,
+      // convertEol: true
+      
     });
 
     fitAddon.current = new FitAddon(); // штуковина, которая подгоняет размер терминала под его контейнер
