@@ -1,4 +1,4 @@
-import logo from './logo.webp';
+// import logo from './logo.webp';
 import XTerminal from './components/Terminal/Terminal';
 import Sidebar from './components/Sidebar/Sidebar';
 import Panel from './components/Hosts/Panel/Panel';
@@ -17,12 +17,16 @@ function App() {
           <h1>Terminator SSH</h1>
           {activeView === 'hosts' && <Panel />}
           {activeView === 'terminal' && <XTerminal/>}
-          {activeView === 'keychain' && <div>Тут пока ничего нет... </div>}
+          {activeView === 'keychain' && 
+          <div>Тут пока ничего нет... 
+            <img src="logo.jpg" className="App-logo" alt="logo" />
+          </div>
+          }
         </main>
       </div>
       <footer>
         {/*  Line 1:8:  'logo' is defined but never used  no-unused-vars */}
-        <img src={logo} className="App-logo" alt="logo" />
+        
       </footer>
     </div>
   );
