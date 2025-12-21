@@ -8,10 +8,10 @@ const KeychainPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const keys = [
-    { id: 1, name: 'Key 1', user: '12498442342', pass: 'gjikrdjhkwfdjdshfdhbj...' },
-    { id: 2, name: 'Key 2', user: '12498442342', pass: 'gjikrdjhkwfdjdshfdhbj...' },
-    { id: 3, name: 'Key 3', user: '12498442342', pass: 'gjikrdjhkwfdjdshfdhbj...' },
-    { id: 4, name: 'Key 4', user: '12498442342', pass: 'gjikrdjhkwfdjdshfdhbj...' },
+    { id: 1, name: 'Key 1', user: '12498442342' },
+    { id: 2, name: 'Key 2', user: '12498442342' },
+    { id: 3, name: 'Key 3', user: '12498442342' },
+    { id: 4, name: 'Key 4', user: '12498442342' },
   ];
 
   return (
@@ -48,11 +48,6 @@ const KeychainPage = () => {
             </div>
             <div className="flex-1">
               <h3 className="text-gray-200 font-medium">{key.name}</h3>
-              <div className="text-gray-500 text-sm flex gap-3">
-                <span>User: {key.user}</span>
-                <span className="text-gray-700">|</span>
-                <span className="font-mono text-xs pt-0.5 opacity-60">Password: {key.pass}</span>
-              </div>
             </div>
             <button className="text-gray-500 hover:text-white p-2">
               <MoreHorizontal size={20} />
