@@ -13,7 +13,7 @@ const HostsPage = () => {
   return (
     <div className="p-8 w-full">
       {/* Header */}
-      <h1 className="text-3xl font-bold text-gray-200 mb-2">Terminator SSH <span className="text-gray-500 text-lg font-normal">| Hosts</span></h1>
+      <h1 className="text-3xl font-bold text-gray-200 mb-2">Terminator <span className="text-gray-500 text-lg font-normal">| Hosts</span></h1>
 
       {/* Controls */}
       <div className="flex justify-between items-center mb-8 mt-6">
