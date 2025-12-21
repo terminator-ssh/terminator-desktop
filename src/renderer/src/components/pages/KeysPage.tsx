@@ -37,7 +37,7 @@ const KeysPage = () => {
         </button>
       </div>
 
-      <h2 className="text-xl font-semibold text-gray-200 mb-4">Save keys</h2>
+      <h2 className="text-xl font-semibold text-gray-200 mb-4">Saved keys</h2>
 
       {/* List */}
       <div className="flex flex-col gap-3">

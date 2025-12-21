@@ -21,7 +21,7 @@ const NewKeyModal = ({ onClose }: { onClose: () => void }) => {
             <label className="text-xs text-gray-400 font-medium ml-1">Name</label>
             <input
               type="text"
-              placeholder="Name1"
+              placeholder="Name"
               className="w-full bg-[#2b2d33] border border-gray-700 text-gray-200 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-emerald-500"
             />
           </div>

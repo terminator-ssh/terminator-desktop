@@ -21,7 +21,7 @@ const HostsPage = () => {
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
           <input
             type="text"
-            placeholder="Find a host or ssh"
+            placeholder="Find a host..."
             className="w-full bg-[#23242a] text-gray-300 pl-12 pr-4 py-3 rounded-xl focus:outline-none border border-transparent focus:border-gray-700"
           />
         </div>
@@ -30,7 +30,7 @@ const HostsPage = () => {
         </button>
       </div>
 
-      <h2 className="text-xl font-semibold text-gray-200 mb-4">Save hosts</h2>
+      <h2 className="text-xl font-semibold text-gray-200 mb-4">Saved hosts</h2>
 
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
