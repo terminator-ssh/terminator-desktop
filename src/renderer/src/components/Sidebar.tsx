@@ -1,6 +1,5 @@
-import React from 'react';
-import { 
-  Cloud, Key, Terminal, User 
+import {
+  Cloud, Key, Terminal, User
 } from 'lucide-react';
 
 const Sidebar = ({ activeTab, setActiveTab }: { activeTab: string, setActiveTab: (t: string) => void }) => {
@@ -40,7 +39,7 @@ const Sidebar = ({ activeTab, setActiveTab }: { activeTab: string, setActiveTab:
     </div>
   );
 
- 
-}; 
+
+};
 
 export default Sidebar;

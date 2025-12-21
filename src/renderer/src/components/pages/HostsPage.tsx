@@ -1,5 +1,4 @@
-import React from 'react';
-import { 
+import {
   Cloud, Search, Plus, MoreHorizontal, Edit2, Trash2
 } from 'lucide-react';
 
@@ -15,14 +14,14 @@ const HostsPage = () => {
     <div className="p-8 w-full">
       {/* Header */}
       <h1 className="text-3xl font-bold text-gray-200 mb-2">Terminator SSH <span className="text-gray-500 text-lg font-normal">| Hosts</span></h1>
-      
+
       {/* Controls */}
       <div className="flex justify-between items-center mb-8 mt-6">
         <div className="relative w-full max-w-2xl">
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
-          <input 
-            type="text" 
-            placeholder="Find a host or ssh" 
+          <input
+            type="text"
+            placeholder="Find a host or ssh"
             className="w-full bg-[#23242a] text-gray-300 pl-12 pr-4 py-3 rounded-xl focus:outline-none border border-transparent focus:border-gray-700"
           />
         </div>
@@ -51,12 +50,12 @@ const HostsPage = () => {
                   <span>User: {host.user}</span>
                 </div>
               </div>
-              
+
               {/* Context Menu Trigger */}
               <button className="text-gray-500 hover:text-white">
                 <MoreHorizontal size={20} />
               </button>
-              
+
               {/* Visual Demo of Context Menu (Show only on first item for demo) */}
               {host.id === 1 && (
                 <div className="absolute right-12 top-4 bg-[#1e1f24] rounded-lg shadow-xl border border-gray-800 overflow-hidden flex flex-col w-28 z-10">

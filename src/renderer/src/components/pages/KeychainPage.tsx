@@ -1,4 +1,4 @@
-import React, { useState }  from 'react';
+import { useState }  from 'react';
 import {
   Key, Search, Plus, MoreHorizontal
 } from 'lucide-react';

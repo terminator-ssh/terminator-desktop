@@ -1,6 +1,5 @@
-import React from 'react';
-import { 
-  Plus,  X, FileText 
+import {
+  Plus,  X, FileText
 } from 'lucide-react';
 
 const NewKeychainModal = ({ onClose }: { onClose: () => void }) => {
@@ -20,9 +19,9 @@ const NewKeychainModal = ({ onClose }: { onClose: () => void }) => {
           {/* Name */}
           <div className="space-y-1">
             <label className="text-xs text-gray-400 font-medium ml-1">Name</label>
-            <input 
-              type="text" 
-              placeholder="Name1" 
+            <input
+              type="text"
+              placeholder="Name1"
               className="w-full bg-[#2b2d33] border border-gray-700 text-gray-200 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-emerald-500"
             />
           </div>
@@ -31,15 +30,15 @@ const NewKeychainModal = ({ onClose }: { onClose: () => void }) => {
           <div className="flex gap-4">
             <div className="flex-1 space-y-1">
               <label className="text-xs text-gray-400 font-medium ml-1">Private key *</label>
-              <textarea 
-                placeholder="Private key *" 
+              <textarea
+                placeholder="Private key *"
                 className="w-full h-24 bg-[#2b2d33] border border-gray-700 text-gray-200 text-sm rounded-lg px-4 py-3 resize-none focus:outline-none focus:border-emerald-500"
               />
             </div>
             <div className="flex-1 space-y-1">
               <label className="text-xs text-gray-400 font-medium ml-1">Public key</label>
-              <textarea 
-                placeholder="Public key" 
+              <textarea
+                placeholder="Public key"
                 className="w-full h-24 bg-[#2b2d33] border border-gray-700 text-gray-200 text-sm rounded-lg px-4 py-3 resize-none focus:outline-none focus:border-emerald-500"
               />
             </div>
@@ -48,7 +47,7 @@ const NewKeychainModal = ({ onClose }: { onClose: () => void }) => {
           {/* Certificate */}
           <div className="space-y-1">
             <label className="text-xs text-gray-400 font-medium ml-1">Certificate</label>
-            <textarea 
+            <textarea
               placeholder="Certificate"
               className="w-full h-16 bg-[#2b2d33] border border-gray-700 text-gray-200 text-sm rounded-lg px-4 py-3 resize-none focus:outline-none focus:border-emerald-500"
             />
