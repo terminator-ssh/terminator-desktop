@@ -5,7 +5,7 @@ import {
 const NewKeyModal = ({ onClose }: { onClose: () => void }) => {
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="bg-[#23242a] w-[600px] rounded-2xl p-6 shadow-2xl border border-gray-800 relative">
+      <div className="bg-[#23242a] w-150 rounded-2xl p-6 shadow-2xl border border-gray-800 relative">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold text-white mx-auto">New key</h2>
