@@ -1,8 +1,8 @@
 import React, { useState }  from 'react';
-import { 
-  Key, Search, Plus, MoreHorizontal 
+import {
+  Key, Search, Plus, MoreHorizontal
 } from 'lucide-react';
-import NewKeychainModal from '../ui/NewKeyChainModal';
+import NewKeychainModal from '../NewKeyChainModal';
 
 const KeychainPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -18,18 +18,18 @@ const KeychainPage = () => {
     <div className="p-8 w-full">
       {/* Header */}
       <h1 className="text-3xl font-bold text-gray-200 mb-2">Terminator SSH <span className="text-gray-500 text-lg font-normal">| Keychain</span></h1>
-      
+
        {/* Controls */}
        <div className="flex justify-between items-center mb-8 mt-6">
         <div className="relative w-full max-w-2xl">
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
-          <input 
-            type="text" 
-            placeholder="Find a keychain" 
+          <input
+            type="text"
+            placeholder="Find a keychain"
             className="w-full bg-[#23242a] text-gray-300 pl-12 pr-4 py-3 rounded-xl focus:outline-none border border-transparent focus:border-gray-700"
           />
         </div>
-        <button 
+        <button
             onClick={() => setIsModalOpen(true)}
             className="bg-[#10b981] hover:bg-[#059669] text-white px-6 py-3 rounded-xl font-medium flex items-center gap-2 transition-colors ml-4"
         >
