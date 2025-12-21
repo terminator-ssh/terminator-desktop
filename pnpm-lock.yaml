@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  cpu-features@0.0.10:
+    hash: 7721d37aff8be7957401e8617f18a138deaa0cc0908b6fcf8ba90e299bb96415
+    path: patches/cpu-features@0.0.10.patch
+
 importers:
 
   .:
@@ -5968,7 +5973,7 @@ snapshots:
   core-util-is@1.0.2:
     optional: true
 
-  cpu-features@0.0.10:
+  cpu-features@0.0.10(patch_hash=7721d37aff8be7957401e8617f18a138deaa0cc0908b6fcf8ba90e299bb96415):
     dependencies:
       buildcheck: 0.0.7
       nan: 2.24.0
@@ -7915,7 +7920,7 @@ snapshots:
       asn1: 0.2.6
       bcrypt-pbkdf: 1.0.2
     optionalDependencies:
-      cpu-features: 0.0.10
+      cpu-features: 0.0.10(patch_hash=7721d37aff8be7957401e8617f18a138deaa0cc0908b6fcf8ba90e299bb96415)
       nan: 2.24.0
 
   ssri@9.0.1:

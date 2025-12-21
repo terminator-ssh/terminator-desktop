@@ -1,0 +1,6 @@
+diff --git a/binding.gyp b/binding.gyp
+deleted file mode 100644
+index 461c3e5e602e77c13d80c9f679d49ffeb2a2e7d2..0000000000000000000000000000000000000000
+diff --git a/deps/cpu_features/.gitignore b/deps/cpu_features/.gitignore
+deleted file mode 100644
+index f918154bce17d0f37bd75c3f43cf2bf1e7792f31..0000000000000000000000000000000000000000
