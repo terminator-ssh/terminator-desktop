@@ -2,11 +2,11 @@ import { useState } from 'react';
 
 import Sidebar from './components/Sidebar';
 import HostsPage from './components/pages/HostsPage';
-import KeychainPage from './components/pages/KeychainPage';
+import KeysPage from './components/pages/KeysPage';
 
 
 const App = () => {
-  const [activeTab, setActiveTab] = useState('hosts'); // Default to Keychain to show context
+  const [activeTab, setActiveTab] = useState('hosts');
 
 
   return (
@@ -15,7 +15,7 @@ const App = () => {
 
       <main className="flex-1 overflow-y-auto">
         {activeTab === 'hosts' && <HostsPage />}
-        {activeTab === 'keychain' && <KeychainPage />}
+        {activeTab === 'keys' && <KeysPage />}
         {activeTab === 'terminal' && (
             <div className="flex items-center justify-center h-full text-gray-500">Terminal Placeholder</div>
         )}

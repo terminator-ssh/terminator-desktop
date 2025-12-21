@@ -2,13 +2,13 @@ import {
   Plus,  X, FileText
 } from 'lucide-react';
 
-const NewKeychainModal = ({ onClose }: { onClose: () => void }) => {
+const NewKeyModal = ({ onClose }: { onClose: () => void }) => {
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-[#23242a] w-[600px] rounded-2xl p-6 shadow-2xl border border-gray-800 relative">
         {/* Header */}
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold text-white mx-auto">New keychain</h2>
+          <h2 className="text-xl font-semibold text-white mx-auto">New key</h2>
           <button onClick={onClose} className="absolute right-6 text-gray-400 hover:text-white">
             <X size={20} />
           </button>
@@ -71,4 +71,4 @@ const NewKeychainModal = ({ onClose }: { onClose: () => void }) => {
     </div>
   );
 };
-export default NewKeychainModal
+export default NewKeyModal

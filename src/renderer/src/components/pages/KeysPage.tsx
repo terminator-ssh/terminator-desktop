@@ -2,9 +2,9 @@ import { useState }  from 'react';
 import {
   Key, Search, Plus, MoreHorizontal
 } from 'lucide-react';
-import NewKeychainModal from '../NewKeyChainModal';
+import NewKeyModal from '../NewKeyModal';
 
-const KeychainPage = () => {
+const KeysPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const keys = [
@@ -17,7 +17,7 @@ const KeychainPage = () => {
   return (
     <div className="p-8 w-full">
       {/* Header */}
-      <h1 className="text-3xl font-bold text-gray-200 mb-2">Terminator SSH <span className="text-gray-500 text-lg font-normal">| Keychain</span></h1>
+      <h1 className="text-3xl font-bold text-gray-200 mb-2">Terminator SSH <span className="text-gray-500 text-lg font-normal">| Keys</span></h1>
 
        {/* Controls */}
        <div className="flex justify-between items-center mb-8 mt-6">
@@ -25,7 +25,7 @@ const KeychainPage = () => {
           <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-500" size={18} />
           <input
             type="text"
-            placeholder="Find a keychain"
+            placeholder="Find a key..."
             className="w-full bg-[#23242a] text-gray-300 pl-12 pr-4 py-3 rounded-xl focus:outline-none border border-transparent focus:border-gray-700"
           />
         </div>
@@ -57,9 +57,9 @@ const KeychainPage = () => {
       </div>
 
       {/* Modal Overlay */}
-      {isModalOpen && <NewKeychainModal onClose={() => setIsModalOpen(false)} />}
+      {isModalOpen && <NewKeyModal onClose={() => setIsModalOpen(false)} />}
     </div>
   );
 };
 
-export default KeychainPage
+export default KeysPage

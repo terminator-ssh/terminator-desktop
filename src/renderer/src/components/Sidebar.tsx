@@ -5,7 +5,7 @@ import {
 const Sidebar = ({ activeTab, setActiveTab }: { activeTab: string, setActiveTab: (t: string) => void }) => {
   const menuItems = [
     { id: 'hosts', icon: <Cloud size={20} />, label: 'Hosts' },
-    { id: 'keychain', icon: <Key size={20} />, label: 'Keychain' },
+    { id: 'keys', icon: <Key size={20} />, label: 'Keys' },
     { id: 'terminal', icon: <Terminal size={20} />, label: 'Terminal' },
   ];
 
