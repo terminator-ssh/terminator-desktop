@@ -3,6 +3,7 @@ import {
   Key, Search, Plus, MoreHorizontal
 } from 'lucide-react';
 import NewKeyModal from '../NewKeyModal';
+import KeyCard from '../ui/KeyCard';
 
 const KeysPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -42,17 +43,7 @@ const KeysPage = () => {
       {/* List */}
       <div className="flex flex-col gap-3">
         {keys.map((key) => (
-          <div key={key.id} className="bg-[#23242a] p-4 rounded-xl flex items-center gap-4 hover:bg-[#2b2d33] transition-colors border border-transparent hover:border-gray-700">
-            <div className="p-2 bg-[#2b2d33] rounded-lg">
-                <Key size={20} className="text-gray-400" />
-            </div>
-            <div className="flex-1">
-              <h3 className="text-gray-200 font-medium">{key.name}</h3>
-            </div>
-            <button className="text-gray-500 hover:text-white p-2">
-              <MoreHorizontal size={20} />
-            </button>
-          </div>
+          <KeyCard key={key.id} props={key} onClose={() => setIsModalOpen(false)} />
         ))}
       </div>
 
