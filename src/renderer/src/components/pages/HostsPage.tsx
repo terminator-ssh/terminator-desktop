@@ -1,8 +1,11 @@
 import {
   Cloud, Search, Plus, MoreHorizontal, Edit2, Trash2
 } from 'lucide-react';
+import { useState } from 'react';
+import NewHostModal from '../NewHostModal';
 
 const HostsPage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   // Mock data for hosts
   const hosts = [
     { id: 1, name: 'wing.vaultsoldier.tech', host: '12498442342', port: '12498', user: 'dssddasdsa' },
@@ -25,7 +28,10 @@ const HostsPage = () => {
             className="w-full bg-[#23242a] text-gray-300 pl-12 pr-4 py-3 rounded-xl focus:outline-none border border-transparent focus:border-gray-700"
           />
         </div>
-        <button className="bg-[#10b981] hover:bg-[#059669] text-white px-6 py-3 rounded-xl font-medium flex items-center gap-2 transition-colors ml-4">
+        <button
+         onClick={() => setIsModalOpen(true)}
+         className="bg-[#10b981] hover:bg-[#059669] text-white px-6 py-3 rounded-xl font-medium flex items-center gap-2 transition-colors ml-4"
+         >
           New host <Plus size={18} />
         </button>
       </div>
@@ -71,6 +77,9 @@ const HostsPage = () => {
           </div>
         ))}
       </div>
+
+      {/* Modal Overlay */}
+      {isModalOpen && <NewHostModal onClose={() => setIsModalOpen(false)} />}
     </div>
   );
 };
