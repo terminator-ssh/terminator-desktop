@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Sidebar from './components/Sidebar';
 import HostsPage from './components/pages/HostsPage';
 import KeysPage from './components/pages/KeysPage';
+import TerminalPage from './components/pages/TerminalPage';
 
 
 const App = () => {
@@ -16,9 +17,7 @@ const App = () => {
       <main className="flex-1 overflow-y-auto">
         {activeTab === 'hosts' && <HostsPage />}
         {activeTab === 'keys' && <KeysPage />}
-        {activeTab === 'terminal' && (
-            <div className="flex items-center justify-center h-full text-gray-500">Terminal Placeholder</div>
-        )}
+        {activeTab === 'terminal' && <TerminalPage />}
       </main>
 
     </div>
