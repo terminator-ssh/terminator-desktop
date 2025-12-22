@@ -3,6 +3,8 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import NewHostModal from '../NewHostModal';
+import EditHostModal from '../EditHostModal';
+import HostCard from '../ui/HostCard';
 
 const HostsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -41,40 +43,42 @@ const HostsPage = () => {
       {/* Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {hosts.map((host) => (
-          <div key={host.id} className="bg-[#23242a] p-5 rounded-2xl border border-transparent hover:border-gray-700 transition-all group relative">
-            <div className="flex items-start gap-4">
-              <div className="mt-1">
-                <Cloud size={24} className="text-gray-400" />
-              </div>
-              <div className="flex-1">
-                <h3 className="text-gray-200 font-medium text-lg">{host.name}</h3>
-                <div className="text-gray-500 text-sm mt-1 flex flex-wrap gap-x-3">
-                  <span>Host: {host.host}</span>
-                  <span className="text-gray-700">|</span>
-                  <span>Port: {host.port}</span>
-                  <span className="text-gray-700">|</span>
-                  <span>User: {host.user}</span>
-                </div>
-              </div>
+          // <div key={host.id} className="bg-[#23242a] p-5 rounded-2xl border border-transparent hover:border-gray-700 transition-all group relative">
+          //   <div className="flex items-start gap-4">
+          //     <div className="mt-1">
+          //       <Cloud size={24} className="text-gray-400" />
+          //     </div>
+          //     <div className="flex-1">
+          //       <h3 className="text-gray-200 font-medium text-lg">{host.name}</h3>
+          //       <div className="text-gray-500 text-sm mt-1 flex flex-wrap gap-x-3">
+          //         <span>Host: {host.host}</span>
+          //         <span className="text-gray-700">|</span>
+          //         <span>Port: {host.port}</span>
+          //         <span className="text-gray-700">|</span>
+          //         <span>User: {host.user}</span>
+          //       </div>
+          //     </div>
 
-              {/* Context Menu Trigger */}
-              <button className="text-gray-500 hover:text-white">
-                <MoreHorizontal size={20} />
-              </button>
+          //     {/* Context Menu Trigger */}
+          //     <button className="text-gray-500 hover:text-white">
+          //       <MoreHorizontal size={20} />
+          //     </button>
 
-              {/* Visual Demo of Context Menu (Show only on first item for demo) */}
-              {host.id === 1 && (
-                <div className="absolute right-12 top-4 bg-[#1e1f24] rounded-lg shadow-xl border border-gray-800 overflow-hidden flex flex-col w-28 z-10">
-                    <button className="flex items-center gap-2 px-4 py-2 text-xs text-gray-300 hover:bg-[#2b2d33] text-left">
-                      <Edit2 size={12} /> Edit
-                    </button>
-                    <button className="flex items-center gap-2 px-4 py-2 text-xs text-red-400 hover:bg-[#2b2d33] text-left">
-                        <Trash2 size={12} /> Delete
-                    </button>
-                </div>
-              )}
-            </div>
-          </div>
+          //     {/* Visual Demo of Context Menu (Show only on first item for demo) */}
+          //     {host.id === 1 && (
+          //       <div className="absolute right-12 top-4 bg-[#1e1f24] rounded-lg shadow-xl border border-gray-800 overflow-hidden flex flex-col w-28 z-10">
+          //           <button className="flex items-center gap-2 px-4 py-2 text-xs text-gray-300 hover:bg-[#2b2d33] text-left">
+          //             <Edit2 size={12} /> Edit
+          //           </button>
+          //           <button className="flex items-center gap-2 px-4 py-2 text-xs text-red-400 hover:bg-[#2b2d33] text-left">
+          //               <Trash2 size={12} /> Delete
+          //           </button>
+          //       </div>
+          //     )}
+          //   </div>
+            
+          // </div>
+          <HostCard key={host.id} props={host} onClose={() => setIsModalOpen(false)} />
         ))}
       </div>
 
