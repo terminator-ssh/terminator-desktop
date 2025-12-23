@@ -1,14 +1,29 @@
-import {
-  Plus,  X, FileText,
-  ArrowBigRight
-} from 'lucide-react';
+import { ArrowBigRight, X } from 'lucide-react';
+import { useState } from 'react';
 
 const SwitchServerModal = ({ onClose }: { onClose: () => void }) => {
-    const onClick = () => {}
+  const [url, setUrl] = useState('http://localhost:5000/api/v1');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleConnect = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      await window.electron.ipcRenderer.invoke('sync:register', url);
+      // If successful, try a sync immediately
+      await window.electron.ipcRenderer.invoke('sync:now');
+      onClose();
+    } catch (e) {
+      setError("Failed to connect to server");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
       <div className="bg-[#23242a] w-150 rounded-2xl p-6 shadow-2xl border border-gray-800 relative">
-        {/* Header */}
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold text-white mx-auto">Switch Server</h2>
           <button onClick={onClose} className="absolute right-6 text-gray-400 hover:text-white">
@@ -16,38 +31,30 @@ const SwitchServerModal = ({ onClose }: { onClose: () => void }) => {
           </button>
         </div>
 
-        {/* Form */}
-        <form className="space-y-4">
-          {/* Address */}
+        <div className="space-y-4">
           <div className="space-y-1">
-            <label className="text-xs text-gray-400 font-medium ml-1">Address of your server</label>
+            <label className="text-xs text-gray-400 font-medium ml-1">Server API URL</label>
             <input
               type="text"
-              placeholder="Name"
+              value={url}
+              onChange={(e) => setUrl(e.target.value)}
+              placeholder="http://example.com/api/v1"
               className="w-full bg-[#2b2d33] border border-gray-700 text-gray-200 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-emerald-500"
             />
           </div>
 
-          {/* Password. Ремувни если не нужен */}
-          <div className="flex gap-4">
-            <div className="flex-1 space-y-1">
-              <label className="text-xs text-gray-400 font-medium ml-1">Address</label>
-            <input
-              type="password"
-              placeholder="0.0.0.0"
-              className="w-full bg-[#2b2d33] border border-gray-700 text-gray-200 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-emerald-500"
-            />
-            </div>
-          </div>
-          <hr />
+          {error && <div className="text-red-400 text-sm text-center">{error}</div>}
 
-          {/* Save Button */}
-          <button type="button" onClick={onClick} className="w-full bg-[#10b981] hover:bg-[#059669] text-white font-medium py-3 rounded-xl mt-4 transition-colors flex justify-center items-center gap-2">
-            Connect <ArrowBigRight />
+          <button
+            type="button"
+            onClick={handleConnect}
+            disabled={loading}
+            className="w-full bg-[#10b981] hover:bg-[#059669] text-white font-medium py-3 rounded-xl mt-4 transition-colors flex justify-center items-center gap-2 disabled:opacity-50">
+            {loading ? "Connecting..." : "Connect & Register"} <ArrowBigRight />
           </button>
-        </form>
+        </div>
       </div>
     </div>
   );
 };
-export default SwitchServerModal
+export default SwitchServerModal;

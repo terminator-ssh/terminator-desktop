@@ -2,6 +2,8 @@ import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
+import './ssh/session-manager'
+import { registerHandlers } from './handlers' // Import it
 
 function createWindow(): void {
   // Create the browser window.
@@ -52,6 +54,7 @@ app.whenReady().then(() => {
   // IPC test
   ipcMain.on('ping', () => console.log('pong'))
 
+  registerHandlers()
   createWindow()
 
   app.on('activate', function () {
