@@ -1,11 +1,16 @@
 import { resolve } from 'path'
-import {defineConfig, externalizeDepsPlugin} from 'electron-vite'
+import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin({exclude: ['@prisma/client'] })]
+    plugins: [
+      externalizeDepsPlugin({
+        // FIX: Explicitly externalize our custom folder
+        include: ['.prisma-client']
+      })
+    ]
   },
   preload: {
     plugins: [externalizeDepsPlugin()]

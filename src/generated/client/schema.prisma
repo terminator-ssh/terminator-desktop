@@ -3,8 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["driverAdapters"]
-  output          = "../node_modules/.prisma-client"
+  output   = "../src/generated/client"
 }
 
 datasource db {
@@ -15,18 +14,18 @@ datasource db {
 model User {
   id                 String  @id // UUID
   username           String
-  keySalt            String  // Base64
+  keySalt            String // Base64
   authSalt           String? // Base64 (can be null per PDF)
-  encryptedMasterKey String  // Base64 (AES-256-GCM)
-  loginHash          String  // SHA-256 hex
+  encryptedMasterKey String // Base64 (AES-256-GCM)
+  loginHash          String // SHA-256 hex
 }
 
 // Stores everything else (Hosts, Keys) as encrypted blobs for Sync
 model EncryptedBlob {
   id        String   @id // UUID
-  blob      String   // Base64 (Encrypted JSON of ConnectionProfile or ConnectionKey)
-  iv        String   // Base64
+  blob      String // Base64 (Encrypted JSON of ConnectionProfile or ConnectionKey)
+  iv        String // Base64
   updatedAt DateTime // UTC ISO 8601
   isDeleted Boolean  @default(false)
-  versionId String?  // UUID (For future 3-way merge)
+  versionId String? // UUID (For future 3-way merge)
 }
