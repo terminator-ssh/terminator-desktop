@@ -17,7 +17,7 @@ const HostCard = (props) => {
             <div className="flex items-center gap-4">
               <div className="mt-1">
                 <Cloud size={24} className="text-gray-400" />
-              </div>props
+              </div>
               <div className="flex-1">
                 <h3 className="text-gray-200 font-medium text-lg">{props.props.name}</h3>
                 <div className="text-gray-500 text-sm mt-1 flex flex-wrap gap-x-3">
