@@ -14,7 +14,7 @@ const KeyCard = (props) => {
   console.log(props.props)
   return (
     
-          <div key={props.props.id} className="bg-[#23242a] p-4 rounded-xl flex items-center gap-4 hover:bg-[#2b2d33] transition-colors border border-transparent hover:border-gray-700">
+          <div key={props.props.id} className="bg-[#23242a] p-4 rounded-xl flex items-center gap-4 hover:bg-[#2b2d33]  transition-colors border border-transparent hover:border-gray-700 transition-all group relative">
             <div className="p-2 bg-[#2b2d33] rounded-lg">
                 <Key size={20} className="text-gray-400" />
             </div>
