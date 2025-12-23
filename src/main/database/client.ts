@@ -1,5 +1,4 @@
 ﻿import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3'
-// FIX: Import from the standard @prisma/client package
 import path from 'path'
 import { app } from 'electron'
 import {PrismaClient} from "@prisma/client/extension";

@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 export default defineConfig({
   main: {
-    plugins: [externalizeDepsPlugin()]
+    plugins: [externalizeDepsPlugin({exclude: ['@prisma/client'] })]
   },
   preload: {
     plugins: [externalizeDepsPlugin()]
