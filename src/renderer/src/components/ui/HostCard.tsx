@@ -14,7 +14,7 @@ const HostCard = (props) => {
   return (
     
           <div key={props.props.id} className="bg-[#23242a] p-5 rounded-2xl border border-transparent hover:border-gray-700 transition-all group relative">
-            <div className="flex items-start gap-4">
+            <div className="flex items-center gap-4">
               <div className="mt-1">
                 <Cloud size={24} className="text-gray-400" />
               </div>props
