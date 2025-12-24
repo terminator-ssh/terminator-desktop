@@ -1,10 +1,26 @@
-﻿import "dotenv/config";
-import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
-import { PrismaClient } from "@prisma/client";
+﻿import { drizzle } from 'drizzle-orm/better-sqlite3';
+import { migrate } from 'drizzle-orm/better-sqlite3/migrator';
+import Database from 'better-sqlite3';
+import path from 'path';
+import { app } from 'electron';
+import * as schema from './schema'; // Import your tables
 
-const connectionString = `${process.env.DATABASE_URL}`;
+const dbPath = app.isPackaged
+  ? path.join(app.getPath('userData'), 'terminator.db')
+  : path.join(__dirname, '../../dev.db');
 
-const adapter = new PrismaBetterSqlite3({ url: connectionString });
-const prisma = new PrismaClient({ adapter });
+const migrationsFolder = app.isPackaged
+  ? path.join(process.resourcesPath, 'drizzle')
+  : path.join(__dirname, '../../drizzle');
 
-export { prisma };
+const sqlite = new Database(dbPath);
+sqlite.pragma('journal_mode = WAL');
+
+export const db = drizzle(sqlite, { schema });
+
+try {
+  migrate(db, { migrationsFolder });
+  console.log("Migrations applied successfully.");
+} catch (e) {
+  console.error("Migration failed:", e);
+}

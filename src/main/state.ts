@@ -16,7 +16,7 @@
   }
 
   getLoginKey(): string {
-    if (!this._loginKey) throw new Error("VAULT_LOCKED");
+    if (!this._loginKey) throw new Error("NOT_LOGGED_IN");
     return this._loginKey;
   }
 

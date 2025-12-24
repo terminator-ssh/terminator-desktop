@@ -1,19 +1,19 @@
 ﻿import axios from 'axios'
-import { prisma } from '../database/client'
+import { gt } from 'drizzle-orm'
+import { db } from '../database/client'
+import { encryptedBlobs } from '../database/schema'
 import { appState } from '../state'
 
 export class SyncService {
-  // CHANGE THIS TO YOUR REAL C# API URL
   private baseUrl: string = 'http://localhost:5000/api/v1'
   private token: string | null = null
 
   async authenticate() {
-    const user = await prisma.user.findFirst()
+    const user = await db.query.users.findFirst();
     if (!user) return
 
     try {
       // PDF Page 21: POST /api/v1/auth/login
-      // We use the loginKey we calculated during the local login phase
       const loginKey = appState.getLoginKey();
 
       const response = await axios.post(`${this.baseUrl}/auth/login`, {
@@ -35,25 +35,29 @@ export class SyncService {
     if (!this.token) await this.authenticate()
     if (!this.token) return
 
-    // Get last sync time
-    const lastSyncRow = await prisma.encryptedBlob.findFirst({
-      orderBy: { updatedAt: 'desc' }
-    })
-    const lastSyncTime = lastSyncRow?.updatedAt.toISOString() || new Date(0).toISOString()
+    // 1. Get last sync time (latest local update)
+    // Drizzle: SELECT * FROM encrypted_blobs ORDER BY updated_at DESC LIMIT 1
+    const lastSyncRow = await db.query.encryptedBlobs.findFirst({
+      orderBy: (blobs, { desc }) => [desc(blobs.updatedAt)]
+    });
 
-    // A. Collect local changes
-    const localChanges = await prisma.encryptedBlob.findMany({
-      where: { updatedAt: { gt: lastSyncRow?.updatedAt || new Date(0) } }
-    })
+    const lastSyncTime = lastSyncRow?.updatedAt || new Date(0).toISOString();
+
+    // 2. Collect local changes
+    // Drizzle: SELECT * FROM encrypted_blobs WHERE updated_at > lastSyncTime
+    const localChanges = await db
+      .select()
+      .from(encryptedBlobs)
+      .where(gt(encryptedBlobs.updatedAt, lastSyncTime));
 
     try {
-      // B. Push to Server
+      // 3. Push to Server
       const response = await axios.post(`${this.baseUrl}/sync`, {
         blobs: localChanges.map(b => ({
           id: b.id,
-          updatedAt: b.updatedAt.toISOString(),
+          updatedAt: b.updatedAt, // Already string in Drizzle/SQLite
           iv: b.iv,
-          isDeleted: b.isDeleted,
+          isDeleted: b.isDeleted, // Drizzle handles 0/1 -> boolean conversion
           blob: b.blob,
           versionId: b.versionId
         })),
@@ -62,25 +66,25 @@ export class SyncService {
         headers: { Authorization: `Bearer ${this.token}` }
       })
 
-      // C. Process incoming blobs
-      // Note: We don't need to decrypt these to save them. We save them as encrypted blobs.
+      // 4. Process incoming blobs
       const incomingBlobs = response.data.blobs
+
       for (const incoming of incomingBlobs) {
-        await prisma.encryptedBlob.upsert({
-          where: { id: incoming.id },
-          update: {
+        // Drizzle Upsert
+        await db.insert(encryptedBlobs).values({
+          id: incoming.id,
+          blob: incoming.blob,
+          iv: incoming.iv,
+          isDeleted: incoming.isDeleted,
+          updatedAt: incoming.updatedAt, // Server sends ISO string
+          versionId: incoming.versionId
+        }).onConflictDoUpdate({
+          target: encryptedBlobs.id,
+          set: {
             blob: incoming.blob,
             iv: incoming.iv,
             isDeleted: incoming.isDeleted,
-            updatedAt: new Date(incoming.updatedAt),
-            versionId: incoming.versionId
-          },
-          create: {
-            id: incoming.id,
-            blob: incoming.blob,
-            iv: incoming.iv,
-            isDeleted: incoming.isDeleted,
-            updatedAt: new Date(incoming.updatedAt),
+            updatedAt: incoming.updatedAt,
             versionId: incoming.versionId
           }
         })
@@ -93,22 +97,21 @@ export class SyncService {
 
   async registerOnServer(serverUrl: string) {
     // 1. Get Local User Data
-    const user = await prisma.user.findFirst();
+    const user = await db.query.users.findFirst();
     if (!user) throw new Error("No local user found");
 
-    // 2. Get the LoginKey (Requires app to be unlocked)
+    // 2. Get the LoginKey
     if (!appState.isUnlocked()) throw new Error("Vault locked");
     const loginKey = appState.getLoginKey();
 
     try {
       // PDF Page 20: /api/v1/auth/register
-      // RegisterRequestDto: { username, authSalt, keySalt, loginKey, encryptedMasterKey }
       await axios.post(`${serverUrl}/auth/register`, {
         username: user.username,
         authSalt: user.authSalt,
         keySalt: user.keySalt,
-        loginKey: loginKey, // We send this so server can hash it and verify login later
-        encryptedMasterKey: user.encryptedMasterKey // Server stores this blob for other devices
+        loginKey: loginKey,
+        encryptedMasterKey: user.encryptedMasterKey
       });
 
       this.baseUrl = serverUrl;

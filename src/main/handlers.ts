@@ -1,9 +1,11 @@
 ﻿import { ipcMain } from 'electron'
 import { v4 as uuidv4 } from 'uuid'
-import { prisma } from './database/client'
+import { eq } from 'drizzle-orm'
+import { db } from './database/client'
+import { encryptedBlobs } from './database/schema'
 import { Host, SavedKey, IPC } from '../shared/types'
 import { authService } from './services/AuthService'
-import { syncService } from './services/SyncService' // <--- ADDED THIS
+import { syncService } from './services/SyncService'
 import { appState } from './state'
 import { encryptAES, decryptAES, packBlob, unpackBlob } from './lib/crypto'
 
@@ -24,7 +26,7 @@ export function registerHandlers() {
   ipcMain.handle(IPC.HOSTS.GET, async () => {
     const mk = appState.getMasterKey();
 
-    const blobs = await prisma.encryptedBlob.findMany({ where: { isDeleted: false } })
+    const blobs = await db.select().from(encryptedBlobs).where(eq(encryptedBlobs.isDeleted, false));
     const hosts: Host[] = []
 
     for (const row of blobs) {
@@ -50,17 +52,16 @@ export function registerHandlers() {
     const { ciphertext, iv, tag } = encryptAES(Buffer.from(json), mk);
     const blob = packBlob(iv, ciphertext, tag);
 
-    await prisma.encryptedBlob.upsert({
-      where: { id },
-      update: { blob, updatedAt: new Date(), iv },
-      create: {
-        id,
-        blob,
-        iv,
-        updatedAt: new Date(),
-        isDeleted: false
-      }
-    })
+    await db.insert(encryptedBlobs).values({
+      id,
+      blob,
+      iv,
+      updatedAt: new Date().toISOString(),
+      isDeleted: false
+    }).onConflictDoUpdate({
+      target: encryptedBlobs.id,
+      set: { blob, updatedAt: new Date().toISOString(), iv }
+    });
     return { success: true, id }
   })
 
@@ -69,7 +70,7 @@ export function registerHandlers() {
   // GET KEYS
   ipcMain.handle(IPC.KEYS.GET, async () => {
     const mk = appState.getMasterKey();
-    const blobs = await prisma.encryptedBlob.findMany({ where: { isDeleted: false } })
+    const blobs = await db.select().from(encryptedBlobs).where(eq(encryptedBlobs.isDeleted, false));
     const keys: SavedKey[] = []
 
     for (const row of blobs) {
@@ -95,17 +96,16 @@ export function registerHandlers() {
     const { ciphertext, iv, tag } = encryptAES(Buffer.from(json), mk);
     const blob = packBlob(iv, ciphertext, tag);
 
-    await prisma.encryptedBlob.upsert({
-      where: { id },
-      update: { blob, updatedAt: new Date(), iv },
-      create: {
-        id,
-        blob,
-        iv,
-        updatedAt: new Date(),
-        isDeleted: false
-      }
-    })
+    await db.insert(encryptedBlobs).values({
+      id,
+      blob,
+      iv,
+      updatedAt: new Date().toISOString(),
+      isDeleted: false
+    }).onConflictDoUpdate({
+      target: encryptedBlobs.id,
+      set: { blob, updatedAt: new Date().toISOString(), iv }
+    });
     return { success: true, id }
   })
 
@@ -115,9 +115,8 @@ export function registerHandlers() {
 }
 
 async function deleteBlob(id: string) {
-  await prisma.encryptedBlob.update({
-    where: { id },
-    data: { isDeleted: true, updatedAt: new Date() }
-  })
+  await db.update(encryptedBlobs)
+    .set({ isDeleted: true, updatedAt: new Date().toISOString() })
+    .where(eq(encryptedBlobs.id, id));
   return true
 }
