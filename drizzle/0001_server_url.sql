@@ -1,0 +1,1 @@
+ALTER TABLE `users` ADD `server_url` text;

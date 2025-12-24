@@ -11,18 +11,25 @@ import { encryptAES, decryptAES, packBlob, unpackBlob } from './lib/crypto'
 
 export function registerHandlers() {
 
-  // --- AUTH ---
-  ipcMain.handle('auth:check', () => authService.hasUser())
-  ipcMain.handle('auth:register', (_, { username, password }) => authService.register(username, password))
-  ipcMain.handle('auth:login', (_, { password }) => authService.login(password))
+  ipcMain.handle('auth:check', () =>
+    authService.hasUser()
+  )
+  ipcMain.handle('auth:register', (_, { username, password }) =>
+    authService.registerLocal(username, password)
+  )
+  ipcMain.handle('auth:login', (_, { password }) =>
+    authService.login(password)
+  )
+  ipcMain.handle('auth:login-sync', (_, { url, username, password }) =>
+    authService.loginFromSync(url, username, password)
+  )
+  ipcMain.handle('sync:register', (_, url) =>
+    syncService.registerOnServer(url)
+  );
+  ipcMain.handle('sync:now', () =>
+    syncService.sync()
+  );
 
-  // --- SYNC ---
-  ipcMain.handle('sync:register', (_, url) => syncService.registerOnServer(url));
-  ipcMain.handle('sync:now', () => syncService.sync());
-
-  // --- HOSTS ---
-
-  // GET HOSTS
   ipcMain.handle(IPC.HOSTS.GET, async () => {
     const mk = appState.getMasterKey();
 
@@ -43,7 +50,6 @@ export function registerHandlers() {
     return hosts
   })
 
-  // SAVE HOST
   ipcMain.handle(IPC.HOSTS.SAVE, async (_, host: Host) => {
     const mk = appState.getMasterKey();
     const id = host.id || uuidv4();
@@ -65,9 +71,6 @@ export function registerHandlers() {
     return { success: true, id }
   })
 
-  // --- KEYS ---
-
-  // GET KEYS
   ipcMain.handle(IPC.KEYS.GET, async () => {
     const mk = appState.getMasterKey();
     const blobs = await db.select().from(encryptedBlobs).where(eq(encryptedBlobs.isDeleted, false));
@@ -87,7 +90,6 @@ export function registerHandlers() {
     return keys
   })
 
-  // SAVE KEY
   ipcMain.handle(IPC.KEYS.SAVE, async (_, key: SavedKey) => {
     const mk = appState.getMasterKey();
     const id = key.id || uuidv4();
@@ -109,7 +111,6 @@ export function registerHandlers() {
     return { success: true, id }
   })
 
-  // --- SHARED ---
   ipcMain.handle(IPC.HOSTS.DELETE, async (_, id) => deleteBlob(id))
   ipcMain.handle(IPC.KEYS.DELETE, async (_, id) => deleteBlob(id))
 }

@@ -3,8 +3,6 @@ import crypto from 'crypto';
 
 const AES_ALGO = 'aes-256-gcm';
 
-// 1. KEK Generation (Argon2)
-// PDF: KEK = argon2(password, key salt)
 export async function deriveKEK(password: string, keySaltBase64: string): Promise<Buffer> {
   return await argon2.hash(password, {
     raw: true,
@@ -16,7 +14,6 @@ export async function deriveKEK(password: string, keySaltBase64: string): Promis
   });
 }
 
-// 2. Generic AES Encryption (Used for MasterKey and Blobs)
 export function encryptAES(data: Buffer, key: Buffer): { ciphertext: string, iv: string, tag: string } {
   const iv = crypto.randomBytes(12);
   const cipher = crypto.createCipheriv(AES_ALGO, key, iv);
@@ -32,7 +29,6 @@ export function encryptAES(data: Buffer, key: Buffer): { ciphertext: string, iv:
   };
 }
 
-// 3. Generic AES Decryption
 export function decryptAES(ciphertextB64: string, ivB64: string, tagB64: string, key: Buffer): Buffer {
   const decipher = crypto.createDecipheriv(AES_ALGO, key, Buffer.from(ivB64, 'base64'));
   decipher.setAuthTag(Buffer.from(tagB64, 'base64'));
@@ -43,9 +39,6 @@ export function decryptAES(ciphertextB64: string, ivB64: string, tagB64: string,
   return decrypted;
 }
 
-// 4. Helper for PDF Page 5 logic (Blob construction)
-// The PDF says "blob = base64(iv + ciphertext + authTag)"
-// We will pack them into a string for storage.
 export function packBlob(iv: string, ciphertext: string, tag: string): string {
   const buf = Buffer.concat([
     Buffer.from(iv, 'base64'),
@@ -57,7 +50,6 @@ export function packBlob(iv: string, ciphertext: string, tag: string): string {
 
 export function unpackBlob(blobB64: string): { iv: string, ciphertext: string, tag: string } {
   const buf = Buffer.from(blobB64, 'base64');
-  // IV (12) + Cipher + Tag (16)
   const iv = buf.subarray(0, 12);
   const tag = buf.subarray(buf.length - 16);
   const ciphertext = buf.subarray(12, buf.length - 16);
