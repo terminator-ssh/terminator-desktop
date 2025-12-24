@@ -1,17 +1,10 @@
-﻿import { PrismaBetterSqlite3 } from '@prisma/adapter-better-sqlite3'
-import path from 'path'
-import { app } from 'electron'
+﻿import "dotenv/config";
+import { PrismaBetterSqlite3 } from "@prisma/adapter-better-sqlite3";
+import { PrismaClient } from "@prisma/client";
 
-// FIX: Import directly from our custom generated location
-// @ts-ignore - Typescript might complain it can't find it, but it exists
-import { PrismaClient } from '.prisma-client'
+const connectionString = `${process.env.DATABASE_URL}`;
 
-const dbPath = app.isPackaged
-  ? path.join(app.getPath('userData'), 'app.db')
-  : path.join(__dirname, '../../prisma/dev.db')
+const adapter = new PrismaBetterSqlite3({ url: connectionString });
+const prisma = new PrismaClient({ adapter });
 
-const adapter = new PrismaBetterSqlite3({
-  url: `file:${dbPath}`
-})
-
-export const prisma = new PrismaClient({ adapter })
+export { prisma };

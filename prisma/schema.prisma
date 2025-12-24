@@ -3,8 +3,7 @@
 
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["driverAdapters"]
-  output          = "../node_modules/.prisma-client"
+  output = "../generated/prisma/client"
 }
 
 datasource db {

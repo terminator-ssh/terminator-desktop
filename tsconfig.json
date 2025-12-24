@@ -5,6 +5,12 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/renderer/src/*"]
-    }
+    },
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "target": "ES2023",
+    "strict": true,
+    "esModuleInterop": true,
+    "ignoreDeprecations": "6.0"
   }
 }

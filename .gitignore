@@ -29,4 +29,4 @@ out
 .idea
 .vscode
 
-/src/generated/prisma
+*.db
