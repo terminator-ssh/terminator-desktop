@@ -8,9 +8,10 @@ export async function deriveKEK(password: string, keySaltBase64: string): Promis
     raw: true,
     salt: Buffer.from(keySaltBase64, 'base64'),
     timeCost: 3,
-    memoryCost: 4096,
-    parallelism: 1,
-    hashLength: 32 // 32 bytes = 256 bits
+    memoryCost: 131072,
+    parallelism: 4,
+    hashLength: 32,
+    type: argon2.argon2id
   });
 }
 
