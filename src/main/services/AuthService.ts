@@ -1,5 +1,5 @@
 ﻿import { count } from 'drizzle-orm';
-import {db, destroyDatabaseAndRestart} from '../database/client';
+import {db, destroyDatabase} from '../database/client';
 import { users } from '../database/schema';
 import { deriveKEK, encryptAES, decryptAES } from '../lib/crypto';
 import { appState } from '../state';
@@ -7,6 +7,7 @@ import crypto from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 import { syncService } from './SyncService';
+import {app} from "electron";
 
 export class AuthService {
 
@@ -24,8 +25,9 @@ export class AuthService {
     };
   }
 
-  async wipeData() {
-    destroyDatabaseAndRestart();
+  async wipeDataAndCloseApp() {
+    destroyDatabase();
+    app.exit(0);
   }
 
   async registerLocal(username: string, password: string) {

@@ -16,7 +16,7 @@ const triggerSync = () => {
 export function registerHandlers() {
 
   ipcMain.handle('auth:me', () => authService.getCurrentUser())
-  ipcMain.handle('auth:wipe', () => authService.wipeData())
+  ipcMain.handle('auth:wipe', () => authService.wipeDataAndCloseApp())
   ipcMain.handle('auth:check', () => authService.hasUser())
   ipcMain.handle('auth:register', (_, { username, password }) => authService.registerLocal(username, password))
   ipcMain.handle('auth:login', (_, { password }) => authService.login(password))

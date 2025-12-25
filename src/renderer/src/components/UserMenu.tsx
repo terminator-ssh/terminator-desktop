@@ -155,7 +155,7 @@ const UserMenu = () => {
       {showWipeModal && (
         <ConfirmModal
           title="Wipe Everything?"
-          message="This will delete your database and keys, and restart the app. This cannot be undone."
+          message="This will delete your database and keys, and close the app. This cannot be undone."
           confirmText="Nuke it"
           onConfirm={handleWipe}
           onCancel={() => setShowWipeModal(false)}

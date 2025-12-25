@@ -26,7 +26,7 @@ try {
   console.error("Migration failed:", e);
 }
 
-export function destroyDatabaseAndRestart() {
+export function destroyDatabase() {
   console.log("Stopping database...");
   sqlite.close();
 
@@ -41,7 +41,4 @@ export function destroyDatabaseAndRestart() {
       }
     }
   });
-
-  app.relaunch({ args: process.argv.slice(1) });
-  app.exit(0);
 }
