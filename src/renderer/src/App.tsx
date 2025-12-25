@@ -6,8 +6,10 @@ import TerminalPage from './components/pages/TerminalPage';
 import NewUserModal from './components/NewUserModal';
 import LoginModal from './components/LoginModal';
 import { useStore } from './store/useStore';
+import { useQueryClient } from '@tanstack/react-query';
 
 const App = () => {
+  const queryClient = useQueryClient();
   const {
     activeTab, setActiveTab,
     isUnlocked, setUnlocked,
@@ -16,6 +18,20 @@ const App = () => {
   } = useStore();
 
   const [checkingAuth, setCheckingAuth] = useState(true);
+
+  useEffect(() => {
+    const handleUpdates = () => {
+      console.log("Background sync received new data, refreshing UI...");
+      queryClient.invalidateQueries({ queryKey: ['hosts'] });
+      queryClient.invalidateQueries({ queryKey: ['keys'] });
+    };
+
+    window.electron.ipcRenderer.on('sync:updates-available', handleUpdates);
+
+    return () => {
+      window.electron.ipcRenderer.removeAllListeners('sync:updates-available');
+    };
+  }, [queryClient]);
 
   useEffect(() => {
     const checkUser = async () => {

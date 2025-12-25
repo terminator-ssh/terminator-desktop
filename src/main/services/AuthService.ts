@@ -1,17 +1,31 @@
 ﻿import { count } from 'drizzle-orm';
-import { db } from '../database/client';
+import {db, destroyDatabaseAndRestart} from '../database/client';
 import { users } from '../database/schema';
 import { deriveKEK, encryptAES, decryptAES } from '../lib/crypto';
 import { appState } from '../state';
 import crypto from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
+import { syncService } from './SyncService';
 
 export class AuthService {
 
   async hasUser(): Promise<boolean> {
     const result = await db.select({ value: count() }).from(users);
     return result[0].value > 0;
+  }
+
+  async getCurrentUser() {
+    const user = await db.query.users.findFirst();
+    if (!user) return null;
+    return {
+      username: user.username,
+      serverUrl: user.serverUrl
+    };
+  }
+
+  async wipeData() {
+    destroyDatabaseAndRestart();
   }
 
   async registerLocal(username: string, password: string) {
@@ -39,17 +53,19 @@ export class AuthService {
       authSalt,
       encryptedMasterKey: packedEncryptedMK,
       loginHash,
-      serverUrl: null
+      serverUrl: null,
+      lastSyncTime: new Date(0).toISOString()
     });
 
     appState.setKeys(masterKey, loginKey);
+    syncService.startAutoSync();
     return true;
   }
 
   async loginFromSync(serverUrl: string, username: string, password: string) {
     try {
       console.log(`[Auth] Preflight to ${serverUrl} for ${username}`);
-      const preflight = await axios.post(`${serverUrl}/Auth/preflight`, { username });
+      const preflight = await axios.post(`${serverUrl}/auth/preflight`, { username });
       const { authSalt, keySalt, encryptedMasterKey } = preflight.data;
 
       console.log(`[Auth] Salts received. AuthSalt: ${authSalt.substring(0, 10)}... KeySalt: ${keySalt.substring(0, 10)}...`);
@@ -60,7 +76,7 @@ export class AuthService {
 
       console.log(`[Auth] Derived LoginKey: ${loginKey.substring(0, 10)}...`);
 
-      await axios.post(`${serverUrl}/Auth/login`, { username, loginKey });
+      await axios.post(`${serverUrl}/auth/login`, { username, loginKey });
       console.log("[Auth] Server login successful");
 
       const buf = Buffer.from(encryptedMasterKey, 'base64');
@@ -80,10 +96,12 @@ export class AuthService {
         authSalt,
         encryptedMasterKey,
         loginHash,
-        serverUrl
+        serverUrl,
+        lastSyncTime: new Date(0).toISOString()
       });
 
       appState.setKeys(masterKey, loginKey);
+      syncService.startAutoSync();
       return true;
 
     } catch (e: any) {
@@ -113,6 +131,7 @@ export class AuthService {
     try {
       const masterKey = decryptAES(ciphertext, iv, tag, kek);
       appState.setKeys(masterKey, loginKey);
+      syncService.startAutoSync();
       return true;
     } catch (e) {
       return false;

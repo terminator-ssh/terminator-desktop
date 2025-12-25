@@ -15,6 +15,13 @@
       "when": 1766602871570,
       "tag": "0001_server_url",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1766624425639,
+      "tag": "0002_user_last_sync_time",
+      "breakpoints": true
     }
   ]
 }

@@ -9,8 +9,14 @@ import { syncService } from './services/SyncService'
 import { appState } from './state'
 import { encryptAES, decryptAES, packBlob, unpackBlob } from './lib/crypto'
 
+const triggerSync = () => {
+  syncService.sync().catch(e => console.error("Auto-sync error:", e));
+}
+
 export function registerHandlers() {
 
+  ipcMain.handle('auth:me', () => authService.getCurrentUser())
+  ipcMain.handle('auth:wipe', () => authService.wipeData())
   ipcMain.handle('auth:check', () => authService.hasUser())
   ipcMain.handle('auth:register', (_, { username, password }) => authService.registerLocal(username, password))
   ipcMain.handle('auth:login', (_, { password }) => authService.login(password))
@@ -58,6 +64,7 @@ export function registerHandlers() {
       target: encryptedBlobs.id,
       set: { blob, updatedAt: new Date().toISOString(), iv }
     });
+    triggerSync();
     return { success: true, id }
   })
 
@@ -98,6 +105,8 @@ export function registerHandlers() {
       target: encryptedBlobs.id,
       set: { blob, updatedAt: new Date().toISOString(), iv }
     });
+
+    triggerSync();
     return { success: true, id }
   })
 
@@ -109,5 +118,7 @@ async function deleteBlob(id: string) {
   await db.update(encryptedBlobs)
     .set({ isDeleted: true, updatedAt: new Date().toISOString() })
     .where(eq(encryptedBlobs.id, id));
+
+  triggerSync();
   return true
 }

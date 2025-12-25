@@ -33,3 +33,5 @@ export const IPC = {
     DISCONNECT: 'ssh:disconnect',
   }
 }
+
+export type SyncStatus = 'idle' | 'syncing' | 'success' | 'error' | 'offline' | 'unauthenticated';

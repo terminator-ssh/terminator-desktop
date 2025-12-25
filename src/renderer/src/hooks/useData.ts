@@ -66,3 +66,12 @@ export const useDeleteKey = () => {
     }
   });
 };
+
+export const useCurrentUser = () => {
+  return useQuery({
+    queryKey: ['me'],
+    queryFn: async () => {
+      return await window.electron.ipcRenderer.invoke('auth:me');
+    }
+  });
+};

@@ -3,7 +3,8 @@ import { migrate } from 'drizzle-orm/better-sqlite3/migrator';
 import Database from 'better-sqlite3';
 import path from 'path';
 import { app } from 'electron';
-import * as schema from './schema'; // Import your tables
+import * as schema from './schema';
+import fs from 'fs';
 
 const dbPath = app.isPackaged
   ? path.join(app.getPath('userData'), 'terminator.db')
@@ -23,4 +24,24 @@ try {
   console.log("Migrations applied successfully.");
 } catch (e) {
   console.error("Migration failed:", e);
+}
+
+export function destroyDatabaseAndRestart() {
+  console.log("Stopping database...");
+  sqlite.close();
+
+  const files = [dbPath, `${dbPath}-wal`, `${dbPath}-shm`];
+  files.forEach(f => {
+    if (fs.existsSync(f)) {
+      try {
+        fs.unlinkSync(f);
+      }
+      catch (e) {
+        console.error(`Failed to delete ${f}`, e);
+      }
+    }
+  });
+
+  app.relaunch({ args: process.argv.slice(1) });
+  app.exit(0);
 }

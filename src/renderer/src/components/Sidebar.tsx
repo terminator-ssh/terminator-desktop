@@ -1,14 +1,9 @@
-import {
-  Cable,
-  Cloud, Key, Terminal, User
-} from 'lucide-react';
-import { useState } from 'react';
-import SwitchServerModal from './SwitchServerModal';
+import { Cloud, Key, Terminal } from 'lucide-react';
 import { TabType } from '@/store/useStore';
+import UserMenu from './UserMenu';
 
-const Sidebar = ({ activeTab, setActiveTab }: { activeTab: TabType, setActiveTab: (t: TabType) => void }) => {
-
-  const [isServermodalVisible, setServerModalVisible] = useState(false)
+const Sidebar = ({ activeTab, setActiveTab }:
+                 { activeTab: TabType, setActiveTab: (t: TabType) => void }) => {
 
   const menuItems: { id: TabType, icon: any, label: string }[] = [
     { id: 'hosts', icon: <Cloud size={20} />, label: 'Hosts' },
@@ -18,15 +13,12 @@ const Sidebar = ({ activeTab, setActiveTab }: { activeTab: TabType, setActiveTab
 
   return (
     <div className="w-64 bg-[#1e1f24] h-screen flex flex-col p-4 border-r border-gray-800">
-      {isServermodalVisible && <SwitchServerModal onClose={() => setServerModalVisible(false)}/>}
-      <div className="bg-[#2b2d33] rounded-xl p-3 mb-8 flex items-center gap-3">
-        <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center">
-          <User size={16} className="text-gray-300" />
-        </div>
-        <div className="text-sm font-medium text-gray-200">User Meme</div>
+
+      <div className="mb-8">
+        <UserMenu />
       </div>
 
-      <nav className="flex flex-col gap-2">
+      <nav className="flex flex-col gap-2 flex-1">
         {menuItems.map((item) => (
           <button
             key={item.id}
@@ -41,16 +33,6 @@ const Sidebar = ({ activeTab, setActiveTab }: { activeTab: TabType, setActiveTab
             {item.label}
           </button>
         ))}
-
-        <button
-          key={"switchServer"}
-          onClick={() => setServerModalVisible(true)}
-          className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-colors text-gray-400 hover:text-gray-200 hover:bg-[#2b2d33] `}
-        >
-          <Cable size={20} />
-          Switch Server
-        </button>
-
       </nav>
     </div>
   );

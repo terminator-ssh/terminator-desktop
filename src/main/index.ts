@@ -4,7 +4,6 @@ import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import './ssh/session-manager'
 import { registerHandlers } from './handlers'
-import {syncService} from "./services/SyncService"; // Import it
 
 function createWindow(): void {
   // Create the browser window.
@@ -63,14 +62,6 @@ app.whenReady().then(() => {
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createWindow()
   })
-
-  setInterval(() => {
-    syncService.sync().catch(err => console.error("Auto-Sync failed:", err));
-  }, 30 * 1000);
-
-  setTimeout(() => {
-    syncService.sync().catch(err => console.error("Startup Sync failed:", err));
-  }, 2000);
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

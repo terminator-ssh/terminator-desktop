@@ -8,6 +8,7 @@ export const users = sqliteTable('users', {
   encryptedMasterKey: text('encrypted_master_key').notNull(),
   loginHash: text('login_hash').notNull(),
   serverUrl: text('server_url'),
+  lastSyncTime: text('last_sync_time'),
 });
 
 export const encryptedBlobs = sqliteTable('encrypted_blobs', {
