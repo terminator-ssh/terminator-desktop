@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: terminator
+appId: com.terminator.app
+productName: Terminator
 directories:
   buildResources: build
 files:
@@ -9,11 +9,14 @@ files:
   - '!{.eslintcache,eslint.config.mjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
   - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
   - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+  - '!*.{db,.db-shm,.db-wal}'
   - from: drizzle
     to: drizzle
     filter: ["**/*"]
 asarUnpack:
   - resources/**
+  - "**/node_modules/better-sqlite3/**/*"
+  - "**/node_modules/argon2/**/*"
 win:
   executableName: terminator
 nsis:
@@ -46,3 +49,7 @@ publish:
   url: https://example.com/auto-updates
 electronDownload:
   mirror: https://npmmirror.com/mirrors/electron/
+
+extraResources:
+  - from: drizzle
+    to: drizzle

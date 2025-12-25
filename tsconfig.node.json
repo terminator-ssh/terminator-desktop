@@ -10,5 +10,9 @@
   "compilerOptions": {
     "composite": true,
     "types": ["electron-vite/node"]
+  },
+  "paths": {
+    "@renderer/*": ["src/renderer/src/*"],
+    "@shared/*": ["src/shared/*"]
   }
 }

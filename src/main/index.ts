@@ -10,6 +10,7 @@ function createWindow(): void {
   const mainWindow = new BrowserWindow({
     width: 1600,
     height: 920,
+    title: 'Terminator',
     show: false,
     autoHideMenuBar: true,
     ...(process.platform === 'linux' ? { icon } : {}),
