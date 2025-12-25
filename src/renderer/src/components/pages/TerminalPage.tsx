@@ -16,7 +16,6 @@ interface TerminalPageProps {
 
 const TerminalPage = ({ connection, sessionId, isActive }: TerminalPageProps) => {
   const { removeSession } = useStore();
-
   const { data: keys = [], isLoading: keysLoading } = useKeys();
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -25,116 +24,156 @@ const TerminalPage = ({ connection, sessionId, isActive }: TerminalPageProps) =>
   const fitAddonRef = useRef<FitAddon | null>(null);
 
   const [status, setStatus] = useState('Initializing...');
-
-  const connectionInitiatedRef = useRef(false);
+  const connectedRef = useRef(false);
   const terminalMountedRef = useRef(false);
 
   useEffect(() => {
     if (!terminalRef.current || terminalMountedRef.current) return;
+
+    if (connection.keyId && keysLoading) {
+      setStatus('Loading Keys...');
+      return;
+    }
+
     terminalMountedRef.current = true;
 
     const term = new Terminal({
       cursorBlink: true,
       fontSize: 14,
-      fontFamily: 'Menlo, Monaco, "Courier New", monospace',
-      theme: { background: '#16171b', foreground: '#ffffff' }
+      fontFamily: '"CascadiaMonoNF-SemiLight", "CascadiaMonoNF", "SourceCodeProNF", "Cascadia Code", ' +
+        'Consolas, monospace',
+      allowProposedApi: true,
+      lineHeight: 1.1,
+      theme: {
+        background: '#16171b',
+        foreground: '#ffffff',
+        cursor: '#f8f8f2',
+        selectionBackground: 'rgba(255, 255, 255, 0.3)',
+      }
     });
 
     const fitAddon = new FitAddon();
     term.loadAddon(fitAddon);
-    try { term.loadAddon(new WebglAddon()); } catch (e) { }
+
+    try {
+      const webgl = new WebglAddon();
+      webgl.onContextLoss(() => { term.dispose() });
+      term.loadAddon(webgl);
+    } catch (e) {
+      console.warn("WebGL failed");
+    }
 
     term.open(terminalRef.current);
     fitAddon.fit();
-
     xtermRef.current = term;
     fitAddonRef.current = fitAddon;
 
-    return () => {
-      window.electron.ipcRenderer.send(IPC.SSH.DISCONNECT, sessionId);
-      term.dispose();
-      connectionInitiatedRef.current = false;
-      terminalMountedRef.current = false;
-    };
-  }, []);
+    term.attachCustomKeyEventHandler((arg) => {
+      if (arg.repeat) return false;
 
-  useEffect(() => {
-    if (!xtermRef.current || connectionInitiatedRef.current) return;
-
-    let resolvedKey = '';
-
-    if (connection.keyId) {
-      const foundKey = keys.find(k => k.id === connection.keyId);
-
-      if (!foundKey) {
-        if (keysLoading) {
-          setStatus('Loading Keys...');
-          return;
-        } else {
-          xtermRef.current.writeln(`\x1b[31mError: Key (ID: ${connection.keyId}) not found in vault.\x1b[0m`);
-          setStatus('Key Missing');
-          connectionInitiatedRef.current = true;
-          return;
+      // Ctrl + Shift + C
+      if (arg.ctrlKey && arg.shiftKey && arg.code === 'KeyC' && arg.type === 'keydown') {
+        const selection = term.getSelection();
+        if (selection) {
+          navigator.clipboard.writeText(selection);
+          return false;
         }
       }
-      resolvedKey = foundKey.privateKey;
+      // Ctrl + Shift + V
+      if (arg.ctrlKey && arg.shiftKey && arg.code === 'KeyV' && arg.type === 'keydown') {
+        navigator.clipboard.readText().then(text => {
+          window.electron.ipcRenderer.send(IPC.SSH.INPUT, { id: sessionId, data: text });
+        });
+        return false;
+      }
+      return true;
+    });
+
+    terminalRef.current.addEventListener('contextmenu', (e) => {
+      e.preventDefault();
+      navigator.clipboard.readText().then(text => {
+        if(text) window.electron.ipcRenderer.send(IPC.SSH.INPUT, { id: sessionId, data: text });
+      });
+    });
+
+
+    const sendResize = () => {
+      window.electron.ipcRenderer.send(IPC.SSH.RESIZE, {
+        id: sessionId,
+        cols: term.cols,
+        rows: term.rows
+      });
+    };
+
+    let resolvedConnection = { ...connection };
+    if (connection.keyId) {
+      const key = keys.find(k => k.id === connection.keyId);
+      if (key) (resolvedConnection as any).privateKey = key.privateKey;
     }
-
-    connectionInitiatedRef.current = true;
-    const term = xtermRef.current;
-    const fitAddon = fitAddonRef.current;
-
-    const onDataDispose = term.onData((data) => {
-      window.electron.ipcRenderer.send(IPC.SSH.INPUT, { id: sessionId, data });
-    });
-
-    const removeDataListener = window.electron.ipcRenderer.on(IPC.SSH.DATA, (_, { id, data }) => {
-      if (id === sessionId) term.write(data);
-    });
 
     setStatus('Connecting...');
 
-    const payload = { ...connection };
-    if(resolvedKey) (payload as any).privateKey = resolvedKey;
+    if (!connectedRef.current) {
+      connectedRef.current = true;
 
-    window.electron.ipcRenderer.invoke(IPC.SSH.CONNECT, { ...payload, id: sessionId })
-      .then(() => {
-        setStatus('Connected');
-        term.writeln(`\r\nConnected to ${connection.host}\r\n`);
-        fitAddon?.fit();
-        window.electron.ipcRenderer.send(IPC.SSH.RESIZE, {
-          id: sessionId,
-          cols: term.cols,
-          rows: term.rows
+      window.electron.ipcRenderer.invoke(IPC.SSH.CONNECT, { ...resolvedConnection, id: sessionId })
+        .then(() => {
+          setStatus('Connected');
+          fitAddon.fit();
+          sendResize();
+          term.focus();
+        })
+        .catch((err: any) => {
+          setStatus('Error');
+          term.writeln(`\r\n\x1b[31mConnection failed: ${err.message}\x1b[0m\r\n`);
         });
-      })
-      .catch((err: any) => {
-        setStatus('Error');
-        term.writeln(`\r\nConnection failed: ${err.message}\r\n`);
-      });
+    }
+
+    term.onData((data) => {
+      window.electron.ipcRenderer.send(IPC.SSH.INPUT, { id: sessionId, data });
+    });
+
+    const removeListener = window.electron.ipcRenderer.on(IPC.SSH.DATA, (_, { id, data }) => {
+      if (id === sessionId) term.write(data);
+    });
+
+    const resizeObserver = new ResizeObserver(() => {
+      if (isActive && containerRef.current?.offsetParent) {
+        fitAddon.fit();
+        sendResize();
+      }
+    });
+    if (containerRef.current) resizeObserver.observe(containerRef.current);
 
     return () => {
-      onDataDispose.dispose();
-      removeDataListener();
+      removeListener();
+      resizeObserver.disconnect();
+      window.electron.ipcRenderer.send(IPC.SSH.DISCONNECT, sessionId);
+      term.dispose();
+      connectedRef.current = false;
+      terminalMountedRef.current = false;
     };
-
-  }, [keys, keysLoading, connection, sessionId]);
+  }, [keysLoading]);
 
   useEffect(() => {
-    if (!isActive || !fitAddonRef.current || !xtermRef.current || !containerRef.current?.offsetParent) return;
+    if (isActive && fitAddonRef.current && xtermRef.current && containerRef.current?.offsetParent) {
+      setTimeout(() => {
+        fitAddonRef.current?.fit();
+        if(status === 'Connected') {
+          window.electron.ipcRenderer.send(IPC.SSH.RESIZE, {
+            id: sessionId,
+            cols: xtermRef.current!.cols,
+            rows: xtermRef.current!.rows
+          });
+        }
+        xtermRef.current?.focus();
+      }, 50);
+    }
+  }, [isActive, sessionId]);
 
-    setTimeout(() => {
-      fitAddonRef.current?.fit();
-      if(status === 'Connected') {
-        window.electron.ipcRenderer.send(IPC.SSH.RESIZE, {
-          id: sessionId,
-          cols: xtermRef.current!.cols,
-          rows: xtermRef.current!.rows
-        });
-      }
-      xtermRef.current?.focus();
-    }, 50);
-  }, [isActive, sessionId, status]);
+  const handleDisconnect = () => {
+    removeSession(sessionId);
+  };
 
   return (
     <div ref={containerRef} className="flex flex-col h-full w-full bg-[#16171b]">
@@ -147,7 +186,7 @@ const TerminalPage = ({ connection, sessionId, isActive }: TerminalPageProps) =>
             {connection.username}@{connection.host}
           </div>
         </div>
-        <button onClick={() => removeSession(sessionId)} className="text-gray-400 hover:text-red-400 flex items-center gap-1 text-xs font-medium px-2 py-1 rounded hover:bg-white/5 transition-colors">
+        <button onClick={handleDisconnect} className="text-gray-400 hover:text-red-400 flex items-center gap-1 text-xs font-medium px-2 py-1 rounded hover:bg-white/5 transition-colors">
           <XCircle size={16} /> Disconnect
         </button>
       </div>

@@ -5,6 +5,27 @@
 
 @tailwind utilities;
 
+@font-face {
+  font-family: 'CascadiaMonoNF';
+  src: url('./fonts/CascadiaMonoNF.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'CascadiaMonoNF-SemiLight';
+  src: url('./fonts/CascadiaMonoNF-SemiLight.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'SourceCodeProNF';
+  src: url('./fonts/SourceCodeProNF.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 :root {

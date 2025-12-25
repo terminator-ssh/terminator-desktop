@@ -61,11 +61,9 @@ const App = () => {
   return (
     <div className="flex h-screen bg-[#16171b] text-gray-100 font-sans overflow-hidden">
 
-      {/* Auth Modals */}
       {hasUser && !isUnlocked && <LoginModal onUnlock={handleUnlock} />}
       {!hasUser && <NewUserModal onClick={handleCreated} />}
 
-      {/* Main Content (Only if Unlocked) */}
       {isUnlocked && (
         <>
           <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
