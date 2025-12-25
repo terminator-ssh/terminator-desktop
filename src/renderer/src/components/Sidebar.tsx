@@ -4,12 +4,13 @@ import {
 } from 'lucide-react';
 import { useState } from 'react';
 import SwitchServerModal from './SwitchServerModal';
+import { TabType } from '@/store/useStore';
 
-const Sidebar = ({ activeTab, setActiveTab }: { activeTab: string, setActiveTab: (t: string) => void }) => {
+const Sidebar = ({ activeTab, setActiveTab }: { activeTab: TabType, setActiveTab: (t: TabType) => void }) => {
 
   const [isServermodalVisible, setServerModalVisible] = useState(false)
 
-  const menuItems = [
+  const menuItems: { id: TabType, icon: any, label: string }[] = [
     { id: 'hosts', icon: <Cloud size={20} />, label: 'Hosts' },
     { id: 'keys', icon: <Key size={20} />, label: 'Keys' },
     { id: 'terminal', icon: <Terminal size={20} />, label: 'Terminal' },
@@ -25,7 +26,6 @@ const Sidebar = ({ activeTab, setActiveTab }: { activeTab: string, setActiveTab:
         <div className="text-sm font-medium text-gray-200">User Meme</div>
       </div>
 
-      {/* Navigation */}
       <nav className="flex flex-col gap-2">
         {menuItems.map((item) => (
           <button
@@ -33,7 +33,7 @@ const Sidebar = ({ activeTab, setActiveTab }: { activeTab: string, setActiveTab:
             onClick={() => setActiveTab(item.id)}
             className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-colors ${
               activeTab === item.id
-                ? 'bg-[#e4e4e7] text-black font-medium' // Active state (Light)
+                ? 'bg-[#e4e4e7] text-black font-medium'
                 : 'text-gray-400 hover:text-gray-200 hover:bg-[#2b2d33]'
             }`}
           >
@@ -42,20 +42,18 @@ const Sidebar = ({ activeTab, setActiveTab }: { activeTab: string, setActiveTab:
           </button>
         ))}
 
-          <button
-            key={"switchServer"}
-            onClick={() => setServerModalVisible(true)}
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-colors  text-gray-400 hover:text-gray-200 hover:bg-[#2b2d33] `}
-          >
-            <Cable />
-            Switch Server
-          </button>
-         
+        <button
+          key={"switchServer"}
+          onClick={() => setServerModalVisible(true)}
+          className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-colors text-gray-400 hover:text-gray-200 hover:bg-[#2b2d33] `}
+        >
+          <Cable size={20} />
+          Switch Server
+        </button>
+
       </nav>
     </div>
   );
-
-
 };
 
 export default Sidebar;

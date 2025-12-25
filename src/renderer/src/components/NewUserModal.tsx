@@ -1,4 +1,4 @@
-import { ArrowBigRight, Server, Shield, ArrowLeft } from 'lucide-react';
+import { ArrowBigRight, Server, Shield, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import { normalizeApiUrl } from '@/lib/utils';
 
@@ -37,9 +37,12 @@ const SelectionView = ({ setMode }: { setMode: (m: Mode) => void }) => (
   </div>
 );
 
-const CreateView = ({ onRegister, loading }: { onRegister: (u: string, p: string) => void, loading: boolean }) => {
+const CreateView =
+  ({ onRegister, loading }:
+   { onRegister: (u: string, p: string) => void, loading: boolean }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className="space-y-4">
@@ -54,15 +57,26 @@ const CreateView = ({ onRegister, loading }: { onRegister: (u: string, p: string
           autoFocus
         />
       </div>
+
       <div>
         <label className="text-xs text-gray-400 font-medium ml-1">Master Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full bg-[#2b2d33] border border-gray-700 text-gray-200 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-emerald-500"
-        />
+        <div className="relative">
+          <input
+            type={showPassword ? "text" : "password"}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full bg-[#2b2d33] border border-gray-700 text-gray-200 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-emerald-500 pr-10"
+          />
+          <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
+          >
+            {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+          </button>
+        </div>
       </div>
+
       <button
         onClick={() => onRegister(username, password)}
         disabled={loading}
@@ -76,7 +90,8 @@ const CreateView = ({ onRegister, loading }: { onRegister: (u: string, p: string
 const ConnectView = ({ onConnect, loading }: { onConnect: (url: string, u: string, p: string) => void, loading: boolean }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [url, setUrl] = useState(''); // No default value
+  const [url, setUrl] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className="space-y-4">
@@ -104,12 +119,21 @@ const ConnectView = ({ onConnect, loading }: { onConnect: (url: string, u: strin
         </div>
         <div>
           <label className="text-xs text-gray-400 font-medium ml-1">Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full bg-[#2b2d33] border border-gray-700 text-gray-200 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500"
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full bg-[#2b2d33] border border-gray-700 text-gray-200 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-blue-500 pr-10"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
+            >
+              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+            </button>
+          </div>
         </div>
       </div>
       <button

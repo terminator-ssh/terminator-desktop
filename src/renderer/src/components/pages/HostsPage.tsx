@@ -1,41 +1,27 @@
 import { Search, Plus } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import NewHostModal from '../NewHostModal';
 import HostCard from '../ui/HostCard';
-import { Host, IPC } from '../../../../shared/types';
+import { Host } from '../../../../shared/types';
+import { useHosts } from '@/hooks/useData';
 
-// Define props interface explicitly
 interface HostsPageProps {
   onConnect: (host: Host) => void;
 }
 
 const HostsPage = ({ onConnect }: HostsPageProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [hosts, setHosts] = useState<Host[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const refreshHosts = async () => {
-    try {
-      const data = await window.electron.ipcRenderer.invoke(IPC.HOSTS.GET);
-      setHosts(data);
-    } catch (e) {
-      console.error("Failed to fetch hosts", e);
-    }
-  };
+  const { data: hosts = [] } = useHosts();
 
-  useEffect(() => {
-    refreshHosts();
-  }, []);
+  const filteredHosts = hosts.filter(h => {
+    const name = h.name || '';
+    const host = h.host || '';
+    const term = searchTerm.toLowerCase();
 
-  const handleSave = async () => {
-    setIsModalOpen(false);
-    await refreshHosts();
-  };
-
-  const filteredHosts = hosts.filter(h =>
-    h.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    h.host.includes(searchTerm)
-  );
+    return name.toLowerCase().includes(term) || host.includes(term);
+  });
 
   return (
     <div className="p-8 w-full">
@@ -70,7 +56,7 @@ const HostsPage = ({ onConnect }: HostsPageProps) => {
         ))}
       </div>
 
-      {isModalOpen && <NewHostModal onClose={() => setIsModalOpen(false)} onSaved={handleSave} />}
+      {isModalOpen && <NewHostModal onClose={() => setIsModalOpen(false)} onSaved={() => setIsModalOpen(false)} />}
     </div>
   );
 };

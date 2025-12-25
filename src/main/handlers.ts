@@ -11,28 +11,16 @@ import { encryptAES, decryptAES, packBlob, unpackBlob } from './lib/crypto'
 
 export function registerHandlers() {
 
-  ipcMain.handle('auth:check', () =>
-    authService.hasUser()
-  )
-  ipcMain.handle('auth:register', (_, { username, password }) =>
-    authService.registerLocal(username, password)
-  )
-  ipcMain.handle('auth:login', (_, { password }) =>
-    authService.login(password)
-  )
-  ipcMain.handle('auth:login-sync', (_, { url, username, password }) =>
-    authService.loginFromSync(url, username, password)
-  )
-  ipcMain.handle('sync:register', (_, url) =>
-    syncService.registerOnServer(url)
-  );
-  ipcMain.handle('sync:now', () =>
-    syncService.sync()
-  );
+  ipcMain.handle('auth:check', () => authService.hasUser())
+  ipcMain.handle('auth:register', (_, { username, password }) => authService.registerLocal(username, password))
+  ipcMain.handle('auth:login', (_, { password }) => authService.login(password))
+  ipcMain.handle('auth:login-sync', (_, { url, username, password }) => authService.loginFromSync(url, username, password))
+
+  ipcMain.handle('sync:register', (_, url) => syncService.registerOnServer(url));
+  ipcMain.handle('sync:now', () => syncService.sync());
 
   ipcMain.handle(IPC.HOSTS.GET, async () => {
     const mk = appState.getMasterKey();
-
     const blobs = await db.select().from(encryptedBlobs).where(eq(encryptedBlobs.isDeleted, false));
     const hosts: Host[] = []
 
@@ -42,7 +30,7 @@ export function registerHandlers() {
         const jsonBuf = decryptAES(ciphertext, iv, tag, mk);
         const data = JSON.parse(jsonBuf.toString('utf-8'));
 
-        if (data.host) {
+        if (!data.privateKey) {
           hosts.push({ ...data, id: row.id });
         }
       } catch (e) { }
@@ -54,7 +42,9 @@ export function registerHandlers() {
     const mk = appState.getMasterKey();
     const id = host.id || uuidv4();
 
-    const json = JSON.stringify({ ...host, id });
+    const { privateKey, ...hostData } = host as any;
+
+    const json = JSON.stringify({ ...hostData, id });
     const { ciphertext, iv, tag } = encryptAES(Buffer.from(json), mk);
     const blob = packBlob(iv, ciphertext, tag);
 
@@ -82,7 +72,7 @@ export function registerHandlers() {
         const jsonBuf = decryptAES(ciphertext, iv, tag, mk);
         const data = JSON.parse(jsonBuf.toString('utf-8'));
 
-        if (data.privateKey && !data.host) {
+        if (data.privateKey) {
           keys.push({ ...data, id: row.id });
         }
       } catch (e) {}

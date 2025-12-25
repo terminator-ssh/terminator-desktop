@@ -1,31 +1,14 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Search, Plus } from 'lucide-react';
 import NewKeyModal from '../NewKeyModal';
 import KeyCard from '../ui/KeyCard';
-import { SavedKey, IPC } from '../../../../shared/types';
+import { useKeys } from '@/hooks/useData';
 
 const KeysPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [keys, setKeys] = useState<SavedKey[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
 
-  const refreshKeys = async () => {
-    try {
-      const data = await window.electron.ipcRenderer.invoke(IPC.KEYS.GET);
-      setKeys(data);
-    } catch (e) {
-      console.error(e);
-    }
-  };
-
-  useEffect(() => {
-    refreshKeys();
-  }, []);
-
-  const handleSave = async () => {
-    setIsModalOpen(false);
-    await refreshKeys();
-  };
+  const { data: keys = [] } = useKeys();
 
   const filteredKeys = keys.filter(k =>
     k.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -56,13 +39,13 @@ const KeysPage = () => {
 
       <h2 className="text-xl font-semibold text-gray-200 mb-4">Saved keys</h2>
 
-      <div className="flex flex-col gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {filteredKeys.map((key) => (
           <KeyCard key={key.id} props={key} onClose={() => {}} />
         ))}
       </div>
 
-      {isModalOpen && <NewKeyModal onClose={() => setIsModalOpen(false)} onSaved={handleSave} />}
+      {isModalOpen && <NewKeyModal onClose={() => setIsModalOpen(false)} onSaved={() => setIsModalOpen(false)} />}
     </div>
   );
 };

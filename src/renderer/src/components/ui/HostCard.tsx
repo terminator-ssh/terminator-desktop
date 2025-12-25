@@ -1,63 +1,199 @@
 import { Cloud, MoreHorizontal, Edit2, Trash2 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import EditHostModal from '../EditHostModal';
-import { Host, IPC } from '../../../../shared/types';
+import { Host } from '../../../../shared/types';
+import ConfirmModal from '../ConfirmModal';
+import { useDeleteHost, useSaveHost } from '@/hooks/useData';
 
-// Define props correctly
-const HostCard = ({ props, onClose }: { props: Host, onClose: () => void }) => {
-  const [isOptionsOpen, setOptionsOpen] = useState(false);
-  const [isEditOpen, setIsEditOpen] = useState(false);
+interface InlineInputProps {
+  value: string;
+  placeholder?: string;
+  className: string;
+  onSave: (val: string) => void;
+  onCancel: () => void;
+  fullWidth?: boolean;
+}
 
-  const handleDelete = async () => {
-    if (confirm(`Delete ${props.name}?`)) {
-      await window.electron.ipcRenderer.invoke(IPC.HOSTS.DELETE, props.id);
-      onClose(); // Triggers a refresh in parent
-    }
+const InlineInput = ({ value, placeholder, className, onSave, onCancel, fullWidth }: InlineInputProps) => {
+  const [tempValue, setTempValue] = useState(value);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') { e.stopPropagation(); onSave(tempValue); }
+    if (e.key === 'Escape') { e.stopPropagation(); onCancel(); }
   };
 
   return (
-    <div className="bg-[#23242a] p-5 rounded-2xl border border-transparent hover:border-gray-700 transition-all group relative">
-      <div className="flex items-center gap-4">
-        <div className="mt-1">
-          <Cloud size={24} className="text-gray-400" />
-        </div>
-        <div className="flex-1">
-          <h3 className="text-gray-200 font-medium text-lg">{props.name}</h3>
-          <div className="text-gray-500 text-sm mt-1 flex flex-wrap gap-x-3">
-            <span>{props.host}</span>
-            <span className="text-gray-700">|</span>
-            <span>{props.username}</span>
-          </div>
-        </div>
+    <div className={`flex items-center gap-2 ${fullWidth ? 'w-full' : ''}`} onClick={(e) => e.stopPropagation()}>
+      <div className={`inline-grid items-center ${fullWidth ? 'w-full' : ''}`}>
+        <span className="col-start-1 row-start-1 opacity-0 px-2 py-0.5 whitespace-pre pointer-events-none font-medium text-sm">
+          {tempValue || placeholder || "Placeholder"}
+        </span>
+        <input
+          ref={inputRef}
+          type="text"
+          value={tempValue}
+          placeholder={placeholder}
+          onChange={(e) => setTempValue(e.target.value)}
+          onBlur={() => onSave(tempValue)}
+          className={`col-start-1 row-start-1 focus:outline-none ${className} ${fullWidth ? 'w-full' : ''}`}
+          onKeyDown={handleKeyDown}
+        />
+      </div>
+    </div>
+  );
+};
 
-        <button onClick={(e) => { e.stopPropagation(); setOptionsOpen(!isOptionsOpen); }} className="text-gray-500 hover:text-white p-2">
-          <MoreHorizontal size={20} />
-        </button>
+const HostCard = ({ props, onClose }: { props: Host, onClose: () => void }) => {
+  const [isOptionsOpen, setOptionsOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [editingField, setEditingField] = useState<'name' | 'host' | 'username' | null>(null);
 
-        {isOptionsOpen && (
-          <div className="absolute right-12 top-4 bg-[#1e1f24] rounded-lg shadow-xl border border-gray-800 overflow-hidden flex flex-col w-28 z-20">
-            <button
-              onClick={(e) => { e.stopPropagation(); setIsEditOpen(true); setOptionsOpen(false); }}
-              className="flex items-center gap-2 px-4 py-2 text-xs text-gray-300 hover:bg-[#2b2d33] text-left">
-              <Edit2 size={12} /> Edit
-            </button>
-            <button
-              onClick={(e) => { e.stopPropagation(); handleDelete(); }}
-              className="flex items-center gap-2 px-4 py-2 text-xs text-red-400 hover:bg-[#2b2d33] text-left">
-              <Trash2 size={12} /> Delete
-            </button>
+  const deleteMutation = useDeleteHost();
+  const saveMutation = useSaveHost();
+
+  const handleDelete = () => {
+    deleteMutation.mutate(props.id);
+    setIsDeleteModalOpen(false);
+    onClose();
+  };
+
+  const handleSaveField = (field: keyof Host, value: string) => {
+    saveMutation.mutate({ ...props, [field]: value });
+    setEditingField(null);
+  };
+
+  const INPUT_STYLE = "bg-[#1e1f24] border border-gray-600 focus:border-gray-500 text-white rounded px-2 py-0.5";
+
+  return (
+    <>
+      <div className="bg-[#23242a] p-5 rounded-2xl border border-transparent hover:border-gray-700 transition-all group relative h-full flex flex-col justify-center">
+        <div className="flex items-center gap-4">
+          <div className="mt-1 shrink-0">
+            <Cloud size={24} className="text-gray-400" />
           </div>
-        )}
+
+          <div className="flex-1 min-w-0 flex flex-col">
+
+            {/* NAME */}
+            <div className="h-8 flex items-center">
+              {editingField === 'name' ? (
+                <InlineInput
+                  value={props.name}
+                  placeholder="Name"
+                  className={`${INPUT_STYLE} text-lg font-medium`}
+                  onSave={(val) => handleSaveField('name', val)}
+                  onCancel={() => setEditingField(null)}
+                  fullWidth={!props.name}
+                />
+              ) : (
+                <h3
+                  className={`text-gray-200 font-medium text-lg truncate cursor-text border border-transparent hover:border-gray-700 -ml-1 px-1 rounded transition-colors
+                            ${!props.name ? 'w-full h-full italic text-gray-600 hover:text-gray-400' : ''}`}
+                  onClick={(e) => { e.stopPropagation(); setEditingField('name'); }}
+                  title="Click to rename"
+                >
+                  {props.name || "Add Label..."}
+                </h3>
+              )}
+            </div>
+
+            {/* HOST | USER */}
+            <div className="text-gray-500 text-sm mt-1 flex flex-wrap gap-x-2 items-center h-6">
+
+              {/* Host */}
+              {editingField === 'host' ? (
+                <InlineInput
+                  value={props.host}
+                  placeholder="Host / IP"
+                  className={`${INPUT_STYLE} text-sm`}
+                  onSave={(val) => handleSaveField('host', val)}
+                  onCancel={() => setEditingField(null)}
+                />
+              ) : (
+                <span
+                  className="hover:text-gray-300 cursor-text hover:bg-[#1e1f24] px-1 -ml-1 rounded transition-colors"
+                  onClick={(e) => { e.stopPropagation(); setEditingField('host'); }}
+                >
+                        {props.host || "0.0.0.0"}
+                    </span>
+              )}
+
+              <span className="text-gray-700">|</span>
+
+              {/* User */}
+              {editingField === 'username' ? (
+                <InlineInput
+                  value={props.username}
+                  placeholder="User"
+                  className={`${INPUT_STYLE} text-sm`}
+                  onSave={(val) => handleSaveField('username', val)}
+                  onCancel={() => setEditingField(null)}
+                />
+              ) : (
+                <span
+                  className="hover:text-gray-300 cursor-text hover:bg-[#1e1f24] px-1 rounded transition-colors"
+                  onClick={(e) => { e.stopPropagation(); setEditingField('username'); }}
+                >
+                        {props.username || "root"}
+                    </span>
+              )}
+            </div>
+          </div>
+
+          <button
+            onClick={(e) => { e.stopPropagation(); setOptionsOpen(!isOptionsOpen); }}
+            className="text-gray-500 hover:text-white p-2 rounded-lg hover:bg-white/5 shrink-0"
+          >
+            <MoreHorizontal size={20} />
+          </button>
+
+          {isOptionsOpen && (
+            <>
+              <div
+                className="fixed inset-0 z-10 cursor-default"
+                onClick={(e) => { e.stopPropagation(); setOptionsOpen(false); }}
+              />
+
+              <div className="absolute right-12 top-4 bg-[#1e1f24] rounded-lg shadow-xl border border-gray-800 overflow-hidden flex flex-col w-32 z-20">
+                <button
+                  onClick={(e) => { e.stopPropagation(); setIsEditModalOpen(true); setOptionsOpen(false); }}
+                  className="flex items-center gap-2 px-4 py-3 text-xs text-gray-300 hover:bg-[#2b2d33] text-left transition-colors">
+                  <Edit2 size={12} /> Edit
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); setIsDeleteModalOpen(true); setOptionsOpen(false); }}
+                  className="flex items-center gap-2 px-4 py-3 text-xs text-red-400 hover:bg-[#2b2d33] text-left transition-colors">
+                  <Trash2 size={12} /> Delete
+                </button>
+              </div>
+            </>
+          )}
+        </div>
       </div>
 
-      {isEditOpen && (
+      {isEditModalOpen && (
         <EditHostModal
           host={props}
-          onClose={() => setIsEditOpen(false)}
-          onSaved={onClose} // Refresh list on save
+          onClose={() => setIsEditModalOpen(false)}
+          onSaved={onClose}
         />
       )}
-    </div>
+
+      {isDeleteModalOpen && (
+        <ConfirmModal
+          title="Delete Host?"
+          message={`Are you sure you want to delete ${props.name || props.host}?`}
+          onConfirm={handleDelete}
+          onCancel={() => setIsDeleteModalOpen(false)}
+        />
+      )}
+    </>
   );
 };
 
