@@ -120,7 +120,6 @@ const TerminalPage = ({ connection, sessionId, isActive }: TerminalPageProps) =>
 
   }, [keys, keysLoading, connection, sessionId]);
 
-  // 3. Resize Handler
   useEffect(() => {
     if (!isActive || !fitAddonRef.current || !xtermRef.current || !containerRef.current?.offsetParent) return;
 

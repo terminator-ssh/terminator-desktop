@@ -1,8 +1,6 @@
 ﻿class AppState {
-  // 1. The Key to decrypt local data (AES)
   private _masterKey: Buffer | null = null;
 
-  // 2. The Key to authenticate with the API (Argon2 derived)
   private _loginKey: string | null = null;
 
   setKeys(masterKey: Buffer, loginKey: string) {

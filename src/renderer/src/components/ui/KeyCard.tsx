@@ -4,7 +4,7 @@ import EditKeyModal from '../EditKeyModal';
 import { SavedKey } from '../../../../shared/types';
 import ConfirmModal from '../ConfirmModal';
 import { useDeleteKey, useSaveKey } from '@/hooks/useData';
-import { InlineInput } from './InlineInput'; // Import
+import { InlineInput } from './InlineInput';
 
 const KeyCard = ({ props, onClose }: { props: SavedKey, onClose: () => void }) => {
   const [isOptionsOpen, setOptionsOpen] = useState(false);
