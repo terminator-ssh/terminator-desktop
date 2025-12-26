@@ -1,7 +1,7 @@
 {
   "name": "terminator-client",
   "productName": "Terminator",
-  "version": "0.1.0",
+  "version": "0.0.1-alpha",
   "description": "An Electron application with React and TypeScript",
   "main": "./out/main/index.js",
   "author": "Terminator SSH",
