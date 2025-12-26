@@ -28,7 +28,7 @@ export class SyncService {
     this.sync().catch(console.error);
     this.syncInterval = setInterval(() => {
       this.sync().catch(console.error);
-    }, 5000);
+    }, 3000);
   }
 
   public stopAutoSync() {
