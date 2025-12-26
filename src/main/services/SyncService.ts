@@ -83,10 +83,13 @@ export class SyncService {
 
       const lastSyncTime = user.lastSyncTime || new Date(0).toISOString();
 
+      const SYNC_OVERLAP_MS = 60 * 60 * 1000;
+      const safeCursor = new Date(new Date(lastSyncTime).getTime() - SYNC_OVERLAP_MS).toISOString();
+
       const localChanges = await db
         .select()
         .from(encryptedBlobs)
-        .where(gt(encryptedBlobs.updatedAt, lastSyncTime));
+        .where(gt(encryptedBlobs.updatedAt, safeCursor));
 
       const response = await axios.post(`${user.serverUrl}/Sync`, {
         blobs: localChanges.map(b => ({
