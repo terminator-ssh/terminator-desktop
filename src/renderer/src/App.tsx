@@ -14,7 +14,7 @@ const App = () => {
     activeTab, setActiveTab,
     isUnlocked, setUnlocked,
     hasUser, setHasUser,
-    sessions, activeSessionId, addSession
+    sessions, activeSessionId, addSession, removeSession, setActiveSession
   } = useStore();
 
   const [checkingAuth, setCheckingAuth] = useState(true);
@@ -77,6 +77,33 @@ const App = () => {
             <div className={activeTab === 'keys' ? 'block h-full' : 'hidden'}>
               <KeysPage />
             </div>
+
+            {activeTab === 'terminal' && sessions.length > 0 && (
+            <div className="flex flex-row bg-gray-800 border-b border-gray-700 overflow-x-auto">
+              {sessions.map((s) => (
+                <div
+                  key={s.id}
+                  onClick={() => setActiveSession(s.id)} // Нужно убедиться, что эта функция есть в сторе
+                  className={`
+                    px-4 py-2 cursor-pointer border-r border-gray-700 flex items-center gap-2 min-w-[150px]
+                    ${activeSessionId === s.id ? 'bg-gray-900 text-blue-400 border-b-2 border-b-blue-500' : 'text-gray-400 hover:bg-gray-700'}
+                  `}
+                >
+                <span className="truncate text-xs">{s.connection.name || 'Session'}  </span>
+
+                <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeSession(s.id);
+                    }}
+                    className="ml-auto hover:text-red-500"
+                  >
+                    ×
+                  </button>
+                </div>
+              ))}
+            </div>
+            )}
 
             {sessions.map(session => (
               <div
