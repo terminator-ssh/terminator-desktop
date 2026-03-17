@@ -1,6 +1,7 @@
 import { Cloud, Key, Terminal } from 'lucide-react';
 import { TabType } from '@/store/useStore';
 import UserMenu from './UserMenu';
+import {Button} from "@/components/ui/button";
 
 const Sidebar = ({ activeTab, setActiveTab }:
                  { activeTab: TabType, setActiveTab: (t: TabType) => void }) => {
@@ -20,18 +21,19 @@ const Sidebar = ({ activeTab, setActiveTab }:
 
       <nav className="flex flex-col gap-2 flex-1">
         {menuItems.map((item) => (
-          <button
+          <Button
             key={item.id}
+            variant="ghost"
             onClick={() => setActiveTab(item.id)}
-            className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-colors ${
+            className={`w-full justify-start gap-3 ${
               activeTab === item.id
-                ? 'bg-primary/10 text-primary font-medium'
-                : 'text-muted-foreground hover:text-foreground hover:bg-input/50'
+                ? 'bg-primary/10 text-primary hover:bg-primary/10 hover:text-primary font-medium'
+                : 'text-muted-foreground hover:text-foreground'
             }`}
           >
             {item.icon}
             {item.label}
-          </button>
+          </Button>
         ))}
       </nav>
     </div>

@@ -7,6 +7,7 @@ import NewUserModal from './components/NewUserModal';
 import LoginModal from './components/LoginModal';
 import { useStore } from './store/useStore';
 import { useQueryClient } from '@tanstack/react-query';
+import {Button} from "@/components/ui/button";
 
 const App = () => {
   const queryClient = useQueryClient();
@@ -94,12 +95,12 @@ const App = () => {
             {activeTab === 'terminal' && sessions.length === 0 && (
               <div className="text-muted-foreground">
                 <p>No active connections.</p>
-                <button
+                <Button
                   onClick={() => setActiveTab('hosts')}
-                  className="text-primary hover:underline"
+                  variant="link"
                 >
                   Select a host
-                </button>
+                </Button>
               </div>
             )}
           </main>

@@ -1,6 +1,7 @@
 ﻿import { ArrowBigRight, Lock } from 'lucide-react';
 import { useState } from 'react';
 import { PasswordInput } from './ui/PasswordInput';
+import { Button } from './ui/button';
 
 const LoginModal = ({ onUnlock }: { onUnlock: () => void }) => {
   const [password, setPassword] = useState('');
@@ -48,13 +49,15 @@ const LoginModal = ({ onUnlock }: { onUnlock: () => void }) => {
 
           {error && <div className="text-destructive text-xs bg-destructive/10 p-2 rounded">{error}</div>}
 
-          <button
+          <Button
             type="submit"
             disabled={loading}
-            className="w-full bg-primary hover:bg-primary/90 text-foreground font-medium py-3 rounded-xl transition-colors flex justify-center items-center gap-2 disabled:opacity-50">
+            className="w-full"
+            size="lg"
+          >
             {loading ? "Unlocking..." : "Unlock Vault"}
             {!loading && <ArrowBigRight size={18} />}
-          </button>
+          </Button>
         </form>
       </div>
     </div>

@@ -8,6 +8,7 @@ import { Host, IPC } from '../../../../shared/types';
 import { useStore } from '@/store/useStore';
 import { useKeys } from '@/hooks/useData';
 import {TERMINAL_THEME} from "@/lib/terminalTheme";
+import { Button } from '@/components/ui/button';
 
 interface TerminalPageProps {
   connection: Host;
@@ -171,7 +172,7 @@ const TerminalPage = ({ connection, sessionId, isActive }: TerminalPageProps) =>
       }, 50);
     }
   }, [isActive, sessionId]);
-  
+
   return (
     <div ref={containerRef} className="flex flex-col h-full w-full bg-background">
       <div className="flex items-center justify-between px-4 py-2 bg-input border-b border-border/50 h-12">
@@ -183,9 +184,14 @@ const TerminalPage = ({ connection, sessionId, isActive }: TerminalPageProps) =>
             {connection.username}@{connection.host}
           </div>
         </div>
-        <button onClick={handleDisconnect} className="text-muted-foreground hover:text-destructive flex items-center gap-1 text-xs font-medium px-2 py-1 rounded hover:bg-foreground/5 transition-colors">
+        <Button
+          onClick={() => removeSession(sessionId)}
+          variant="ghost"
+          size="sm"
+          className="text-muted-foreground hover:text-destructive"
+        >
           <XCircle size={16} /> Disconnect
-        </button>
+        </Button>
       </div>
       <div className="flex-1 p-1 overflow-hidden relative">
         <div ref={terminalRef} className="absolute inset-0" />

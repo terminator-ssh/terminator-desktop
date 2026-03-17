@@ -1,6 +1,7 @@
 import { ArrowBigRight, Server, Shield, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { useState } from 'react';
 import { normalizeApiUrl } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 type Mode = 'select' | 'create' | 'connect';
 
@@ -9,37 +10,37 @@ const SelectionView = ({ setMode }: { setMode: (m: Mode) => void }) => (
     <h2 className="text-xl font-semibold text-foreground mb-2 text-center">Welcome to Terminator</h2>
     <p className="text-muted-foreground text-sm text-center mb-6">Choose how you want to start.</p>
 
-    <button
+    <Button
+      variant="ghost"
       onClick={() => setMode('create')}
-      className="w-full bg-input hover:bg-input/80 border border-border p-4 rounded-xl flex items-center gap-4 transition-all group text-left"
+      className="w-full bg-input hover:bg-input/80 border border-border p-4 rounded-xl flex items-center gap-4 text-left h-auto justify-start whitespace-normal"
     >
-      <div className="bg-primary/10 p-3 rounded-lg group-hover:bg-primary/20 transition-colors">
+      <div className="bg-primary/10 p-3 rounded-lg shrink-0">
         <Shield className="text-primary" size={24} />
       </div>
       <div>
         <div className="text-foreground font-medium">Create Local Vault</div>
         <div className="text-xs text-muted-foreground/70 mt-1">Store keys locally. Sync optional later.</div>
       </div>
-    </button>
+    </Button>
 
-    <button
+    <Button
+      variant="ghost"
       onClick={() => setMode('connect')}
-      className="w-full bg-input hover:bg-input/80 border border-border p-4 rounded-xl flex items-center gap-4 transition-all group text-left"
+      className="w-full bg-input hover:bg-input/80 border border-border p-4 rounded-xl flex items-center gap-4 text-left h-auto justify-start whitespace-normal"
     >
-      <div className="border-primary p-3 rounded-lg group-hover:border-primary/20 transition-colors">
+      <div className="bg-info/10 p-3 rounded-lg shrink-0">
         <Server className="text-info" size={24} />
       </div>
       <div>
         <div className="text-foreground font-medium">Restore from Server</div>
         <div className="text-xs text-muted-foreground/70 mt-1">Log in to an existing account and download data.</div>
       </div>
-    </button>
+    </Button>
   </div>
 );
 
-const CreateView =
-  ({ onRegister, loading }:
-   { onRegister: (u: string, p: string) => void, loading: boolean }) => {
+const CreateView = ({ onRegister, loading }: { onRegister: (u: string, p: string) => void, loading: boolean }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -67,22 +68,25 @@ const CreateView =
             onChange={(e) => setPassword(e.target.value)}
             className="w-full bg-input border border-border text-foreground text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-primary pr-10"
           />
-          <button
+          <Button
             type="button"
+            variant="ghost"
+            size="icon-sm"
             onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/70 hover:text-foreground"
-          >
+            className="absolute right-1 top-1/2 -translate-y-1/2 text-muted-foreground/70 hover:text-foreground">
             {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-          </button>
+          </Button>
         </div>
       </div>
 
-      <button
+      <Button
         onClick={() => onRegister(username, password)}
         disabled={loading}
-        className="w-full bg-primary hover:bg-primary/90 text-foreground font-medium py-3 rounded-xl mt-4 transition-colors flex justify-center items-center gap-2 disabled:opacity-50">
+        className="w-full mt-4"
+        size="lg"
+      >
         {loading ? "Creating..." : "Create & Unlock"} <ArrowBigRight size={18} />
-      </button>
+      </Button>
     </div>
   );
 };
@@ -126,22 +130,26 @@ const ConnectView = ({ onConnect, loading }: { onConnect: (url: string, u: strin
               onChange={(e) => setPassword(e.target.value)}
               className="w-full bg-input border border-border text-foreground text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-primary pr-10"
             />
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="icon-sm"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/70 hover:text-foreground"
-            >
+              className="absolute right-1 top-1/2 -translate-y-1/2 text-muted-foreground/70 hover:text-foreground">
               {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-            </button>
+            </Button>
           </div>
         </div>
       </div>
-      <button
+      <Button
         onClick={() => onConnect(url, username, password)}
         disabled={loading}
-        className="w-full bg-info hover:bg-info/90 text-foreground font-medium py-3 rounded-xl mt-4 transition-colors flex justify-center items-center gap-2 disabled:opacity-50">
+        variant="info"
+        className="w-full mt-4"
+        size="lg"
+      >
         {loading ? "Connecting..." : "Connect & Restore"} <ArrowBigRight size={18} />
-      </button>
+      </Button>
     </div>
   );
 };
@@ -188,12 +196,13 @@ const NewUserModal = ({ onClick }: { onClick: () => void }) => {
       <div className="bg-card w-96 rounded-2xl p-6 shadow-2xl border border-border/50 relative">
 
         {mode !== 'select' && (
-          <button
+          <Button
+            variant="ghost"
             onClick={() => { setMode('select'); setError(''); }}
             className="absolute top-6 left-6 text-muted-foreground/70 hover:text-foreground"
           >
             <ArrowLeft size={20} />
-          </button>
+          </Button>
         )}
 
         {mode === 'select' && <SelectionView setMode={setMode} />}
@@ -210,4 +219,5 @@ const NewUserModal = ({ onClick }: { onClick: () => void }) => {
     </div>
   );
 };
+
 export default NewUserModal;

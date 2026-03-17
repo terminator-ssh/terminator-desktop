@@ -4,6 +4,7 @@ import { SavedKey } from '../../../shared/types';
 import { useSaveKey } from '@/hooks/useData';
 import { useEscape } from '@/hooks/useEscape';
 import { KeyEditor } from './ui/KeyEditor';
+import { Button } from '@/components/ui/button';
 
 const EditKeyModal = ({ savedKey, onClose, onSaved }: { savedKey: SavedKey, onClose: () => void, onSaved: () => void }) => {
   const [formData, setFormData] = useState<SavedKey>(savedKey);
@@ -22,7 +23,9 @@ const EditKeyModal = ({ savedKey, onClose, onSaved }: { savedKey: SavedKey, onCl
       <div className="bg-card w-150 rounded-2xl p-6 shadow-2xl border border-border/50 relative">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold text-foreground mx-auto">Edit Key</h2>
-          <button onClick={onClose} className="absolute right-6 text-muted-foreground hover:text-foreground"><X size={20} /></button>
+          <Button variant="ghost" size="icon" onClick={onClose} className="absolute right-2 top-2 text-muted-foreground hover:text-foreground">
+            <X size={18} />
+          </Button>
         </div>
 
         <form className="space-y-4" onSubmit={handleSave}>
@@ -41,12 +44,18 @@ const EditKeyModal = ({ savedKey, onClose, onSaved }: { savedKey: SavedKey, onCl
             onChange={(val) => setFormData({...formData, privateKey: val})}
           />
 
-          <button type="submit" className="w-full bg-primary hover:bg-primary/90 text-foreground font-medium py-3 rounded-xl mt-4 transition-colors flex justify-center items-center gap-2">
+          <Button
+            type="submit"
+            disabled={saveMutation.isPending}
+            className="w-full mt-4"
+            size="lg"
+          >
             Save Changes <Plus size={18} />
-          </button>
+          </Button>
         </form>
       </div>
     </div>
   );
 };
+
 export default EditKeyModal;

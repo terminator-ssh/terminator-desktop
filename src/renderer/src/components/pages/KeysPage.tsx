@@ -3,6 +3,7 @@ import { Search, Plus } from 'lucide-react';
 import NewKeyModal from '../NewKeyModal';
 import KeyCard from '../ui/KeyCard';
 import { useKeys } from '@/hooks/useData';
+import { Button } from '@/components/ui/button';
 
 const KeysPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,7 +17,9 @@ const KeysPage = () => {
 
   return (
     <div className="p-8 w-full">
-      <h1 className="text-3xl font-bold text-foreground mb-2">Terminator <span className="text-muted-foreground/70 text-lg font-normal">| Keys</span></h1>
+      <h1 className="text-3xl font-bold text-foreground mb-2">
+        Terminator <span className="text-muted-foreground/70 text-lg font-normal">| Keys</span>
+      </h1>
 
       <div className="flex justify-between items-center mb-8 mt-6">
         <div className="relative w-full max-w-2xl">
@@ -29,12 +32,9 @@ const KeysPage = () => {
             className="w-full bg-card text-foreground/80 pl-12 pr-4 py-3 rounded-xl focus:outline-none border border-transparent focus:border-border"
           />
         </div>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="bg-primary hover:bg-primary/90 text-foreground px-6 py-3 rounded-xl font-medium flex items-center gap-2 transition-colors ml-4"
-        >
+        <Button onClick={() => setIsModalOpen(true)} className="ml-4" size="lg">
           New key <Plus size={18} />
-        </button>
+        </Button>
       </div>
 
       <h2 className="text-xl font-semibold text-foreground mb-4">Saved keys</h2>

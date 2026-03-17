@@ -1,6 +1,7 @@
 import { ArrowBigRight, X, UploadCloud, AlertTriangle } from 'lucide-react';
 import { useState } from 'react';
 import { normalizeApiUrl } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 interface SwitchServerModalProps {
   onClose: () => void;
@@ -44,9 +45,9 @@ const SwitchServerModal = ({ onClose, currentUrl }: SwitchServerModalProps) => {
           <h2 className="text-xl font-semibold text-foreground mx-auto">
             {isSwitching ? "Switch Server" : "Connect Cloud"}
           </h2>
-          <button onClick={onClose} className="absolute right-6 text-muted-foreground hover:text-foreground">
-            <X size={20} />
-          </button>
+          <Button variant="ghost" size="icon" onClick={onClose} className="absolute right-2 top-2 text-muted-foreground hover:text-foreground">
+            <X size={18} />
+          </Button>
         </div>
 
         <div className="space-y-4">
@@ -81,20 +82,26 @@ const SwitchServerModal = ({ onClose, currentUrl }: SwitchServerModalProps) => {
             <p className="text-[10px] text-muted-foreground/70 mt-1 ml-1">/api/v1 added automatically.</p>
           </div>
 
-          {error && <div className="text-destructive text-sm text-center p-2 bg-destructive/20/20 rounded">{error}</div>}
+          {error && (
+            <div className="text-destructive text-sm text-center p-2 bg-destructive/10 rounded">
+              {error}
+            </div>
+          )}
 
-          <button
+          <Button
             type="button"
             onClick={handleConnect}
             disabled={loading}
-            className={`w-full text-foreground font-medium py-3 rounded-xl mt-4 transition-colors flex justify-center items-center gap-2 disabled:opacity-50
-                ${isSwitching ? 'bg-warning hover:bg-warning/90' : 'bg-primary hover:bg-primary/90'}`}
+            variant={isSwitching ? 'warning' : 'default'}
+            className="w-full mt-4"
+            size="lg"
           >
             {loading ? "Connecting..." : (isSwitching ? "Confirm Switch" : "Register & Sync")} <ArrowBigRight />
-          </button>
+          </Button>
         </div>
       </div>
     </div>
   );
 };
+
 export default SwitchServerModal;

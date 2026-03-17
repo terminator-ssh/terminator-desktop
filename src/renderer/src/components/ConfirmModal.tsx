@@ -1,5 +1,6 @@
 ﻿import { AlertTriangle } from 'lucide-react';
 import { useEscape } from '@/hooks/useEscape';
+import { Button } from '@/components/ui/button';
 
 interface ConfirmModalProps {
   title: string;
@@ -27,18 +28,12 @@ const ConfirmModal = ({ title, message, confirmText = "Delete", onConfirm, onCan
           <p className="text-muted-foreground text-sm mb-6">{message}</p>
 
           <div className="flex gap-3 w-full">
-            <button
-              onClick={onCancel}
-              className="flex-1 bg-transparent border border-border hover:bg-secondary text-foreground/80 py-2 rounded-lg text-sm font-medium transition-colors"
-            >
+            <Button onClick={onCancel} variant="outline" className="flex-1">
               Cancel
-            </button>
-            <button
-              onClick={onConfirm}
-              className="flex-1 bg-destructive hover:bg-destructive/90 text-foreground py-2 rounded-lg text-sm font-medium transition-colors"
-            >
+            </Button>
+            <Button onClick={onConfirm} variant="destructive" className="flex-1">
               {confirmText}
-            </button>
+            </Button>
           </div>
         </div>
       </div>

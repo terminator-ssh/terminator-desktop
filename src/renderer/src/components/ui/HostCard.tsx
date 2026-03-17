@@ -4,6 +4,7 @@ import EditHostModal from '../EditHostModal';
 import { Host } from '../../../../shared/types';
 import ConfirmModal from '../ConfirmModal';
 import { useDeleteHost, useSaveHost } from '@/hooks/useData';
+import {Button} from "@/components/ui/button";
 
 interface InlineInputProps {
   value: string;
@@ -146,12 +147,12 @@ const HostCard = ({ props, onClose }: { props: Host, onClose: () => void }) => {
             </div>
           </div>
 
-          <button
-            onClick={(e) => { e.stopPropagation(); setOptionsOpen(!isOptionsOpen); }}
-            className="text-muted-foreground/70 hover:text-foreground p-2 rounded-lg hover:bg-foreground/5 shrink-0"
+          <Button variant="ghost" size="icon"
+                  onClick={(e) => { e.stopPropagation(); setOptionsOpen(!isOptionsOpen); }}
+                  className="text-muted-foreground/70 hover:text-foreground shrink-0"
           >
             <MoreHorizontal size={20} />
-          </button>
+          </Button>
 
           {isOptionsOpen && (
             <>
@@ -161,16 +162,16 @@ const HostCard = ({ props, onClose }: { props: Host, onClose: () => void }) => {
               />
 
               <div className="absolute right-12 top-4 bg-sidebar rounded-lg shadow-xl border border-border/50 overflow-hidden flex flex-col w-32 z-20">
-                <button
-                  onClick={(e) => { e.stopPropagation(); setIsEditModalOpen(true); setOptionsOpen(false); }}
-                  className="flex items-center gap-2 px-4 py-3 text-xs text-foreground/80 hover:bg-input text-left transition-colors">
+                <Button variant="ghost" size="sm"
+                        onClick={(e) => { e.stopPropagation(); setIsEditModalOpen(true); setOptionsOpen(false); }}
+                        className="w-full justify-start gap-2 text-foreground/80">
                   <Edit2 size={12} /> Edit
-                </button>
-                <button
-                  onClick={(e) => { e.stopPropagation(); setIsDeleteModalOpen(true); setOptionsOpen(false); }}
-                  className="flex items-center gap-2 px-4 py-3 text-xs text-destructive hover:bg-input text-left transition-colors">
+                </Button>
+                <Button variant="ghost" size="sm"
+                        onClick={(e) => { e.stopPropagation(); setIsDeleteModalOpen(true); setOptionsOpen(false); }}
+                        className="w-full justify-start gap-2 text-destructive hover:text-destructive hover:bg-destructive/10">
                   <Trash2 size={12} /> Delete
-                </button>
+                </Button>
               </div>
             </>
           )}
