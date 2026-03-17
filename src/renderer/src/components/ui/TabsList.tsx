@@ -14,12 +14,12 @@ export const TabsList = ({sessions, activeSessionId, onSelect, onClose, onAdd}: 
     <div className="flex flex-row py-1 bg-secondary border-b border-border overflow-x-auto items-center">
       {sessions.map((s) => (
         <div key={s.id} onClick={() => onSelect(s.id)}
-             className={`px-4 cursor-pointer border-b flex gap-1 min-w-[100px]
+             className={`cursor-pointer border-b flex gap-1 min-w-[120px]
                     ${activeSessionId === s.id ? 'bg-background border-b border-primary' : 'text-foreground hover:bg-background'}`}
         >
 
         <Button
-          className="ml-auto h-5 w-5 hover:text-destructive cursor-pointer"
+          className="flex justify-start ml-2 h-5 w-5 hover:text-destructive cursor-pointer"
           variant="ghost"
           size="icon-sm"
           onClick={(e) => {
@@ -30,7 +30,7 @@ export const TabsList = ({sessions, activeSessionId, onSelect, onClose, onAdd}: 
           ×
         </Button>
 
-        <span className="truncate text-xs">{s.connection.name || 'Session'}  </span>
+        <span className="truncate text-xs justify-center">{s.connection.name || 'Session'}  </span>
         </div>
       ))}
       <Button
