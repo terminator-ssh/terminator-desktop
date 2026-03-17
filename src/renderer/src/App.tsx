@@ -86,6 +86,7 @@ const App = () => {
                   activeSessionId={activeSessionId}
                   onSelect={setActiveSession}
                   onClose={removeSession}
+                  onAdd={setActiveTab}
                 />
                 <TerminalPage
                   connection={session.connection}
