@@ -23,7 +23,7 @@ export const TabsList = ({sessions, activeSessionId, onSelect, onClose}: TabsLis
             e.stopPropagation();
             onClose(s.id);
           }}
-          className="ml-auto hover:text-red-500 cursor-pointer">
+          className="ml-auto hover:text-destructive cursor-pointer">
           ×
         </button>
 
