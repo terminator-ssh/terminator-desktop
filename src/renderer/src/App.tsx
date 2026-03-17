@@ -80,10 +80,7 @@ const App = () => {
             </div>
 
             {sessions.map(session => (
-              <div
-                key={session.id}
-                className={activeTab === 'terminal' && activeSessionId === session.id ? 'flex-1 h-full' : 'hidden'}
-              >
+              <div key={session.id} className={activeTab === 'terminal' && activeSessionId === session.id ? 'flex-1 h-full' : 'hidden'}>
                 <TabsList
                   sessions={sessions}
                   activeSessionId={activeSessionId}
