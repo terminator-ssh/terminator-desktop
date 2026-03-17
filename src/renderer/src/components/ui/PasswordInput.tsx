@@ -18,12 +18,12 @@ export const PasswordInput = ({ value, onChange, placeholder, className }: Passw
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className={`w-full bg-[#2b2d33] border border-gray-700 text-gray-200 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-emerald-500 pr-10 ${className}`}
+        className={`w-full bg-input border border-border text-foreground text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-primary pr-10 ${className}`}
       />
       <button
         type="button"
         onClick={() => setShow(!show)}
-        className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-white"
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/70 hover:text-foreground"
         tabIndex={-1}
       >
         {show ? <EyeOff size={16} /> : <Eye size={16} />}

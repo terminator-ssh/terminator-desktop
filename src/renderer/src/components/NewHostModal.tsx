@@ -67,57 +67,57 @@ const NewHostModal = ({ onClose, onSaved }: { onClose: () => void, onSaved: () =
   };
 
   return (
-    <div onClick={(e) => e.stopPropagation()} className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="bg-[#23242a] w-[500px] rounded-2xl p-6 shadow-2xl border border-gray-800 relative max-h-[90vh] overflow-y-auto">
+    <div onClick={(e) => e.stopPropagation()} className="fixed inset-0 bg-background/60 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-card w-[500px] rounded-2xl p-6 shadow-2xl border border-border/50 relative max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold text-white">New Host</h2>
-          <button onClick={onClose} className="text-gray-400 hover:text-white"><X size={20} /></button>
+          <h2 className="text-xl font-semibold text-foreground">New Host</h2>
+          <button onClick={onClose} className="text-muted-foreground hover:text-foreground"><X size={20} /></button>
         </div>
 
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div className="col-span-2 space-y-1">
-              <label className="text-xs text-gray-400 font-medium ml-1">Host IP / Domain</label>
+              <label className="text-xs text-muted-foreground font-medium ml-1">Host IP / Domain</label>
               <input
                 type="text"
                 placeholder="192.168.1.1"
                 onChange={(e) => handleChange('host', e.target.value)}
-                className="w-full bg-[#2b2d33] border border-gray-700 text-gray-200 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-emerald-500"
+                className="w-full bg-input border border-border text-foreground text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-primary"
                 autoFocus
               />
             </div>
             <div className="col-span-2 space-y-1">
-              <label className="text-xs text-gray-400 font-medium ml-1">Label</label>
+              <label className="text-xs text-muted-foreground font-medium ml-1">Label</label>
               <input
                 type="text"
                 value={formData.name || ''}
                 placeholder="My Server"
                 onChange={(e) => handleChange('name', e.target.value)}
-                className="w-full bg-[#2b2d33] border border-gray-700 text-gray-200 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-emerald-500"
+                className="w-full bg-input border border-border text-foreground text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-primary"
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs text-gray-400 font-medium ml-1">Port</label>
+              <label className="text-xs text-muted-foreground font-medium ml-1">Port</label>
               <input
                 type="number"
                 value={formData.port}
                 onChange={(e) => handleChange('port', parseInt(e.target.value))}
-                className="w-full bg-[#2b2d33] border border-gray-700 text-gray-200 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-emerald-500"
+                className="w-full bg-input border border-border text-foreground text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-primary"
               />
             </div>
             <div className="space-y-1">
-              <label className="text-xs text-gray-400 font-medium ml-1">Username</label>
+              <label className="text-xs text-muted-foreground font-medium ml-1">Username</label>
               <input
                 type="text"
                 value={formData.username}
                 onChange={(e) => handleChange('username', e.target.value)}
-                className="w-full bg-[#2b2d33] border border-gray-700 text-gray-200 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-emerald-500"
+                className="w-full bg-input border border-border text-foreground text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-primary"
               />
             </div>
           </div>
 
           <div className="space-y-1">
-            <label className="text-xs text-gray-400 font-medium ml-1">Password</label>
+            <label className="text-xs text-muted-foreground font-medium ml-1">Password</label>
             <PasswordInput
               value={formData.password || ''}
               onChange={(val) => handleChange('password', val)}
@@ -135,7 +135,7 @@ const NewHostModal = ({ onClose, onSaved }: { onClose: () => void, onSaved: () =
           />
 
           {showValidationWarning && (
-            <div className="flex items-center gap-2 text-yellow-500 text-xs bg-yellow-500/10 p-3 rounded-lg border border-yellow-500/20">
+            <div className="flex items-center gap-2 text-warning text-xs bg-warning/10 p-3 rounded-lg border border-warning/20">
               <AlertTriangle size={16} />
               <span>Missing required fields. Click Save again to force.</span>
             </div>
@@ -146,7 +146,7 @@ const NewHostModal = ({ onClose, onSaved }: { onClose: () => void, onSaved: () =
             onClick={handleSave}
             disabled={saveHostMutation.isPending}
             className={`w-full font-medium py-3 rounded-xl mt-4 transition-colors flex justify-center items-center gap-2
-              ${showValidationWarning ? 'bg-yellow-600 hover:bg-yellow-700 text-white' : 'bg-[#10b981] hover:bg-[#059669] text-white'}`}
+              ${showValidationWarning ? 'bg-warning hover:bg-warning/90 text-foreground' : 'bg-primary hover:bg-primary/90 text-foreground'}`}
           >
             {saveHostMutation.isPending ? "Saving..." : "Save"} <Plus size={18} />
           </button>

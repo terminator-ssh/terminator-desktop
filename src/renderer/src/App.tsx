@@ -56,11 +56,11 @@ const App = () => {
   };
 
   if (checkingAuth) {
-    return <div className="h-screen bg-[#16171b] flex items-center justify-center text-gray-500">Loading...</div>;
+    return <div className="h-screen bg-background flex items-center justify-center text-muted-foreground">Loading...</div>;
   }
 
   return (
-    <div className="flex h-screen bg-[#16171b] text-gray-100 font-sans overflow-hidden">
+    <div className="flex h-screen bg-background text-foreground font-sans overflow-hidden">
 
       {hasUser && !isUnlocked && <LoginModal onUnlock={handleUnlock} />}
       {!hasUser && <NewUserModal onClick={handleCreated} />}
@@ -96,11 +96,11 @@ const App = () => {
             ))}
 
             {activeTab === 'terminal' && sessions.length === 0 && (
-              <div className="flex items-center justify-center h-full text-gray-500 flex-col gap-2">
+              <div className="text-muted-foreground">
                 <p>No active connections.</p>
                 <button
                   onClick={() => setActiveTab('hosts')}
-                  className="text-emerald-500 hover:underline"
+                  className="text-primary hover:underline"
                 >
                   Select a host
                 </button>

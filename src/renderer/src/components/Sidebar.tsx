@@ -12,7 +12,7 @@ const Sidebar = ({ activeTab, setActiveTab }:
   ];
 
   return (
-    <div className="w-64 bg-[#1e1f24] h-screen flex flex-col p-4 border-r border-gray-800">
+    <div className="w-64 bg-sidebar h-screen flex flex-col p-4 border-r border-border/50">
 
       <div className="mb-8">
         <UserMenu />
@@ -25,8 +25,8 @@ const Sidebar = ({ activeTab, setActiveTab }:
             onClick={() => setActiveTab(item.id)}
             className={`flex items-center gap-3 px-4 py-3 rounded-lg text-sm transition-colors ${
               activeTab === item.id
-                ? 'bg-[#e4e4e7] text-black font-medium'
-                : 'text-gray-400 hover:text-gray-200 hover:bg-[#2b2d33]'
+                ? 'bg-primary/10 text-primary font-medium'
+                : 'text-muted-foreground hover:text-foreground hover:bg-input/50'
             }`}
           >
             {item.icon}

@@ -50,15 +50,15 @@ const UserMenu = () => {
     await window.electron.ipcRenderer.invoke('auth:wipe');
   };
 
-  if (!user) return <div className="h-12 bg-[#2b2d33] rounded-xl animate-pulse"></div>;
+  if (!user) return <div className="h-12 bg-input rounded-xl animate-pulse"></div>;
 
   const isSynced = !!user.serverUrl;
 
   const renderStatus = () => {
     if (!isSynced) {
       return (
-        <div className="text-[10px] flex items-center gap-1 text-gray-500">
-          <span className="w-1.5 h-1.5 rounded-full bg-gray-500"></span>
+        <div className="text-[10px] flex items-center gap-1 text-muted-foreground/70">
+          <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground"></span>
           <span className="truncate">Local Vault</span>
         </div>
       );
@@ -67,14 +67,14 @@ const UserMenu = () => {
     switch (syncStatus) {
       case 'syncing':
         return (
-          <div className="text-[10px] flex items-center gap-1 text-blue-400">
+          <div className="text-[10px] flex items-center gap-1 text-info">
             <RefreshCw size={10} className="animate-spin" />
             <span className="truncate">Syncing...</span>
           </div>
         );
       case 'unauthenticated':
         return (
-          <div className="text-[10px] flex items-center gap-1 text-orange-400 font-medium">
+          <div className="text-[10px] flex items-center gap-1 text-warning/80 font-medium">
             <ShieldAlert size={10} />
             <span className="truncate">Unauthenticated</span>
           </div>
@@ -82,7 +82,7 @@ const UserMenu = () => {
       case 'error':
       case 'offline':
         return (
-          <div className="text-[10px] flex items-center gap-1 text-red-500 font-medium">
+          <div className="text-[10px] flex items-center gap-1 text-destructive font-medium">
             <AlertCircle size={10} />
             <span className="truncate">Disconnected</span>
           </div>
@@ -91,8 +91,8 @@ const UserMenu = () => {
       case 'idle':
       default:
         return (
-          <div className="text-[10px] flex items-center gap-1 text-emerald-500">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+          <div className="text-[10px] flex items-center gap-1 text-primary">
+            <span className="w-1.5 h-1.5 rounded-full bg-primary"></span>
             <span className="truncate">Synced</span>
           </div>
         );
@@ -103,49 +103,49 @@ const UserMenu = () => {
     <div className="relative" ref={menuRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full bg-[#2b2d33] rounded-xl p-3 flex items-center gap-3 transition-colors border border-transparent ${isOpen ? 'border-gray-600' : 'hover:bg-[#32343b]'}`}
+        className={`w-full bg-input rounded-xl p-3 flex items-center gap-3 transition-colors border border-transparent ${isOpen ? 'border-border' : 'hover:bg-input/80'}`}
       >
-        <div className="w-8 h-8 bg-gray-600 rounded-full flex items-center justify-center shrink-0">
-          <User size={16} className="text-gray-300" />
+        <div className="w-8 h-8 bg-secondary rounded-full flex items-center justify-center shrink-0">
+          <User size={16} className="text-foreground/80" />
         </div>
         <div className="flex-1 text-left min-w-0">
-          <div className="text-sm font-medium text-gray-200 truncate">{user.username}</div>
+          <div className="text-sm font-medium text-foreground truncate">{user.username}</div>
           {renderStatus()}
         </div>
 
         {isOpen ? (
-          <ChevronUp size={14} className="text-gray-500 pointer-events-none" />
+          <ChevronUp size={14} className="text-muted-foreground/70 pointer-events-none" />
         ) : (
-          <ChevronDown size={14} className="text-gray-500 pointer-events-none" />
+          <ChevronDown size={14} className="text-muted-foreground/70 pointer-events-none" />
         )}
       </button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 w-full mt-2 bg-[#1e1f24] border border-gray-700 rounded-xl shadow-2xl overflow-hidden z-50">
+        <div className="absolute top-full left-0 w-full mt-2 bg-sidebar border border-border rounded-xl shadow-2xl overflow-hidden z-50">
           <div className="p-1">
             <button
               onClick={() => { setShowServerModal(true); setIsOpen(false); }}
-              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-300 hover:bg-[#2b2d33] rounded-lg transition-colors text-left"
+              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground/80 hover:bg-input rounded-lg transition-colors text-left"
             >
-              <Server size={14} className={isSynced ? "text-blue-400" : "text-gray-400"} />
+              <Server size={14} className={isSynced ? "text-info" : "text-muted-foreground"} />
               <span className="flex-1 truncate">{isSynced ? "Switch Server" : "Connect Cloud"}</span>
             </button>
 
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-gray-300 hover:bg-[#2b2d33] rounded-lg transition-colors text-left"
+              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground/80 hover:bg-input rounded-lg transition-colors text-left"
             >
               <LogOut size={14} />
               Lock Vault
             </button>
 
-            <div className="h-px bg-gray-700 my-1 mx-1"></div>
+            <div className="h-px bg-border my-1 mx-1"></div>
 
             <button
               onClick={() => { setShowWipeModal(true); setIsOpen(false); }}
-              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-red-400 hover:bg-red-500/10 rounded-lg transition-colors text-left group"
+              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors text-left group"
             >
-              <Trash2 size={14} className="group-hover:text-red-500" />
+              <Trash2 size={14} className="group-hover:text-destructive" />
               Wipe Data
             </button>
           </div>

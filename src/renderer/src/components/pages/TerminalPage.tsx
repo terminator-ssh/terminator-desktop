@@ -7,6 +7,7 @@ import '@xterm/xterm/css/xterm.css';
 import { Host, IPC } from '../../../../shared/types';
 import { useStore } from '@/store/useStore';
 import { useKeys } from '@/hooks/useData';
+import {TERMINAL_THEME} from "@/lib/terminalTheme";
 
 interface TerminalPageProps {
   connection: Host;
@@ -45,9 +46,9 @@ const TerminalPage = ({ connection, sessionId, isActive }: TerminalPageProps) =>
       allowProposedApi: true,
       lineHeight: 1.1,
       theme: {
-        background: '#16171b',
-        foreground: '#ffffff',
-        cursor: '#f8f8f2',
+        background: TERMINAL_THEME.background,
+        foreground: TERMINAL_THEME.foreground,
+        cursor: TERMINAL_THEME.cursor,
         selectionBackground: 'rgba(255, 255, 255, 0.3)',
       }
     });
@@ -176,17 +177,17 @@ const TerminalPage = ({ connection, sessionId, isActive }: TerminalPageProps) =>
   };
 
   return (
-    <div ref={containerRef} className="flex flex-col h-full w-full bg-[#16171b]">
-      <div className="flex items-center justify-between px-4 py-2 bg-[#2b2d33] border-b border-gray-800 h-12">
+    <div ref={containerRef} className="flex flex-col h-full w-full bg-background">
+      <div className="flex items-center justify-between px-4 py-2 bg-input border-b border-border/50 h-12">
         <div className="flex items-center gap-3">
-          <div className={`text-xs px-2 py-1 rounded ${status === 'Connected' ? 'bg-green-900 text-green-200' : 'bg-red-900 text-red-200'}`}>
+          <div className={`text-xs px-2 py-1 rounded ${status === 'Connected' ? 'bg-success/20 text-success/80' : 'bg-destructive/20 text-destructive/80'}`}>
             {status}
           </div>
-          <div className="text-gray-200 text-sm font-medium">
+          <div className="text-foreground text-sm font-medium">
             {connection.username}@{connection.host}
           </div>
         </div>
-        <button onClick={handleDisconnect} className="text-gray-400 hover:text-red-400 flex items-center gap-1 text-xs font-medium px-2 py-1 rounded hover:bg-white/5 transition-colors">
+        <button onClick={handleDisconnect} className="text-muted-foreground hover:text-destructive flex items-center gap-1 text-xs font-medium px-2 py-1 rounded hover:bg-foreground/5 transition-colors">
           <XCircle size={16} /> Disconnect
         </button>
       </div>

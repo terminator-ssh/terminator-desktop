@@ -27,14 +27,14 @@ const LoginModal = ({ onUnlock }: { onUnlock: () => void }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/90 backdrop-blur-md flex items-center justify-center z-50">
-      <div className="bg-[#23242a] w-96 rounded-2xl p-8 shadow-2xl border border-gray-800 text-center">
-        <div className="mx-auto bg-gray-800 w-16 h-16 rounded-full flex items-center justify-center mb-6">
-          <Lock size={32} className="text-emerald-500" />
+    <div className="fixed inset-0 bg-background/90 backdrop-blur-md flex items-center justify-center z-50">
+      <div className="bg-card w-96 rounded-2xl p-8 shadow-2xl border border-border/50 text-center">
+        <div className="mx-auto bg-secondary w-16 h-16 rounded-full flex items-center justify-center mb-6">
+          <Lock size={32} className="text-primary" />
         </div>
 
-        <h2 className="text-2xl font-bold text-white mb-2">Welcome Back</h2>
-        <p className="text-gray-400 text-sm mb-6">Enter your master password to unlock your vault.</p>
+        <h2 className="text-2xl font-bold text-foreground mb-2">Welcome Back</h2>
+        <p className="text-muted-foreground text-sm mb-6">Enter your master password to unlock your vault.</p>
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div className="text-left">
@@ -46,12 +46,12 @@ const LoginModal = ({ onUnlock }: { onUnlock: () => void }) => {
             />
           </div>
 
-          {error && <div className="text-red-400 text-xs bg-red-400/10 p-2 rounded">{error}</div>}
+          {error && <div className="text-destructive text-xs bg-destructive/10 p-2 rounded">{error}</div>}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#10b981] hover:bg-[#059669] text-white font-medium py-3 rounded-xl transition-colors flex justify-center items-center gap-2 disabled:opacity-50">
+            className="w-full bg-primary hover:bg-primary/90 text-foreground font-medium py-3 rounded-xl transition-colors flex justify-center items-center gap-2 disabled:opacity-50">
             {loading ? "Unlocking..." : "Unlock Vault"}
             {!loading && <ArrowBigRight size={18} />}
           </button>
