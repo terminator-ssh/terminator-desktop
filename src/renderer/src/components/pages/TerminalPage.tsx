@@ -49,7 +49,7 @@ const TerminalPage = ({ connection, sessionId, isActive }: TerminalPageProps) =>
         background: TERMINAL_THEME.background,
         foreground: TERMINAL_THEME.foreground,
         cursor: TERMINAL_THEME.cursor,
-        selectionBackground: 'rgba(255, 255, 255, 0.3)',
+        selectionBackground: TERMINAL_THEME.selectionBackground,
       }
     });
 
