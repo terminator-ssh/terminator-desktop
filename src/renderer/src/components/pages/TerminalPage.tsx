@@ -171,11 +171,7 @@ const TerminalPage = ({ connection, sessionId, isActive }: TerminalPageProps) =>
       }, 50);
     }
   }, [isActive, sessionId]);
-
-  const handleDisconnect = () => {
-    removeSession(sessionId);
-  };
-
+  
   return (
     <div ref={containerRef} className="flex flex-col h-full w-full bg-background">
       <div className="flex items-center justify-between px-4 py-2 bg-input border-b border-border/50 h-12">
