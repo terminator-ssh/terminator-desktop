@@ -38,13 +38,13 @@ const SwitchServerModal = ({ onClose, currentUrl }: SwitchServerModalProps) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="bg-[#23242a] w-150 rounded-2xl p-6 shadow-2xl border border-gray-800 relative">
+    <div className="fixed inset-0 bg-background/60 backdrop-blur-sm flex items-center justify-center z-50">
+      <div className="bg-card w-150 rounded-2xl p-6 shadow-2xl border border-border/50 relative">
         <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-semibold text-white mx-auto">
+          <h2 className="text-xl font-semibold text-foreground mx-auto">
             {isSwitching ? "Switch Server" : "Connect Cloud"}
           </h2>
-          <button onClick={onClose} className="absolute right-6 text-gray-400 hover:text-white">
+          <button onClick={onClose} className="absolute right-6 text-muted-foreground hover:text-foreground">
             <X size={20} />
           </button>
         </div>
@@ -52,7 +52,7 @@ const SwitchServerModal = ({ onClose, currentUrl }: SwitchServerModalProps) => {
         <div className="space-y-4">
 
           {isSwitching ? (
-            <div className="bg-yellow-500/10 p-4 rounded-lg flex items-start gap-3 border border-yellow-500/20 text-yellow-500">
+            <div className="bg-warning/10 p-4 rounded-lg flex items-start gap-3 border border-warning/20 text-warning">
               <AlertTriangle size={20} className="shrink-0" />
               <div className="text-xs">
                 You are currently connected to <b>{currentUrl}</b>. <br/>
@@ -60,7 +60,7 @@ const SwitchServerModal = ({ onClose, currentUrl }: SwitchServerModalProps) => {
               </div>
             </div>
           ) : (
-            <div className="bg-blue-500/10 p-4 rounded-lg flex items-start gap-3 border border-blue-500/20 text-blue-400">
+            <div className="bg-info/10 p-4 rounded-lg flex items-start gap-3 border border-info/20 text-info">
               <UploadCloud size={20} className="shrink-0" />
               <div className="text-xs">
                 This will register your current local account on the server and upload your encrypted data.
@@ -69,26 +69,26 @@ const SwitchServerModal = ({ onClose, currentUrl }: SwitchServerModalProps) => {
           )}
 
           <div className="space-y-1">
-            <label className="text-xs text-gray-400 font-medium ml-1">New Server URL</label>
+            <label className="text-xs text-muted-foreground font-medium ml-1">New Server URL</label>
             <input
               type="text"
               value={url}
               onChange={(e) => setUrl(e.target.value)}
               placeholder="example.com"
-              className="w-full bg-[#2b2d33] border border-gray-700 text-gray-200 text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-emerald-500"
+              className="w-full bg-input border border-border text-foreground text-sm rounded-lg px-4 py-3 focus:outline-none focus:border-primary"
               autoFocus
             />
-            <p className="text-[10px] text-gray-500 mt-1 ml-1">/api/v1 added automatically.</p>
+            <p className="text-[10px] text-muted-foreground/70 mt-1 ml-1">/api/v1 added automatically.</p>
           </div>
 
-          {error && <div className="text-red-400 text-sm text-center p-2 bg-red-900/20 rounded">{error}</div>}
+          {error && <div className="text-destructive text-sm text-center p-2 bg-destructive/20/20 rounded">{error}</div>}
 
           <button
             type="button"
             onClick={handleConnect}
             disabled={loading}
-            className={`w-full text-white font-medium py-3 rounded-xl mt-4 transition-colors flex justify-center items-center gap-2 disabled:opacity-50
-                ${isSwitching ? 'bg-yellow-600 hover:bg-yellow-700' : 'bg-[#10b981] hover:bg-[#059669]'}`}
+            className={`w-full text-foreground font-medium py-3 rounded-xl mt-4 transition-colors flex justify-center items-center gap-2 disabled:opacity-50
+                ${isSwitching ? 'bg-warning hover:bg-warning/90' : 'bg-primary hover:bg-primary/90'}`}
           >
             {loading ? "Connecting..." : (isSwitching ? "Confirm Switch" : "Register & Sync")} <ArrowBigRight />
           </button>

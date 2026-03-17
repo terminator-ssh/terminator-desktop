@@ -68,14 +68,14 @@ const HostCard = ({ props, onClose }: { props: Host, onClose: () => void }) => {
     setEditingField(null);
   };
 
-  const INPUT_STYLE = "bg-[#1e1f24] border border-gray-600 focus:border-gray-500 text-white rounded px-2 py-0.5";
+  const INPUT_STYLE = "bg-sidebar border border-border focus:border-primary text-foreground rounded px-2 py-0.5";
 
   return (
     <>
-      <div className="bg-[#23242a] p-5 rounded-2xl border border-transparent hover:border-gray-700 transition-all group relative h-full flex flex-col justify-center">
+      <div className="bg-card p-5 rounded-2xl border border-transparent hover:border-border transition-all group relative h-full flex flex-col justify-center">
         <div className="flex items-center gap-4">
           <div className="mt-1 shrink-0">
-            <Cloud size={24} className="text-gray-400" />
+            <Cloud size={24} className="text-muted-foreground" />
           </div>
 
           <div className="flex-1 min-w-0 flex flex-col">
@@ -93,8 +93,8 @@ const HostCard = ({ props, onClose }: { props: Host, onClose: () => void }) => {
                 />
               ) : (
                 <h3
-                  className={`text-gray-200 font-medium text-lg truncate cursor-text border border-transparent hover:border-gray-700 -ml-1 px-1 rounded transition-colors
-                            ${!props.name ? 'w-full h-full italic text-gray-600 hover:text-gray-400' : ''}`}
+                  className={`text-foreground font-medium text-lg truncate cursor-text border border-transparent hover:border-border -ml-1 px-1 rounded transition-colors
+                            ${!props.name ? 'w-full h-full italic text-muted-foreground/50 hover:text-muted-foreground' : ''}`}
                   onClick={(e) => { e.stopPropagation(); setEditingField('name'); }}
                   title="Click to rename"
                 >
@@ -104,7 +104,7 @@ const HostCard = ({ props, onClose }: { props: Host, onClose: () => void }) => {
             </div>
 
             {/* HOST | USER */}
-            <div className="text-gray-500 text-sm mt-1 flex flex-wrap gap-x-2 items-center h-6">
+            <div className="text-muted-foreground/70 text-sm mt-1 flex flex-wrap gap-x-2 items-center h-6">
 
               {/* Host */}
               {editingField === 'host' ? (
@@ -117,14 +117,14 @@ const HostCard = ({ props, onClose }: { props: Host, onClose: () => void }) => {
                 />
               ) : (
                 <span
-                  className="hover:text-gray-300 cursor-text hover:bg-[#1e1f24] px-1 -ml-1 rounded transition-colors"
+                  className="hover:text-foreground/80 cursor-text hover:bg-sidebar px-1 -ml-1 rounded transition-colors"
                   onClick={(e) => { e.stopPropagation(); setEditingField('host'); }}
                 >
                         {props.host || "0.0.0.0"}
                     </span>
               )}
 
-              <span className="text-gray-700">|</span>
+              <span className="text-muted-foreground/40">|</span>
 
               {/* User */}
               {editingField === 'username' ? (
@@ -137,7 +137,7 @@ const HostCard = ({ props, onClose }: { props: Host, onClose: () => void }) => {
                 />
               ) : (
                 <span
-                  className="hover:text-gray-300 cursor-text hover:bg-[#1e1f24] px-1 rounded transition-colors"
+                  className="hover:text-foreground/80 cursor-text hover:bg-sidebar px-1 rounded transition-colors"
                   onClick={(e) => { e.stopPropagation(); setEditingField('username'); }}
                 >
                         {props.username || "root"}
@@ -148,7 +148,7 @@ const HostCard = ({ props, onClose }: { props: Host, onClose: () => void }) => {
 
           <button
             onClick={(e) => { e.stopPropagation(); setOptionsOpen(!isOptionsOpen); }}
-            className="text-gray-500 hover:text-white p-2 rounded-lg hover:bg-white/5 shrink-0"
+            className="text-muted-foreground/70 hover:text-foreground p-2 rounded-lg hover:bg-foreground/5 shrink-0"
           >
             <MoreHorizontal size={20} />
           </button>
@@ -160,15 +160,15 @@ const HostCard = ({ props, onClose }: { props: Host, onClose: () => void }) => {
                 onClick={(e) => { e.stopPropagation(); setOptionsOpen(false); }}
               />
 
-              <div className="absolute right-12 top-4 bg-[#1e1f24] rounded-lg shadow-xl border border-gray-800 overflow-hidden flex flex-col w-32 z-20">
+              <div className="absolute right-12 top-4 bg-sidebar rounded-lg shadow-xl border border-border/50 overflow-hidden flex flex-col w-32 z-20">
                 <button
                   onClick={(e) => { e.stopPropagation(); setIsEditModalOpen(true); setOptionsOpen(false); }}
-                  className="flex items-center gap-2 px-4 py-3 text-xs text-gray-300 hover:bg-[#2b2d33] text-left transition-colors">
+                  className="flex items-center gap-2 px-4 py-3 text-xs text-foreground/80 hover:bg-input text-left transition-colors">
                   <Edit2 size={12} /> Edit
                 </button>
                 <button
                   onClick={(e) => { e.stopPropagation(); setIsDeleteModalOpen(true); setOptionsOpen(false); }}
-                  className="flex items-center gap-2 px-4 py-3 text-xs text-red-400 hover:bg-[#2b2d33] text-left transition-colors">
+                  className="flex items-center gap-2 px-4 py-3 text-xs text-destructive hover:bg-input text-left transition-colors">
                   <Trash2 size={12} /> Delete
                 </button>
               </div>

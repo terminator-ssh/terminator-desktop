@@ -28,21 +28,21 @@ const KeyCard = ({ props, onClose }: { props: SavedKey, onClose: () => void }) =
 
   return (
     <>
-      <div className="bg-[#23242a] p-4 rounded-xl flex items-center gap-4 hover:bg-[#2b2d33] transition-colors border border-transparent hover:border-gray-700 transition-all group relative">
-        <div className="p-2 bg-[#2b2d33] rounded-lg">
-          <Key size={20} className="text-gray-400" />
+      <div className="bg-card p-4 rounded-xl flex items-center gap-4 hover:bg-input transition-colors border border-transparent hover:border-border transition-all group relative">
+        <div className="p-2 bg-input rounded-lg">
+          <Key size={20} className="text-muted-foreground" />
         </div>
         <div className="flex-1 min-w-0">
           {isEditingName ? (
             <InlineInput
               value={props.name}
-              className="bg-[#1e1f24] border border-emerald-500 text-white font-medium px-2 py-0.5 rounded w-full"
+              className="bg-sidebar border border-primary text-foreground font-medium px-2 py-0.5 rounded w-full"
               onSave={handleRename}
               onCancel={() => setIsEditingName(false)}
             />
           ) : (
             <h3
-              className="text-gray-200 font-medium truncate cursor-text border border-transparent hover:border-gray-700 px-1 -ml-1 rounded transition-colors"
+              className="text-foreground font-medium truncate cursor-text border border-transparent hover:border-border px-1 -ml-1 rounded transition-colors"
               onClick={(e) => { e.stopPropagation(); setIsEditingName(true); }}
               title="Click to rename"
             >
@@ -53,7 +53,7 @@ const KeyCard = ({ props, onClose }: { props: SavedKey, onClose: () => void }) =
 
         <button
           onClick={(e) => { e.stopPropagation(); setOptionsOpen(!isOptionsOpen); }}
-          className="text-gray-500 hover:text-white p-2 rounded-lg hover:bg-white/5"
+          className="text-muted-foreground/70 hover:text-foreground p-2 rounded-lg hover:bg-foreground/5"
         >
           <MoreHorizontal size={20} />
         </button>
@@ -64,15 +64,15 @@ const KeyCard = ({ props, onClose }: { props: SavedKey, onClose: () => void }) =
               className="fixed inset-0 z-10 cursor-default"
               onClick={(e) => { e.stopPropagation(); setOptionsOpen(false); }}
             />
-            <div className="absolute right-12 top-4 bg-[#1e1f24] rounded-lg shadow-xl border border-gray-800 overflow-hidden flex flex-col w-32 z-20">
+            <div className="absolute right-12 top-4 bg-sidebar rounded-lg shadow-xl border border-border/50 overflow-hidden flex flex-col w-32 z-20">
               <button
                 onClick={(e) => { e.stopPropagation(); setIsEditOpen(true); setOptionsOpen(false); }}
-                className="flex items-center gap-2 px-4 py-2 text-xs text-gray-300 hover:bg-[#2b2d33] text-left">
+                className="flex items-center gap-2 px-4 py-2 text-xs text-foreground/80 hover:bg-input text-left">
                 <Edit2 size={12} /> Edit
               </button>
               <button
                 onClick={(e) => { e.stopPropagation(); setIsDeleteModalOpen(true); setOptionsOpen(false); }}
-                className="flex items-center gap-2 px-4 py-2 text-xs text-red-400 hover:bg-[#2b2d33] text-left">
+                className="flex items-center gap-2 px-4 py-2 text-xs text-destructive hover:bg-input text-left">
                 <Trash2 size={12} /> Delete
               </button>
             </div>
