@@ -7,7 +7,11 @@ import NewUserModal from './components/NewUserModal';
 import LoginModal from './components/LoginModal';
 import { useStore } from './store/useStore';
 import { useQueryClient } from '@tanstack/react-query';
+<<<<<<< feat/tabs-list
+import TabsList from "@/components/ui/TabsList";
+=======
 import {Button} from "@/components/ui/button";
+>>>>>>> refactor/v2
 
 const App = () => {
   const queryClient = useQueryClient();
@@ -15,7 +19,7 @@ const App = () => {
     activeTab, setActiveTab,
     isUnlocked, setUnlocked,
     hasUser, setHasUser,
-    sessions, activeSessionId, addSession
+    sessions, activeSessionId, addSession, removeSession, setActiveSession
   } = useStore();
 
   const [checkingAuth, setCheckingAuth] = useState(true);
@@ -80,10 +84,14 @@ const App = () => {
             </div>
 
             {sessions.map(session => (
-              <div
-                key={session.id}
-                className={activeTab === 'terminal' && activeSessionId === session.id ? 'flex-1 h-full' : 'hidden'}
-              >
+              <div key={session.id} className={activeTab === 'terminal' && activeSessionId === session.id ? 'flex-1 h-full' : 'hidden'}>
+                <TabsList
+                  sessions={sessions}
+                  activeSessionId={activeSessionId}
+                  onSelect={setActiveSession}
+                  onClose={removeSession}
+                  onAdd={setActiveTab}
+                />
                 <TerminalPage
                   connection={session.connection}
                   sessionId={session.id}
