@@ -7,11 +7,8 @@ import NewUserModal from './components/NewUserModal';
 import LoginModal from './components/LoginModal';
 import { useStore } from './store/useStore';
 import { useQueryClient } from '@tanstack/react-query';
-<<<<<<< feat/tabs-list
 import TabsList from "@/components/ui/TabsList";
-=======
 import {Button} from "@/components/ui/button";
->>>>>>> refactor/v2
 
 const App = () => {
   const queryClient = useQueryClient();
