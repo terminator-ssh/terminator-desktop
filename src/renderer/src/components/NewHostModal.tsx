@@ -6,6 +6,7 @@ import { useKeys, useSaveHost } from '@/hooks/useData';
 import { useEscape } from '@/hooks/useEscape';
 import { PasswordInput } from './ui/PasswordInput';
 import { KeySelector } from './ui/KeySelector';
+import { Button } from '@/components/ui/button';
 
 const NewHostModal = ({ onClose, onSaved }: { onClose: () => void, onSaved: () => void }) => {
   const queryClient = useQueryClient();
@@ -16,7 +17,6 @@ const NewHostModal = ({ onClose, onSaved }: { onClose: () => void, onSaved: () =
 
   const [formData, setFormData] = useState<Partial<Host>>({ port: 22, username: 'root' });
   const [showValidationWarning, setShowValidationWarning] = useState(false);
-
   const [keyContent, setKeyContent] = useState('');
 
   const handleChange = (field: keyof Host, value: any) => {
@@ -36,7 +36,6 @@ const NewHostModal = ({ onClose, onSaved }: { onClose: () => void, onSaved: () =
     }
 
     let finalKeyId = formData.keyId;
-
     const isNewKeyContent = keyContent && !existingKeys.find(k => k.id === finalKeyId);
 
     if (isNewKeyContent) {
@@ -44,13 +43,10 @@ const NewHostModal = ({ onClose, onSaved }: { onClose: () => void, onSaved: () =
         name: `${formData.name} key`,
         privateKey: keyContent
       };
-
       try {
         const result = await window.electron.ipcRenderer.invoke(IPC.KEYS.SAVE, newKey);
         finalKeyId = result.id;
-
         await queryClient.invalidateQueries({ queryKey: ['keys'] });
-
       } catch (e) {
         console.error("Failed to auto-create key", e);
         return;
@@ -59,9 +55,7 @@ const NewHostModal = ({ onClose, onSaved }: { onClose: () => void, onSaved: () =
       finalKeyId = undefined;
     }
 
-    const hostPayload = { ...formData, keyId: finalKeyId };
-
-    saveHostMutation.mutate(hostPayload, {
+    saveHostMutation.mutate({ ...formData, keyId: finalKeyId }, {
       onSuccess: () => { onSaved(); onClose(); }
     });
   };
@@ -71,7 +65,9 @@ const NewHostModal = ({ onClose, onSaved }: { onClose: () => void, onSaved: () =
       <div className="bg-card w-[500px] rounded-2xl p-6 shadow-2xl border border-border/50 relative max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold text-foreground">New Host</h2>
-          <button onClick={onClose} className="text-muted-foreground hover:text-foreground"><X size={20} /></button>
+          <Button variant="ghost" size="icon" onClick={onClose} className="absolute right-2 top-2 text-muted-foreground hover:text-foreground">
+            <X size={18} />
+          </Button>
         </div>
 
         <div className="space-y-4">
@@ -141,18 +137,20 @@ const NewHostModal = ({ onClose, onSaved }: { onClose: () => void, onSaved: () =
             </div>
           )}
 
-          <button
+          <Button
             type="button"
             onClick={handleSave}
             disabled={saveHostMutation.isPending}
-            className={`w-full font-medium py-3 rounded-xl mt-4 transition-colors flex justify-center items-center gap-2
-              ${showValidationWarning ? 'bg-warning hover:bg-warning/90 text-foreground' : 'bg-primary hover:bg-primary/90 text-foreground'}`}
+            variant={showValidationWarning ? 'warning' : 'default'}
+            className="w-full mt-4"
+            size="lg"
           >
             {saveHostMutation.isPending ? "Saving..." : "Save"} <Plus size={18} />
-          </button>
+          </Button>
         </div>
       </div>
     </div>
   );
 };
+
 export default NewHostModal;

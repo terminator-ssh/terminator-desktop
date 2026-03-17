@@ -6,6 +6,7 @@ import { useStore } from '@/store/useStore';
 import ConfirmModal from './ConfirmModal';
 import SwitchServerModal from './SwitchServerModal';
 import {SyncStatus} from "../../../shared/types";
+import {Button} from "@/components/ui/button";
 
 const UserMenu = () => {
   const { data: user, refetch } = useCurrentUser();
@@ -101,9 +102,10 @@ const UserMenu = () => {
 
   return (
     <div className="relative" ref={menuRef}>
-      <button
+      <Button
+        variant="ghost"
         onClick={() => setIsOpen(!isOpen)}
-        className={`w-full bg-input rounded-xl p-3 flex items-center gap-3 transition-colors border border-transparent ${isOpen ? 'border-border' : 'hover:bg-input/80'}`}
+        className={`w-full h-auto bg-input rounded-xl p-3 justify-start gap-3 border border-transparent ${isOpen ? 'border-border' : 'hover:bg-input/80'}`}
       >
         <div className="w-8 h-8 bg-secondary rounded-full flex items-center justify-center shrink-0">
           <User size={16} className="text-foreground/80" />
@@ -112,42 +114,33 @@ const UserMenu = () => {
           <div className="text-sm font-medium text-foreground truncate">{user.username}</div>
           {renderStatus()}
         </div>
-
         {isOpen ? (
           <ChevronUp size={14} className="text-muted-foreground/70 pointer-events-none" />
         ) : (
           <ChevronDown size={14} className="text-muted-foreground/70 pointer-events-none" />
         )}
-      </button>
+      </Button>
 
       {isOpen && (
         <div className="absolute top-full left-0 w-full mt-2 bg-sidebar border border-border rounded-xl shadow-2xl overflow-hidden z-50">
           <div className="p-1">
-            <button
-              onClick={() => { setShowServerModal(true); setIsOpen(false); }}
-              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground/80 hover:bg-input rounded-lg transition-colors text-left"
-            >
+            <Button variant="ghost" onClick={() => { setShowServerModal(true); setIsOpen(false); }}
+                    className="w-full justify-start gap-2 text-foreground/80">
               <Server size={14} className={isSynced ? "text-info" : "text-muted-foreground"} />
-              <span className="flex-1 truncate">{isSynced ? "Switch Server" : "Connect Cloud"}</span>
-            </button>
+              {isSynced ? "Switch Server" : "Connect Cloud"}
+            </Button>
 
-            <button
-              onClick={handleLogout}
-              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-foreground/80 hover:bg-input rounded-lg transition-colors text-left"
-            >
-              <LogOut size={14} />
-              Lock Vault
-            </button>
+            <Button variant="ghost" onClick={handleLogout}
+                    className="w-full justify-start gap-2 text-foreground/80">
+              <LogOut size={14} /> Lock Vault
+            </Button>
 
             <div className="h-px bg-border my-1 mx-1"></div>
 
-            <button
-              onClick={() => { setShowWipeModal(true); setIsOpen(false); }}
-              className="w-full flex items-center gap-2 px-3 py-2 text-sm text-destructive hover:bg-destructive/10 rounded-lg transition-colors text-left group"
-            >
-              <Trash2 size={14} className="group-hover:text-destructive" />
-              Wipe Data
-            </button>
+            <Button variant="ghost" onClick={() => { setShowWipeModal(true); setIsOpen(false); }}
+                    className="w-full justify-start gap-2 text-destructive hover:text-destructive hover:bg-destructive/10">
+              <Trash2 size={14} /> Wipe Data
+            </Button>
           </div>
         </div>
       )}

@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useKeys } from '@/hooks/useData';
 import { KeyEditor } from './KeyEditor';
+import { Button } from "./button";
 
 interface KeySelectorProps {
   value: string;
@@ -38,16 +39,11 @@ export const KeySelector = ({ value, onChange }: KeySelectorProps) => {
     <div className="pt-2">
       <div className="flex items-center justify-between mb-2">
         <label className="text-xs text-muted-foreground font-medium ml-1">SSH Key</label>
-        <button
-          type="button"
-          onClick={() => {
-            setUseExisting(!useExisting);
-            if(useExisting) setSelectedKeyId('');
-          }}
-          className="text-xs text-primary hover:text-primary/80 flex items-center gap-1"
-        >
+        <Button variant="link" size="sm" type="button"
+                onClick={() => { setUseExisting(!useExisting); if(useExisting) setSelectedKeyId(''); }}
+                className="text-xs text-primary p-0 h-auto">
           {useExisting ? <><Plus size={12} /> Create / Edit Manually</> : "Select Existing"}
-        </button>
+        </Button>
       </div>
 
       {useExisting ? (

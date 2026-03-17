@@ -6,6 +6,7 @@ import { useKeys, useSaveHost } from '@/hooks/useData';
 import { useEscape } from '@/hooks/useEscape';
 import { PasswordInput } from './ui/PasswordInput';
 import { KeySelector } from './ui/KeySelector';
+import { Button } from '@/components/ui/button';
 
 const EditHostModal = ({ host, onClose, onSaved }: { host: Host, onClose: () => void, onSaved: () => void }) => {
   const queryClient = useQueryClient();
@@ -50,10 +51,12 @@ const EditHostModal = ({ host, onClose, onSaved }: { host: Host, onClose: () => 
 
   return (
     <div onClick={(e) => e.stopPropagation()} className="fixed inset-0 bg-background/60 backdrop-blur-sm flex items-center justify-center z-50 cursor-default">
-      <div className="bg-card w-[500px] rounded-2xl p-6 shadow-2xl border border-border/50 relative max-h-[90vh] overflow-y-auto">
+      <div className="bg-card w-125 rounded-2xl p-6 shadow-2xl border border-border/50 relative max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-xl font-semibold text-foreground mx-auto">Edit Host</h2>
-          <button onClick={onClose} className="absolute right-6 text-muted-foreground hover:text-foreground"><X size={20} /></button>
+          <Button variant="ghost" size="icon" onClick={onClose} className="absolute right-2 top-2 text-muted-foreground hover:text-foreground">
+            <X size={18} />
+          </Button>
         </div>
 
         <form className="space-y-4" onSubmit={handleSave}>
@@ -116,12 +119,18 @@ const EditHostModal = ({ host, onClose, onSaved }: { host: Host, onClose: () => 
             }}
           />
 
-          <button type="submit" className="w-full bg-primary hover:bg-primary/90 text-foreground font-medium py-3 rounded-xl mt-4 transition-colors flex justify-center items-center gap-2">
+          <Button
+            type="submit"
+            disabled={saveHostMutation.isPending}
+            className="w-full mt-4"
+            size="lg"
+          >
             Save Changes <Plus size={18} />
-          </button>
+          </Button>
         </form>
       </div>
     </div>
   );
 };
+
 export default EditHostModal;
