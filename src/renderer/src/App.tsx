@@ -79,20 +79,17 @@ const App = () => {
               <KeysPage />
             </div>
 
-            {activeTab === 'terminal' && sessions.length > 0 && (
-              <TabsList
-                sessions={sessions}
-                activeSessionId={activeSessionId}
-                onSelect={setActiveSession}
-                onClose={removeSession}
-                />
-            )}
-
             {sessions.map(session => (
               <div
                 key={session.id}
                 className={activeTab === 'terminal' && activeSessionId === session.id ? 'flex-1 h-full' : 'hidden'}
               >
+                <TabsList
+                  sessions={sessions}
+                  activeSessionId={activeSessionId}
+                  onSelect={setActiveSession}
+                  onClose={removeSession}
+                />
                 <TerminalPage
                   connection={session.connection}
                   sessionId={session.id}
