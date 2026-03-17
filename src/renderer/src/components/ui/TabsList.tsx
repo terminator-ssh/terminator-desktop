@@ -1,4 +1,7 @@
 import {TerminalSession} from "@/store/useStore";
+import {Button} from "@/components/ui/button";
+import Plus from "lucide-react"
+import {Host} from "../../../../shared/types";
 
 interface TabsListProps {
   sessions: TerminalSession[]
@@ -7,7 +10,7 @@ interface TabsListProps {
   onClose: (sessionId: string) => void
 }
 
-export const TabsList = ({sessions, activeSessionId, onSelect, onClose}: TabsListProps) => {
+export const TabsList = ({sessions, activeSessionId, onSelect, onClose, onAdd}: TabsListProps) => {
   return (
     <div className="flex flex-row bg-secondary border-b border-border overflow-x-auto">
       {sessions.map((s) => (
@@ -18,15 +21,16 @@ export const TabsList = ({sessions, activeSessionId, onSelect, onClose}: TabsLis
 
         <span className="truncate text-xs">{s.connection.name || 'Session'}  </span>
 
-        <button
+        <Button
+          className="ml-auto h-5.5 w-5.5 hover:text-destructive cursor-pointer"
+          variant="ghost"
+          size="icon-sm"
           onClick={(e) => {
             e.stopPropagation();
             onClose(s.id);
           }}
-          className="ml-auto hover:text-destructive cursor-pointer">
-          ×
-        </button>
-
+          >
+        </Button>
         </div>
       ))}
     </div>
