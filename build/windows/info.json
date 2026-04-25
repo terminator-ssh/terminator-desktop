@@ -1,0 +1,15 @@
+{
+	"fixed": {
+		"file_version": "0.0.1"
+	},
+	"info": {
+		"0000": {
+			"ProductVersion": "0.0.1",
+			"CompanyName": "Terminator",
+			"FileDescription": "Terminator",
+			"LegalCopyright": "(c) now, Terminator",
+			"ProductName": "Terminator",
+			"Comments": "SSH client"
+		}
+	}
+}

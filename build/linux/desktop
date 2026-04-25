@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Name=Terminator
+Comment=Terminator
+# The Exec line includes %u to pass the URL to the application
+Exec=/usr/local/bin/terminator %u
+Terminal=false
+Type=Application
+Icon=terminator
+Categories=Utility;
+StartupWMClass=terminator
+
+ 
