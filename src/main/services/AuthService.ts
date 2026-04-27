@@ -1,7 +1,7 @@
 ﻿import { count } from 'drizzle-orm';
 import {db, destroyDatabase} from '../database/client';
 import { users } from '../database/schema';
-import { deriveKEK, encryptAES, decryptAES } from '../lib/crypto';
+import {deriveKEK, encryptAES, decryptAES, packBlob, unpackBlob} from '../lib/crypto';
 import { appState } from '../state';
 import crypto from 'crypto';
 import { v4 as uuidv4 } from 'uuid';
@@ -40,11 +40,7 @@ export class AuthService {
     const loginKey = loginKeyBuf.toString('base64');
 
     const { ciphertext, iv, tag } = encryptAES(masterKey, kek);
-    const packedEncryptedMK = Buffer.concat([
-      Buffer.from(iv, 'base64'),
-      Buffer.from(ciphertext, 'base64'),
-      Buffer.from(tag, 'base64')
-    ]).toString('base64');
+    const packedEncryptedMK = packBlob(iv, ciphertext, tag);
 
     const loginHash = crypto.createHash('sha256').update(loginKey).digest('hex');
 
@@ -81,10 +77,7 @@ export class AuthService {
       await axios.post(`${serverUrl}/auth/login`, { username, loginKey });
       console.log("[Auth] Server login successful");
 
-      const buf = Buffer.from(encryptedMasterKey, 'base64');
-      const iv = buf.subarray(0, 12).toString('base64');
-      const tag = buf.subarray(buf.length - 16).toString('base64');
-      const ciphertext = buf.subarray(12, buf.length - 16).toString('base64');
+      const { iv, ciphertext, tag } = unpackBlob(encryptedMasterKey);
 
       const masterKey = decryptAES(ciphertext, iv, tag, kek);
       console.log("[Auth] MasterKey decrypted successfully");
@@ -125,10 +118,7 @@ export class AuthService {
     const loginKeyBuf = await deriveKEK(password, authSalt);
     const loginKey = loginKeyBuf.toString('base64');
 
-    const buf = Buffer.from(user.encryptedMasterKey, 'base64');
-    const iv = buf.subarray(0, 12).toString('base64');
-    const tag = buf.subarray(buf.length - 16).toString('base64');
-    const ciphertext = buf.subarray(12, buf.length - 16).toString('base64');
+    const { iv, ciphertext, tag } = unpackBlob(user.encryptedMasterKey);
 
     try {
       const masterKey = decryptAES(ciphertext, iv, tag, kek);
