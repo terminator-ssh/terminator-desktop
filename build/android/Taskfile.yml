@@ -147,7 +147,7 @@ tasks:
     generates:
       - frontend/bindings/**/*
     cmds:
-      - wails3 generate bindings -f '{{.BUILD_FLAGS}}' -clean=true
+      - wails3 generate bindings -f '{{.BUILD_FLAGS}}' -clean=true -ts -d frontend/bindings ./backend/...
     env:
       GOOS: android
       CGO_ENABLED: 1

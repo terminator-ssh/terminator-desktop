@@ -5,10 +5,24 @@
 // @ts-ignore: Unused imports
 import type { Events } from "@wailsio/runtime";
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore: Unused imports
+import type * as emitters$0 from "../../../../../terminator-desktop/backend/cmd/terminator-desktop/emitters/models.js";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore: Unused imports
+import type * as present$0 from "../../../../../terminator-desktop/backend/internal/present/models.js";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore: Unused imports
+import type * as sync$0 from "../../../../../terminator-desktop/backend/internal/services/sync/models.js";
+
 declare module "@wailsio/runtime" {
     namespace Events {
         interface CustomEvents {
-            "time": string;
+            "ssh:closed": emitters$0.SSHClosedPayload;
+            "ssh:data": emitters$0.SSHDataPayload;
+            "sync:error": present$0.UIError | null;
+            "sync:status": sync$0.SyncStatus;
+            "sync:updates-available": any;
         }
     }
 }

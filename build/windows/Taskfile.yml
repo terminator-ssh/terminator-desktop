@@ -26,7 +26,7 @@ tasks:
           EXTRA_TAGS: '{{.EXTRA_TAGS}}'
     vars:
       # Default to CGO_ENABLED=0 if not explicitly set
-      CGO_ENABLED: '{{.CGO_ENABLED | default "0"}}'
+      CGO_ENABLED: '{{.CGO_ENABLED | default "1"}}'
 
   build:native:
     summary: Builds the application using native Go cross-compilation
@@ -42,7 +42,7 @@ tasks:
       - task: common:generate:icons
     cmds:
       - task: generate:syso
-      - go build {{.BUILD_FLAGS}} -o "{{.BIN_DIR}}/{{.APP_NAME}}.exe"
+      - go build {{.BUILD_FLAGS}} -o "{{.BIN_DIR}}/{{.APP_NAME}}.exe" ./backend/cmd/terminator-desktop
       - cmd: powershell Remove-item *.syso
         platforms: [windows]
       - cmd: rm -f *.syso
@@ -51,7 +51,7 @@ tasks:
       BUILD_FLAGS: '{{if eq .DEV "true"}}{{if .EXTRA_TAGS}}-tags {{.EXTRA_TAGS}} {{end}}-buildvcs=false -gcflags=all="-l"{{else}}-tags production{{if .EXTRA_TAGS}},{{.EXTRA_TAGS}}{{end}} -trimpath -buildvcs=false -ldflags="-w -s -H windowsgui"{{end}}'
     env:
       GOOS: windows
-      CGO_ENABLED: '{{.CGO_ENABLED | default "0"}}'
+      CGO_ENABLED: '{{.CGO_ENABLED | default "1"}}'
       GOARCH: '{{.ARCH | default ARCH}}'
 
   build:docker:

@@ -28,3 +28,5 @@ frontend/dist
 frontend/node_modules
 build/linux/appimage/build
 build/windows/nsis/MicrosoftEdgeWebview2Setup.exe
+
+__debug_bin.exe

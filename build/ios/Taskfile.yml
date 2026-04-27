@@ -39,7 +39,7 @@ tasks:
       - task: common:generate:icons
     cmds:
       - echo "Building iOS app {{.APP_NAME}}..."
-      - go build -buildmode=c-archive -overlay build/ios/xcode/overlay.json {{.BUILD_FLAGS}} -o {{.OUTPUT}}.a
+      - go build -buildmode=c-archive -overlay build/ios/xcode/overlay.json {{.BUILD_FLAGS}} -o {{.OUTPUT}}.a ./backend/cmd/terminator-desktop
     vars:
       BUILD_FLAGS: '{{if eq .PRODUCTION "true"}}-tags production,ios -trimpath -buildvcs=false -ldflags="-w -s"{{else}}-tags ios,debug -buildvcs=false -gcflags=all="-l"{{end}}'
       DEFAULT_OUTPUT: '{{.BIN_DIR}}/{{.APP_NAME}}'
@@ -149,7 +149,7 @@ tasks:
       SDK_PATH:
         sh: xcrun --sdk iphonesimulator --show-sdk-path
     cmds:
-      - wails3 generate bindings -f '{{.BUILD_FLAGS}}' -clean=true
+      - wails3 generate bindings -f '{{.BUILD_FLAGS}}' -clean=true -ts -d frontend/bindings ./backend/...
     env:
       GOOS: ios
       CGO_ENABLED: 1
