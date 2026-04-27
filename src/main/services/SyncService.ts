@@ -92,7 +92,6 @@ export class SyncService {
         blobs: localChanges.map(b => ({
           id: b.id,
           updatedAt: b.updatedAt,
-          iv: b.iv,
           isDeleted: b.isDeleted,
           blob: b.blob,
           versionId: b.versionId
@@ -109,7 +108,6 @@ export class SyncService {
           await db.insert(encryptedBlobs).values({
             id: incoming.id,
             blob: incoming.blob,
-            iv: incoming.iv,
             isDeleted: incoming.isDeleted,
             updatedAt: incoming.updatedAt,
             versionId: incoming.versionId
@@ -117,7 +115,6 @@ export class SyncService {
             target: encryptedBlobs.id,
             set: {
               blob: incoming.blob,
-              iv: incoming.iv,
               isDeleted: incoming.isDeleted,
               updatedAt: incoming.updatedAt,
               versionId: incoming.versionId

@@ -57,12 +57,11 @@ export function registerHandlers() {
     await db.insert(encryptedBlobs).values({
       id,
       blob,
-      iv,
       updatedAt: new Date().toISOString(),
       isDeleted: false
     }).onConflictDoUpdate({
       target: encryptedBlobs.id,
-      set: { blob, updatedAt: new Date().toISOString(), iv }
+      set: { blob, updatedAt: new Date().toISOString() }
     });
     triggerSync();
     return { success: true, id }
@@ -98,12 +97,11 @@ export function registerHandlers() {
     await db.insert(encryptedBlobs).values({
       id,
       blob,
-      iv,
       updatedAt: new Date().toISOString(),
       isDeleted: false
     }).onConflictDoUpdate({
       target: encryptedBlobs.id,
-      set: { blob, updatedAt: new Date().toISOString(), iv }
+      set: { blob, updatedAt: new Date().toISOString() }
     });
 
     triggerSync();

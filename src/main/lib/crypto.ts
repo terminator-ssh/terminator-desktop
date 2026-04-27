@@ -41,7 +41,9 @@ export function decryptAES(ciphertextB64: string, ivB64: string, tagB64: string,
 }
 
 export function packBlob(iv: string, ciphertext: string, tag: string): string {
+  const versionByte = Buffer.from([0x01]);
   const buf = Buffer.concat([
+    versionByte,
     Buffer.from(iv, 'base64'),
     Buffer.from(ciphertext, 'base64'),
     Buffer.from(tag, 'base64')
@@ -51,9 +53,10 @@ export function packBlob(iv: string, ciphertext: string, tag: string): string {
 
 export function unpackBlob(blobB64: string): { iv: string, ciphertext: string, tag: string } {
   const buf = Buffer.from(blobB64, 'base64');
-  const iv = buf.subarray(0, 12);
-  const tag = buf.subarray(buf.length - 16);
-  const ciphertext = buf.subarray(12, buf.length - 16);
+  const payload = buf.subarray(1);
+  const iv = payload.subarray(0, 12);
+  const tag = payload.subarray(payload.length - 16);
+  const ciphertext = payload.subarray(12, payload.length - 16);
 
   return {
     iv: iv.toString('base64'),
