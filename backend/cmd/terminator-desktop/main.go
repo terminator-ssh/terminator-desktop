@@ -7,7 +7,6 @@ import (
 	"log/slog"
 	"os"
 	"path/filepath"
-	"terminator-desktop/backend"
 	"terminator-desktop/backend/cmd/terminator-desktop/emitters"
 	"terminator-desktop/backend/internal/api"
 	"terminator-desktop/backend/internal/dbgen"
@@ -56,9 +55,8 @@ func main() {
 	app := application.New(application.Options{
 		Name:        AppName,
 		Description: "SSH client",
-		Services: []application.Service{
-			application.NewService(&backend.GreetService{}),
-		},
+		//Services: []application.Service{
+		//},
 		Assets: application.AssetOptions{
 			Handler: application.AssetFileServerFS(root.Frontend),
 		},
