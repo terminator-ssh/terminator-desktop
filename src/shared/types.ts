@@ -1,5 +1,6 @@
 ﻿export interface Host {
   id: string;
+  type?: 'host';
   name: string;
   host: string;
   port: number;
@@ -10,6 +11,7 @@
 
 export interface SavedKey {
   id: string;
+  type?: 'key';
   name: string;
   privateKey: string;
 }

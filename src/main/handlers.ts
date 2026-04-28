@@ -36,7 +36,7 @@ export function registerHandlers() {
         const jsonBuf = decryptAES(ciphertext, iv, tag, mk);
         const data = JSON.parse(jsonBuf.toString('utf-8'));
 
-        if (!data.privateKey) {
+        if (data.type === 'host' || (!data.type && !data.privateKey)) {
           hosts.push({ ...data, id: row.id });
         }
       } catch (e) { }
@@ -50,7 +50,7 @@ export function registerHandlers() {
 
     const { privateKey, ...hostData } = host as any;
 
-    const json = JSON.stringify({ ...hostData, id });
+    const json = JSON.stringify({ ...hostData, type: 'host', id });
     const { ciphertext, iv, tag } = encryptAES(Buffer.from(json), mk);
     const blob = packBlob(iv, ciphertext, tag);
 
@@ -78,7 +78,7 @@ export function registerHandlers() {
         const jsonBuf = decryptAES(ciphertext, iv, tag, mk);
         const data = JSON.parse(jsonBuf.toString('utf-8'));
 
-        if (data.privateKey) {
+        if (data.type === 'key' || (!data.type && data.privateKey)) {
           keys.push({ ...data, id: row.id });
         }
       } catch (e) {}
@@ -90,7 +90,7 @@ export function registerHandlers() {
     const mk = appState.getMasterKey();
     const id = key.id || uuidv4();
 
-    const json = JSON.stringify({ ...key, id });
+    const json = JSON.stringify({ ...key, type: 'key', id });
     const { ciphertext, iv, tag } = encryptAES(Buffer.from(json), mk);
     const blob = packBlob(iv, ciphertext, tag);
 
