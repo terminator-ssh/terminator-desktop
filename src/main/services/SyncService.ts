@@ -94,7 +94,6 @@ export class SyncService {
           updatedAt: b.updatedAt,
           isDeleted: b.isDeleted,
           blob: b.blob,
-          versionId: b.versionId
         })),
         lastSyncTime: lastSyncTime
       }, {
@@ -110,14 +109,12 @@ export class SyncService {
             blob: incoming.blob,
             isDeleted: incoming.isDeleted,
             updatedAt: incoming.updatedAt,
-            versionId: incoming.versionId
           }).onConflictDoUpdate({
             target: encryptedBlobs.id,
             set: {
               blob: incoming.blob,
               isDeleted: incoming.isDeleted,
               updatedAt: incoming.updatedAt,
-              versionId: incoming.versionId
             }
           })
         }

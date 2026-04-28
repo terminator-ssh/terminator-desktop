@@ -1,0 +1,1 @@
+ALTER TABLE `encrypted_blobs` DROP COLUMN `version_id`;

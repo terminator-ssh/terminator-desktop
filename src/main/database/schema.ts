@@ -16,5 +16,4 @@ export const encryptedBlobs = sqliteTable('encrypted_blobs', {
   blob: text('blob').notNull(),
   updatedAt: text('updated_at').notNull(),
   isDeleted: integer('is_deleted', { mode: 'boolean' }).notNull().default(false),
-  versionId: text('version_id'),
 });
