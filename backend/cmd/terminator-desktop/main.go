@@ -47,6 +47,8 @@ func main() {
 	//logger := slog.New(logHandler)
 	//slog.SetDefault(logger)
 
+	var mainWindow *application.WebviewWindow
+
 	// Create a new Wails application by providing the necessary options.
 	// Variables 'Name' and 'Description' are for application metadata.
 	// 'Assets' configures the asset server with the 'FS' variable pointing to the frontend files.
@@ -62,6 +64,19 @@ func main() {
 		},
 		Mac: application.MacOptions{
 			ApplicationShouldTerminateAfterLastWindowClosed: true,
+		},
+		SingleInstance: &application.SingleInstanceOptions{
+			UniqueID: "com.terminator.desktop",
+			OnSecondInstanceLaunch: func(data application.SecondInstanceData) {
+				if mainWindow != nil {
+					mainWindow.Restore()
+					mainWindow.Focus()
+				}
+
+				slog.Info("Second instance launched with args: %v", data.Args)
+				slog.Info("Working directory: %s", data.WorkingDir)
+				slog.Info("Additional data: %v", data.AdditionalData)
+			},
 		},
 		MarshalError: globalErrorHandler,
 	})
@@ -111,7 +126,7 @@ func main() {
 	// 'Mac' options tailor the window when running on macOS.
 	// 'BackgroundColour' is the background colour of the window.
 	// 'URL' is the URL that will be loaded into the webview.
-	app.Window.NewWithOptions(application.WebviewWindowOptions{
+	mainWindow = app.Window.NewWithOptions(application.WebviewWindowOptions{
 		Title: AppName,
 		Mac: application.MacWindow{
 			InvisibleTitleBarHeight: 50,
