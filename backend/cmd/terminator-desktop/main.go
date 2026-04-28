@@ -137,6 +137,9 @@ func main() {
 		URL:              "/",
 	})
 
+	defer v.Lock() // eh why not
+	defer syncService.StopAutoSync()
+
 	// Run the application. This blocks until the application has been exited.
 	err = app.Run()
 
