@@ -14,6 +14,7 @@ import (
 	"terminator-desktop/backend/internal/migration"
 	"terminator-desktop/backend/internal/present"
 	"terminator-desktop/backend/internal/services/auth"
+	"terminator-desktop/backend/internal/services/blob"
 	"terminator-desktop/backend/internal/services/ssh"
 	"terminator-desktop/backend/internal/services/sync"
 	"terminator-desktop/backend/internal/vault"
@@ -98,10 +99,14 @@ func main() {
 	authService := auth.NewAuthService(queries, v, client)
 	syncService := sync.NewSyncService(queries, client, v, syncEmitter, nil)
 	sshService := ssh.NewSshService(sshEmitter)
+	hostService := blob.NewHostService(queries, v)
+	keyService := blob.NewKeyService(queries, v)
 
 	app.RegisterService(application.NewService(authService))
 	app.RegisterService(application.NewService(syncService))
 	app.RegisterService(application.NewService(sshService))
+	app.RegisterService(application.NewService(hostService))
+	app.RegisterService(application.NewService(keyService))
 
 	// Create a new window with the necessary options.
 	// 'Title' is the title of the window.
