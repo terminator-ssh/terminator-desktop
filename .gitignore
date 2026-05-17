@@ -26,6 +26,7 @@ settings.json
 
 # log
 terminator.log
+crash.log
 
 # wails
 .task
