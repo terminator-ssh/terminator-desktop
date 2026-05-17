@@ -48,7 +48,11 @@ export function TitleBar() {
                 </div>
             )}
 
-            <div className="flex h-full flex-1 items-center gap-1 overflow-x-auto pl-2 [&::-webkit-scrollbar]:hidden">
+            <div ref={scrollRef}
+                 onWheel={handleWheel}
+                 className="flex h-full flex-1 items-center gap-1 pl-2
+                            overflow-x-auto overflow-y-hidden [&::-webkit-scrollbar]:hidden"
+            >
                 {sessions.map((session) => (
                     <TerminalTab
                         key={session.id}
