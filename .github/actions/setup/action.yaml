@@ -2,9 +2,6 @@ name: Setup
 runs:
   using: composite
   steps:
-    - name: Checkout code
-      uses: actions/checkout@v5
-
     - name: Setup Go
       uses: actions/setup-go@v6
       with:

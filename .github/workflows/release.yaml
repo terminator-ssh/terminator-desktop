@@ -12,6 +12,9 @@ jobs:
       id-token: write
       attestations: write
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
       - uses: ./.github/actions/setup
 
       - name: Build Wails App
@@ -66,6 +69,9 @@ jobs:
       id-token: write
       attestations: write
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
       - uses: ./.github/actions/setup
 
       - name: Install Linux deps
@@ -122,6 +128,9 @@ jobs:
       id-token: write
       attestations: write
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v5
+
       - uses: ./.github/actions/setup
 
       - name: Build Wails App
