@@ -65,7 +65,7 @@ export function TerminalInstance({sessionId, isActive, config}: TerminalInstance
                     arg.preventDefault();
                     navigator.clipboard.readText().then((text) => {
                         if (text && isReadyRef.current) {
-                            SshService.Input(sessionId, text).catch(printErrorToTerminal);
+                            term.paste(text);
                         }
                     }).catch(console.error);
                     return false;
