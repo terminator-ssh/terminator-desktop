@@ -1,0 +1,172 @@
+name: Release
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: ./.github/actions/setup
+
+      - name: Build Wails App
+        run: wails3 task build
+        env:
+          CGO_ENABLED: 1
+          CGO_LDFLAGS: "-lntdll" # just in case
+
+      - name: Velopack
+        shell: bash
+        run: |
+          dotnet tool install -g vpk
+          
+          vpk download github \
+            --repoUrl "https://github.com/terminator-ssh/terminator-desktop" \
+            --channel windows-stable \
+            --token "${{ github.token }}" \
+            --outputDir releases || true
+          
+          vpk pack \
+            --packId "Terminator" \
+            --packVersion "${{ env.VERSION }}" \
+            --packDir "bin" \
+            --mainExe "terminator.exe" \
+            --packTitle "Terminator" \
+            --packAuthors "Terminator SSH" \
+            --channel windows-stable \
+            --icon "build/windows/icon.ico" \
+            --outputDir releases
+
+      - name: Get green checkmark
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            releases/*
+
+      - name: Upload
+        shell: bash
+        run: |
+          vpk upload github \
+            --repoUrl "https://github.com/terminator-ssh/terminator-desktop" \
+            --channel windows-stable \
+            --token "${{ github.token }}" \
+            --outputDir releases \
+            --merge \
+            --tag "v${{ env.VERSION }}"
+
+  build-linux:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: ./.github/actions/setup
+
+      - name: Install Linux deps
+        run: sudo apt-get update && sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev
+
+      - name: Build Wails App
+        run: wails3 task build
+        env:
+          CGO_ENABLED: 1
+
+      - name: Velopack
+        shell: bash
+        run: |
+          dotnet tool install -g vpk
+          
+          vpk download github \
+            --repoUrl "https://github.com/terminator-ssh/terminator-desktop" \
+            --channel linux-stable \
+            --token "${{ github.token }}" \
+            --outputDir releases || true
+          
+          vpk pack \
+            --packId "Terminator" \
+            --packVersion "${{ env.VERSION }}" \
+            --packDir "bin" \
+            --mainExe "terminator" \
+            --packTitle "Terminator" \
+            --packAuthors "Terminator SSH" \
+            --channel linux-stable \
+            --icon "build/appicon.png" \
+            --outputDir releases
+
+      - name: Get green checkmark
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            releases/*
+
+      - name: Upload
+        shell: bash
+        run: |
+          vpk upload github \
+            --repoUrl "https://github.com/terminator-ssh/terminator-desktop" \
+            --channel linux-stable \
+            --token "${{ github.token }}" \
+            --outputDir releases \
+            --merge \
+            --tag "v${{ env.VERSION }}"
+
+  build-mac:
+    runs-on: macos-latest
+    permissions:
+      contents: write
+      id-token: write
+      attestations: write
+    steps:
+      - uses: ./.github/actions/setup
+
+      - name: Build Wails App
+        run: wails3 task package
+        env:
+          CGO_ENABLED: 1
+
+      - name: Velopack
+        shell: bash
+        run: |
+          dotnet tool install -g vpk
+          
+          vpk download github \
+            --repoUrl "https://github.com/terminator-ssh/terminator-desktop" \
+            --channel macos-stable \
+            --token "${{ github.token }}" \
+            --outputDir releases || true
+          
+          APP_BUNDLE=$(find bin -maxdepth 1 -name "*.app" | head -n 1)
+          
+          vpk pack \
+            --packId "Terminator" \
+            --packVersion "${{ env.VERSION }}" \
+            --packDir "$APP_BUNDLE" \
+            --mainExe "terminator" \
+            --packTitle "Terminator" \
+            --packAuthors "Terminator SSH" \
+            --channel macos-stable \
+            --runtime osx-arm64 \
+            --icon "build/darwin/icons.icns" \
+            --outputDir releases
+
+      - name: Get green checkmark
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            releases/*
+
+      - name: Upload
+        shell: bash
+        run: |
+          vpk upload github \
+            --repoUrl "https://github.com/terminator-ssh/terminator-desktop" \
+            --channel macos-stable \
+            --token "${{ github.token }}" \
+            --outputDir releases \
+            --merge \
+            --tag "v${{ env.VERSION }}"
