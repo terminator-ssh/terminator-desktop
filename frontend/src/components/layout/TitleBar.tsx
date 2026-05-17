@@ -53,7 +53,7 @@ export function TitleBar() {
                     <TerminalTab
                         key={session.id}
                         session={session}
-                        isActive={session.id === activeSessionId}
+                        isActive={isTerminalView && session.id === activeSessionId}
                         onClick={() => setActiveSession(session.id)}
                         onClose={() => removeSession(session.id)}
                     />
