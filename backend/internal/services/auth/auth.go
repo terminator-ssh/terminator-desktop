@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"encoding/base64"
 	"errors"
+	"runtime/debug"
 	"terminator-desktop/backend/internal/api"
 	"terminator-desktop/backend/internal/apperror"
 	"terminator-desktop/backend/internal/crypto"
@@ -138,6 +139,10 @@ func (s *AuthService) Login(ctx context.Context, password string) error {
 
 	s.vault.Unlock(masterKey, loginKey)
 
+	go func() {
+		debug.FreeOSMemory()
+	}()
+
 	return nil
 }
 
@@ -190,6 +195,10 @@ func (s *AuthService) LoginFromSync(ctx context.Context, serverUrl, username, pa
 	s.client.SetToken(authRes.AccessToken)
 	s.vault.Unlock(masterKey, loginKey)
 
+	go func() {
+		debug.FreeOSMemory()
+	}()
+
 	return nil
 }
 
@@ -226,6 +235,10 @@ func (s *AuthService) RegisterOnServer(ctx context.Context, serverURL string) er
 	if err != nil {
 		return err
 	}
+
+	go func() {
+		debug.FreeOSMemory()
+	}()
 
 	return nil
 }
