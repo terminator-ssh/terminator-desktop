@@ -11,6 +11,8 @@ runs:
       uses: pnpm/action-setup@v4
       with:
         version: latest
+        package_json_file: 'frontend/package.json'
+        cache_dependency_path: 'frontend/pnpm-lock.yaml'
 
     - name: Setup Node
       uses: actions/setup-node@v6
