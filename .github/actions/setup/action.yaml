@@ -18,7 +18,9 @@ runs:
         dotnet-version: '10.x'
 
     - name: Install pnpm
-      run: npm install -g pnpm
+      run: |
+        npm install -g pnpm
+        corepack enable pnpm
       shell: bash
 
     - name: Install Wails v3 CLI
