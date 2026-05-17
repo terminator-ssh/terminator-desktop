@@ -54,3 +54,5 @@ require (
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+replace github.com/quaadgras/velopack-go => github.com/terminator-ssh/velopack-go v0.0.2
