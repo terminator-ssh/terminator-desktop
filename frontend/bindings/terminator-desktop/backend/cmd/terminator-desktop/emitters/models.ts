@@ -50,3 +50,24 @@ export class SSHDataPayload {
         return new SSHDataPayload($$parsedSource as Partial<SSHDataPayload>);
     }
 }
+
+export class SyncErrorPayload {
+    "error": any;
+
+    /** Creates a new SyncErrorPayload instance. */
+    constructor($$source: Partial<SyncErrorPayload> = {}) {
+        if (!("error" in $$source)) {
+            this["error"] = null;
+        }
+
+        Object.assign(this, $$source);
+    }
+
+    /**
+     * Creates a new SyncErrorPayload instance from a string or object.
+     */
+    static createFrom($$source: any = {}): SyncErrorPayload {
+        let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
+        return new SyncErrorPayload($$parsedSource as Partial<SyncErrorPayload>);
+    }
+}

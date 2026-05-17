@@ -5,3 +5,7 @@ import * as AuthService from "./authservice.js";
 export {
     AuthService
 };
+
+export {
+    UserInfo
+} from "./models.js";

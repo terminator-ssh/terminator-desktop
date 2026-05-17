@@ -3,5 +3,6 @@
 
 export {
     SSHClosedPayload,
-    SSHDataPayload
+    SSHDataPayload,
+    SyncErrorPayload
 } from "./models.js";

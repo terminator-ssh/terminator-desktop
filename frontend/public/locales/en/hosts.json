@@ -1,0 +1,21 @@
+{
+  "page_title": "Hosts",
+  "new_host": "New Host",
+  "search_hosts": "Find a host...",
+  "loading_hosts": "Loading hosts...",
+  "empty_title": "No hosts configured",
+  "empty_desc": "Add a server to start establishing SSH connections.",
+  "add_first_host": "Add your first host",
+  "edit_title": "Edit Host",
+  "new_title": "New Host",
+  "label_placeholder": "e.g. Production Database",
+  "host_placeholder": "10.0.0.1",
+  "password_optional": "Password (Optional)",
+  "password_placeholder": "Can be left blank",
+  "ssh_key_label": "SSH Key (Optional)",
+  "select_key_placeholder": "Select a key...",
+  "none_use_password": "None",
+  "save_host": "Save Host",
+  "delete_title": "Delete Host?",
+  "delete_desc": "Are you sure you want to delete \"{{name}}\"? This action cannot be undone."
+}

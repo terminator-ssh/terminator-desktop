@@ -3,7 +3,6 @@ package ssh
 import (
 	"fmt"
 	"io"
-	"log/slog"
 	"sync"
 	"terminator-desktop/backend/internal/apperror"
 	"time"
@@ -12,7 +11,7 @@ import (
 )
 
 type SSHEmitter interface {
-	EmitData(sessionID string, data string)
+	EmitData(sessionID string, data []byte)
 	EmitClosed(sessionID string)
 }
 
@@ -39,6 +38,8 @@ type SshService struct {
 
 // TODO: configurable timeout?
 const timeout = 15 * time.Second
+
+const batchRatePerSecond = 60
 
 func NewSshService(emitter SSHEmitter) *SshService {
 	return &SshService{
@@ -116,14 +117,15 @@ func (s *SshService) Connect(config *SSHConnectionConfig) error {
 	}
 
 	s.mu.Lock()
-	s.sessions[config.ID] = &activeSession{
+	currentSession := &activeSession{
 		client:  client,
 		session: session,
 		stdin:   stdin,
 	}
+	s.sessions[config.ID] = currentSession
 	s.mu.Unlock()
 
-	go s.streamOutput(config.ID, stdout)
+	go s.streamOutput(config.ID, stdout, currentSession)
 
 	return nil
 }
@@ -169,19 +171,76 @@ func (s *SshService) Disconnect(sessionID string) {
 	}
 }
 
-func (s *SshService) streamOutput(sessionID string, stdout io.Reader) {
-	buf := make([]byte, 4096)
+func (s *SshService) streamOutput(sessionID string, stdout io.Reader, current *activeSession) {
+	buf := make([]byte, 32*1024)
+	dataChan := make(chan []byte)
 
+	go readOutput(stdout, buf, dataChan)
+
+	batchDelay := time.Second / time.Duration(batchRatePerSecond)
+	ticker := time.NewTicker(batchDelay)
+	defer ticker.Stop()
+
+	batchSize := 128 * 1024
+	batch := make([]byte, 0, batchSize)
+
+	for {
+		select {
+		case chunk, ok := <-dataChan:
+			if !ok {
+				if len(batch) > 0 {
+					s.emitter.EmitData(sessionID, batch)
+				}
+				s.cleanupSession(sessionID, current)
+				return
+			}
+
+			batch = append(batch, chunk...)
+
+			if len(batch) >= batchSize {
+				s.emitter.EmitData(sessionID, batch)
+				batch = batch[:0]
+			}
+
+		case <-ticker.C:
+			if len(batch) > 0 {
+				s.emitter.EmitData(sessionID, batch)
+				batch = batch[:0]
+			}
+		}
+	}
+}
+
+func readOutput(stdout io.Reader, buf []byte, dataChan chan []byte) {
 	for {
 		n, err := stdout.Read(buf)
 		if n > 0 {
-			s.emitter.EmitData(sessionID, string(buf[:n]))
+			chunk := make([]byte, n)
+			copy(chunk, buf[:n])
+			dataChan <- chunk
 		}
-
 		if err != nil {
-			slog.Info("failed to read data, disconnecting", "error", err)
-			s.Disconnect(sessionID)
+			close(dataChan)
 			return
 		}
+	}
+}
+
+func (s *SshService) cleanupSession(sessionID string, current *activeSession) {
+	s.mu.Lock()
+	active, exists := s.sessions[sessionID]
+	if exists && active == current {
+		delete(s.sessions, sessionID)
+		s.mu.Unlock()
+
+		if current.session != nil {
+			_ = current.session.Close()
+		}
+		if current.client != nil {
+			_ = current.client.Close()
+		}
+		s.emitter.EmitClosed(sessionID)
+	} else {
+		s.mu.Unlock()
 	}
 }

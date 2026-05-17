@@ -1,0 +1,48 @@
+{
+  "NOT_FOUND": "The requested item could not be found.",
+  "VALIDATION_FAILED": "Please check your input and try again.",
+  "DECRYPTION_FAILED": "Invalid password or corrupted data.",
+  "VAULT_LOCKED": "Your vault is currently locked. Please log in.",
+  "NETWORK_FAILED": "Failed to connect to the server. Check your connection.",
+  "SSH_CONNECTION_FAILED": "Could not establish an SSH connection to the host.",
+  "SSH_SESSION_NOT_FOUND": "The SSH session was disconnected or lost.",
+  "API_ERROR": "The server rejected the request.",
+  "INTERNAL_ERROR": "An internal application error occurred.",
+  "RUNTIME_ERROR": "An unexpected client error occurred.",
+  "UNKNOWN_ERROR": "An unknown error occurred.",
+
+  "User.AlreadyExists": "Username is already taken.",
+  "User.NotFound": "User not found on this server.",
+  "User.InvalidCredentials": "Login key is invalid or corrupted.",
+  "User.BlobLimitReached": "Storage limit reached.",
+
+  "Sync.EncryptedBlob.InvalidTimestamp": "The sync timestamp provided is invalid.",
+
+  "Auth.Username.Required": "Username is required.",
+  "Auth.Username.TooLong": "Username exceeds maximum allowed length.",
+  "Auth.AuthSalt.Required": "Authentication salt is missing.",
+  "Auth.AuthSalt.InvalidFormat": "Authentication salt must be a valid Base64 string.",
+  "Auth.KeySalt.Required": "Key salt is missing.",
+  "Auth.KeySalt.InvalidFormat": "Key salt must be a valid Base64 string.",
+  "Auth.LoginKey.Required": "Login key is missing.",
+  "Auth.LoginKey.InvalidFormat": "Login key must be a valid Base64 string.",
+  "Auth.MasterKey.Required": "Encrypted master key is missing.",
+  "Auth.MasterKey.InvalidFormat": "Encrypted master key must be a valid Base64 string.",
+
+  "Sync.EncryptedBlob.Id.Required": "Item ID is required for sync.",
+  "Sync.EncryptedBlob.Blob.Required": "Encrypted data is required for sync.",
+  "Sync.EncryptedBlob.Blob.InvalidFormat": "Encrypted data must be a valid Base64 string.",
+  "Sync.EncryptedBlob.Iv.Required": "Initialization vector is required.",
+  "Sync.EncryptedBlob.Iv.InvalidFormat": "Initialization vector must be a valid Base64 string.",
+
+  "User.Id.Required": "User ID is required.",
+
+  "Admin.AlreadyExists": "Admin username is already taken.",
+  "Admin.NotFound": "Admin not found.",
+  "Admin.InvalidCredentials": "Admin credentials are invalid.",
+  "Auth.Admin.Username.Required": "Admin username is required.",
+  "Auth.Admin.Username.TooLong": "Admin username exceeds maximum length.",
+  "Auth.Admin.Password.Required": "Admin password is required.",
+  "Auth.Admin.Password.TooLong": "Admin password exceeds maximum length.",
+  "Auth.Admin.Id.Required": "Admin ID is required."
+}

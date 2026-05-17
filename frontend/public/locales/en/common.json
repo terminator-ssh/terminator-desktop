@@ -1,0 +1,21 @@
+{
+  "cancel": "Cancel",
+  "save": "Save",
+  "delete": "Delete",
+  "edit": "Edit",
+  "connect": "Connect",
+  "close": "Close",
+  "search_placeholder": "Search...",
+  "username": "Username",
+  "password": "Password",
+  "port": "Port",
+  "host_ip": "Host / IP",
+  "label_optional": "Label (Optional)",
+  "loading": "Loading...",
+  "saving": "Saving...",
+  "connecting": "Connecting...",
+  "unlocking": "Unlocking...",
+  "creating": "Creating...",
+  "continue": "Continue",
+  "none": "None"
+}

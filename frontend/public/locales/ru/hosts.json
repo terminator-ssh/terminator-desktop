@@ -1,0 +1,21 @@
+{
+  "page_title": "Хосты",
+  "new_host": "Новый хост",
+  "search_hosts": "Найти хост...",
+  "loading_hosts": "Загрузка хостов...",
+  "empty_title": "Хосты не настроены",
+  "empty_desc": "Добавьте сервер, чтобы начать устанавливать SSH-подключения.",
+  "add_first_host": "Добавить первый хост",
+  "edit_title": "Изменить хост",
+  "new_title": "Новый хост",
+  "label_placeholder": "напр. Рабочая база данных",
+  "host_placeholder": "10.0.0.1",
+  "password_optional": "Пароль (необязательно)",
+  "password_placeholder": "Можно оставить пустым",
+  "ssh_key_label": "SSH ключ (необязательно)",
+  "select_key_placeholder": "Выберите ключ...",
+  "none_use_password": "Нет",
+  "save_host": "Сохранить хост",
+  "delete_title": "Удалить хост?",
+  "delete_desc": "Вы уверены, что хотите удалить \"{{name}}\"? Это действие нельзя отменить."
+}

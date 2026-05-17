@@ -21,10 +21,12 @@ func (s *SyncService) StartAutoSync() {
 		defer ticker.Stop()
 
 		sync := func() {
-			if err := s.Sync(ctx); err != nil {
+			err := s.Sync(ctx)
+			if err != nil {
 				if !errors.Is(err, context.Canceled) {
 					slog.Error("background sync failed", "error", err)
 					s.emitter.EmitSyncError(err)
+					s.emitter.EmitStatus(SyncStatusError)
 				}
 			}
 		}

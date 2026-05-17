@@ -1,0 +1,1 @@
+export const defaultServerUrl = "PLACEHOLDER_API_URL"

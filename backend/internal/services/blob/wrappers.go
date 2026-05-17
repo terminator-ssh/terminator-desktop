@@ -2,9 +2,10 @@ package blob
 
 import (
 	"context"
-
 	"terminator-desktop/backend/internal/dbgen"
 	"terminator-desktop/backend/internal/vault"
+
+	"github.com/google/uuid"
 )
 
 // wrappers for wails
@@ -19,6 +20,9 @@ func NewHostService(q *dbgen.Queries, v *vault.Vault) *HostService {
 }
 
 func (s *HostService) Save(ctx context.Context, host Host) (string, error) {
+	if host.ID == "" {
+		host.ID = uuid.New().String()
+	}
 	host.Type = TypeHost // just in case
 	return saveItem(ctx, s.q, s.v, host.ID, host)
 }
@@ -41,6 +45,9 @@ func NewKeyService(q *dbgen.Queries, v *vault.Vault) *KeyService {
 }
 
 func (s *KeyService) Save(ctx context.Context, key SavedKey) (string, error) {
+	if key.ID == "" {
+		key.ID = uuid.New().String()
+	}
 	key.Type = TypeKey // just in case
 	return saveItem(ctx, s.q, s.v, key.ID, key)
 }

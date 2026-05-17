@@ -21,6 +21,9 @@ out
 *.db-shm
 *.db-wal
 
+# local preferences
+settings.json
+
 # wails
 .task
 bin

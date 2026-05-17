@@ -5,8 +5,22 @@
 // @ts-ignore: Unused imports
 import { Call as $Call, CancellablePromise as $CancellablePromise, Create as $Create } from "@wailsio/runtime";
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore: Unused imports
+import * as $models from "./models.js";
+
+export function GetCurrentUser(): $CancellablePromise<$models.UserInfo | null> {
+    return $Call.ByID(3254285799).then(($result: any) => {
+        return $$createType1($result);
+    });
+}
+
 export function HasUser(): $CancellablePromise<boolean> {
     return $Call.ByID(412997436);
+}
+
+export function LockVault(): $CancellablePromise<void> {
+    return $Call.ByID(2757158698);
 }
 
 /**
@@ -34,3 +48,7 @@ export function RegisterOnServer(serverURL: string): $CancellablePromise<void> {
 export function WipeData(): $CancellablePromise<void> {
     return $Call.ByID(132727258);
 }
+
+// Private type creation functions
+const $$createType0 = $models.UserInfo.createFrom;
+const $$createType1 = $Create.Nullable($$createType0);

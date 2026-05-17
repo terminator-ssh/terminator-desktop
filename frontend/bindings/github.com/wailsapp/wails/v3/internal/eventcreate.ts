@@ -11,23 +11,19 @@ import { Create as $Create } from "@wailsio/runtime";
 import * as emitters$0 from "../../../../../terminator-desktop/backend/cmd/terminator-desktop/emitters/models.js";
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
-import * as present$0 from "../../../../../terminator-desktop/backend/internal/present/models.js";
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore: Unused imports
 import * as sync$0 from "../../../../../terminator-desktop/backend/internal/services/sync/models.js";
 
 function configure() {
     Object.freeze(Object.assign($Create.Events, {
         "ssh:closed": $$createType0,
         "ssh:data": $$createType1,
-        "sync:error": $$createType3,
+        "sync:error": $$createType2,
     }));
 }
 
 // Private type creation functions
 const $$createType0 = emitters$0.SSHClosedPayload.createFrom;
 const $$createType1 = emitters$0.SSHDataPayload.createFrom;
-const $$createType2 = present$0.UIError.createFrom;
-const $$createType3 = $Create.Nullable($$createType2);
+const $$createType2 = emitters$0.SyncErrorPayload.createFrom;
 
 configure();

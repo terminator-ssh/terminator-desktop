@@ -1,6 +1,10 @@
 package emitters
 
-import "github.com/wailsapp/wails/v3/pkg/application"
+import (
+	"encoding/base64"
+
+	"github.com/wailsapp/wails/v3/pkg/application"
+)
 
 type WailsSSHEmitter struct {
 	app *application.App
@@ -24,10 +28,10 @@ func NewWailsSSHEmitter(app *application.App) *WailsSSHEmitter {
 	return &WailsSSHEmitter{app: app}
 }
 
-func (e *WailsSSHEmitter) EmitData(sessionID string, data string) {
+func (e *WailsSSHEmitter) EmitData(sessionID string, data []byte) {
 	e.app.Event.Emit(SSHDataEvent, SSHDataPayload{
 		ID:   sessionID,
-		Data: data,
+		Data: base64.StdEncoding.EncodeToString(data),
 	})
 }
 

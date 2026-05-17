@@ -22,6 +22,11 @@ type AuthService struct {
 	client *api.Client
 }
 
+type UserInfo struct {
+	Username  string `json:"username"`
+	ServerURL string `json:"serverUrl"`
+}
+
 const (
 	saltLength = 16
 	keyLength  = 32
@@ -237,4 +242,26 @@ func (s *AuthService) WipeData(ctx context.Context) error {
 	s.client.ClearToken()
 
 	return nil
+}
+
+func (s *AuthService) LockVault() {
+	s.vault.Lock()
+	s.client.ClearToken()
+}
+
+func (s *AuthService) GetCurrentUser(ctx context.Context) (*UserInfo, error) {
+	user, err := s.q.GetUser(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	url := ""
+	if user.ServerUrl.Valid {
+		url = user.ServerUrl.String
+	}
+
+	return &UserInfo{
+		Username:  user.Username,
+		ServerURL: url,
+	}, nil
 }

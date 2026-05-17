@@ -86,7 +86,6 @@ func (s *SyncService) Authenticate(ctx context.Context) error {
 		LoginKey: loginKeyBase64,
 	})
 	if err != nil {
-		s.emitter.EmitStatus(SyncStatusError)
 		return err
 	}
 
@@ -117,7 +116,6 @@ func (s *SyncService) Sync(ctx context.Context) error {
 
 	user, err := s.q.GetUser(ctx)
 	if err != nil {
-		s.emitter.EmitStatus(SyncStatusError)
 		return err
 	}
 
@@ -142,14 +140,12 @@ func (s *SyncService) Sync(ctx context.Context) error {
 	if err != nil {
 		lastSyncTime, err = time.Parse(time.RFC3339, lastSyncString)
 		if err != nil {
-			s.emitter.EmitStatus(SyncStatusError)
 			return err
 		}
 	}
 
 	localChanges, err := s.q.GetBlobsSince(ctx, lastSyncString)
 	if err != nil {
-		s.emitter.EmitStatus(SyncStatusError)
 		return err
 	}
 
@@ -157,7 +153,6 @@ func (s *SyncService) Sync(ctx context.Context) error {
 	for _, b := range localChanges {
 		parsedTime, err := time.Parse(time.RFC3339Nano, b.UpdatedAt)
 		if err != nil {
-			s.emitter.EmitStatus(SyncStatusError)
 			return err
 		}
 
@@ -183,7 +178,6 @@ func (s *SyncService) Sync(ctx context.Context) error {
 			return err
 		}
 
-		s.emitter.EmitStatus(SyncStatusError)
 		return err
 	}
 
@@ -198,7 +192,6 @@ func (s *SyncService) Sync(ctx context.Context) error {
 				IsDeleted: incoming.IsDeleted,
 			})
 			if err != nil {
-				s.emitter.EmitStatus(SyncStatusError)
 				return err
 			}
 		}
@@ -211,7 +204,6 @@ func (s *SyncService) Sync(ctx context.Context) error {
 		ID:           user.ID,
 	})
 	if err != nil {
-		s.emitter.EmitStatus(SyncStatusError)
 		return err
 	}
 

@@ -1,0 +1,48 @@
+{
+  "NOT_FOUND": "Запрошенный элемент не найден.",
+  "VALIDATION_FAILED": "Пожалуйста, проверьте введенные данные и повторите попытку.",
+  "DECRYPTION_FAILED": "Неверный пароль или поврежденные данные.",
+  "VAULT_LOCKED": "Ваше хранилище заблокировано. Пожалуйста, войдите.",
+  "NETWORK_FAILED": "Не удалось подключиться к серверу. Проверьте подключение.",
+  "SSH_CONNECTION_FAILED": "Не удалось установить SSH-подключение к хосту.",
+  "SSH_SESSION_NOT_FOUND": "SSH-сессия была отключена или потеряна.",
+  "API_ERROR": "Сервер отклонил запрос.",
+  "INTERNAL_ERROR": "Произошла внутренняя ошибка приложения.",
+  "RUNTIME_ERROR": "Произошла непредвиденная ошибка клиента.",
+  "UNKNOWN_ERROR": "Произошла неизвестная ошибка.",
+
+  "User.AlreadyExists": "Имя пользователя уже занято.",
+  "User.NotFound": "Пользователь не найден на этом сервере.",
+  "User.InvalidCredentials": "Ключ входа неверен или поврежден.",
+  "User.BlobLimitReached": "Достигнут лимит хранилища.",
+
+  "Sync.EncryptedBlob.InvalidTimestamp": "Указана недопустимая временная метка синхронизации.",
+
+  "Auth.Username.Required": "Имя пользователя обязательно.",
+  "Auth.Username.TooLong": "Имя пользователя превышает максимальную длину.",
+  "Auth.AuthSalt.Required": "Отсутствует соль аутентификации.",
+  "Auth.AuthSalt.InvalidFormat": "Соль аутентификации должна быть в формате Base64.",
+  "Auth.KeySalt.Required": "Отсутствует соль ключа.",
+  "Auth.KeySalt.InvalidFormat": "Соль ключа должна быть в формате Base64.",
+  "Auth.LoginKey.Required": "Отсутствует ключ входа.",
+  "Auth.LoginKey.InvalidFormat": "Ключ входа должен быть в формате Base64.",
+  "Auth.MasterKey.Required": "Отсутствует зашифрованный мастер-ключ.",
+  "Auth.MasterKey.InvalidFormat": "Зашифрованный мастер-ключ должен быть в формате Base64.",
+
+  "Sync.EncryptedBlob.Id.Required": "ID объекта обязателен для синхронизации.",
+  "Sync.EncryptedBlob.Blob.Required": "Зашифрованные данные обязательны для синхронизации.",
+  "Sync.EncryptedBlob.Blob.InvalidFormat": "Зашифрованные данные должны быть в формате Base64.",
+  "Sync.EncryptedBlob.Iv.Required": "Вектор инициализации обязателен.",
+  "Sync.EncryptedBlob.Iv.InvalidFormat": "Вектор инициализации должен быть в формате Base64.",
+
+  "User.Id.Required": "ID пользователя обязателен.",
+
+  "Admin.AlreadyExists": "Имя пользователя администратора уже занято.",
+  "Admin.NotFound": "Администратор не найден.",
+  "Admin.InvalidCredentials": "Неверные учетные данные администратора.",
+  "Auth.Admin.Username.Required": "Имя пользователя администратора обязательно.",
+  "Auth.Admin.Username.TooLong": "Имя пользователя администратора превышает допустимую длину.",
+  "Auth.Admin.Password.Required": "Пароль администратора обязателен.",
+  "Auth.Admin.Password.TooLong": "Пароль администратора превышает допустимую длину.",
+  "Auth.Admin.Id.Required": "ID администратора обязателен."
+}

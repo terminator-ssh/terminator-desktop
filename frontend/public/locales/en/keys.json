@@ -1,0 +1,21 @@
+{
+  "page_title": "Keys",
+  "new_key": "New Key",
+  "search_keys": "Search keys...",
+  "loading_keys": "Loading keys...",
+  "empty_title": "No keys found",
+  "empty_desc": "Add a private key.",
+  "import_key": "Import a Key",
+  "edit_title": "Edit Key",
+  "new_title": "New Key",
+  "key_name_label": "Key Name",
+  "key_name_placeholder": "e.g. AWS Production",
+  "private_key_label": "Private Key",
+  "load_from_file": "Load from file",
+  "drop_to_autofill": "Drop a file to autofill, or click to browse",
+  "key_loaded": "Key loaded. Click to replace.",
+  "save_key": "Save Key",
+  "delete_title": "Delete SSH Key?",
+  "delete_desc": "Are you sure you want to delete the key \"{{name}}\"? This action cannot be undone and may break hosts relying on this key.",
+  "ssh_private_key": "SSH Private Key"
+}

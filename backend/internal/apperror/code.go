@@ -10,4 +10,8 @@ const (
 	CodeNetworkFailed      = ErrorCode("NETWORK_FAILED")
 	CodeSSHConnectionError = ErrorCode("SSH_CONNECTION_FAILED")
 	CodeSSHSessionNotFound = ErrorCode("SSH_SESSION_NOT_FOUND")
+
+	CodeInternalError = ErrorCode("INTERNAL_ERROR")
+	CodeUnknownError  = ErrorCode("UNKNOWN_ERROR")
+	CodeAPIError      = ErrorCode("API_ERROR")
 )

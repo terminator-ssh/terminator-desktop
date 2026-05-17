@@ -11,9 +11,9 @@ import (
 	"terminator-desktop/backend/internal/api"
 	"terminator-desktop/backend/internal/dbgen"
 	"terminator-desktop/backend/internal/migration"
-	"terminator-desktop/backend/internal/present"
 	"terminator-desktop/backend/internal/services/auth"
 	"terminator-desktop/backend/internal/services/blob"
+	"terminator-desktop/backend/internal/services/settings"
 	"terminator-desktop/backend/internal/services/ssh"
 	"terminator-desktop/backend/internal/services/sync"
 	"terminator-desktop/backend/internal/vault"
@@ -31,14 +31,16 @@ func init() {
 	// and provide a strongly typed JS/TS API for them.
 
 	application.RegisterEvent[sync.SyncStatus](emitters.SyncStatusEvent)
-	application.RegisterEvent[*present.UIError](emitters.SyncErrorEvent)
-	application.RegisterEvent[any](emitters.SyncUpdatesAvailableEvent)
+	application.RegisterEvent[emitters.SyncErrorPayload](emitters.SyncErrorEvent)
+	application.RegisterEvent[bool](emitters.SyncUpdatesAvailableEvent)
 
 	application.RegisterEvent[emitters.SSHDataPayload](emitters.SSHDataEvent)
 	application.RegisterEvent[emitters.SSHClosedPayload](emitters.SSHClosedEvent)
 }
 
 const AppName = "Terminator"
+const dbFile = "terminator.db"
+const devDbFile = "dev.db"
 
 func main() {
 	//logHandler := slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
@@ -73,22 +75,22 @@ func main() {
 					mainWindow.Focus()
 				}
 
-				slog.Info("Second instance launched with args: %v", data.Args)
-				slog.Info("Working directory: %s", data.WorkingDir)
-				slog.Info("Additional data: %v", data.AdditionalData)
+				slog.Info("Second instance launched", "args", data.Args)
+				slog.Info("Working directory", "dir", data.WorkingDir)
+				slog.Info("Additional data", "data", data.AdditionalData)
 			},
 		},
-		MarshalError: globalErrorHandler,
 	})
 
 	slog.SetDefault(app.Logger)
 
 	isDebug := app.Env.Info().Debug
-	dbPath, err := getDbPath(isDebug)
+	appDir, err := getAppDir(isDebug)
 	if err != nil {
-		log.Fatal(fmt.Errorf("error getting database path: %w", err))
+		log.Fatal(fmt.Errorf("error getting app directory: %w", err))
 	}
 
+	dbPath := getDbDir(appDir, isDebug)
 	db, err := sql.Open("sqlite3", dbPath)
 	if err != nil {
 		log.Fatal(fmt.Errorf("error building db: %w", err))
@@ -114,12 +116,15 @@ func main() {
 	sshService := ssh.NewSshService(sshEmitter)
 	hostService := blob.NewHostService(queries, v)
 	keyService := blob.NewKeyService(queries, v)
+	settingsService := settings.NewSettingsService(appDir)
 
 	app.RegisterService(application.NewService(authService))
 	app.RegisterService(application.NewService(syncService))
 	app.RegisterService(application.NewService(sshService))
 	app.RegisterService(application.NewService(hostService))
 	app.RegisterService(application.NewService(keyService))
+	app.RegisterService(application.NewService(settingsService))
+	app.RegisterService(application.NewService(&WindowControls{mainWindow}))
 
 	// Create a new window with the necessary options.
 	// 'Title' is the title of the window.
@@ -127,7 +132,9 @@ func main() {
 	// 'BackgroundColour' is the background colour of the window.
 	// 'URL' is the URL that will be loaded into the webview.
 	mainWindow = app.Window.NewWithOptions(application.WebviewWindowOptions{
-		Title: AppName,
+		Title:          AppName,
+		EnableFileDrop: true,
+		Frameless:      true,
 		Mac: application.MacWindow{
 			InvisibleTitleBarHeight: 50,
 			Backdrop:                application.MacBackdropTranslucent,
@@ -149,15 +156,14 @@ func main() {
 	}
 }
 
-func getDbPath(isDebug bool) (string, error) {
+func getAppDir(isDebug bool) (string, error) {
 	if isDebug {
 		executablePath, err := os.Executable()
 		if err != nil {
 			return "", err
 		}
 		executableDir := filepath.Dir(executablePath)
-
-		return filepath.Join(executableDir, "../dev.db"), nil
+		return filepath.Join(executableDir, ".."), nil
 	}
 
 	userDir, err := os.UserConfigDir()
@@ -171,5 +177,12 @@ func getDbPath(isDebug bool) (string, error) {
 		return "", err
 	}
 
-	return filepath.Join(appDir, "terminator.db"), nil
+	return appDir, nil
+}
+
+func getDbDir(appDir string, isDebug bool) string {
+	if isDebug {
+		return filepath.Join(appDir, devDbFile)
+	}
+	return filepath.Join(appDir, dbFile)
 }

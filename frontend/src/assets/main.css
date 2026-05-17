@@ -123,3 +123,20 @@
     @apply font-sans;
     }
 }
+
+@theme {
+    --text-2xs: 0.625rem;
+    --text-2xs--line-height: 1.4;
+}
+
+.wails-drag {
+    --wails-draggable: drag;
+}
+
+.wails-no-drag {
+    --wails-draggable: no-drag;
+}
+
+.wails-resizeable {
+    --wails-resize: all;
+}
