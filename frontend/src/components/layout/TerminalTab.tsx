@@ -4,13 +4,13 @@ import { cn } from "@/lib/utils";
 import { TerminalSession } from "@/store/sessionStore";
 
 const tabStyles = cva(
-    "wails-no-drag group my-1 flex h-8 min-w-30 max-w-50 cursor-pointer items-center " +
+    "wails-no-drag group my-1 mt-2 flex h-8 min-w-30 max-w-50 cursor-pointer items-center " +
     "justify-between rounded-md border px-3 text-xs font-medium transition-colors",
     {
         variants: {
             state: {
                 active: "border-border bg-card text-foreground",
-                inactive: "border-transparent bg-background text-muted-foreground hover:bg-muted/50 hover:text-foreground",
+                inactive: "border-border border-muted text-muted-foreground hover:bg-muted/50 hover:text-foreground",
             },
         },
         defaultVariants: {
