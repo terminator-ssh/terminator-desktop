@@ -99,9 +99,8 @@ export function HostsPage() {
 
             {!isLoading && hosts?.length === 0 && (
                 <div
-                    className="flex flex-col items-center justify-center
-                               py-16 text-center
-                               rounded-xl border border-dashed border-border">
+                    className="flex flex-col items-center justify-center py-16 text-center
+                               border-2 border-dashed border-border rounded-xl">
                     <h3 className="text-lg font-semibold text-foreground">{t("empty_title")}</h3>
                     <p className="mb-4 mt-2 text-sm text-muted-foreground">{t("empty_desc")}</p>
                     <Button variant="outline" onClick={handleCreateNew}>{t("add_first_host")}</Button>

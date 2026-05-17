@@ -74,7 +74,7 @@ export function KeysPage() {
 
             {!isLoading && keys?.length === 0 && (
                 <div className="flex flex-col items-center justify-center py-16 text-center
-                                border border-dashed border-border rounded-xl">
+                                border-2 border-dashed border-border rounded-xl">
                     <h3 className="text-lg font-semibold text-foreground">{t("empty_title")}</h3>
                     <p className="mb-4 mt-2 text-sm text-muted-foreground">{t("empty_desc")}</p>
                     <Button variant="outline" onClick={handleCreateNew}>{t("import_key")}</Button>
