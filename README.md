@@ -6,8 +6,11 @@ Terminator
 
 </h1>
 
-<!-- TODO links here -->
-<!-- or like below idk -->
+<div align="center">
+
+   [![Discord](https://dcbadge.limes.pink/api/server/x7K9BRrQJE)](https://discord.gg/x7K9BRrQJE)
+   
+</div>
 
 <h3 align="center">
    Self-hostable SSH client with sync
@@ -40,7 +43,7 @@ Terminator is designed as a local-first app, but it supports E2E encrypted sync.
 - [ ] CLI client
 - [ ] SFTP
 
-Something missing? Suggest more!
+Something missing? Suggest more! [Issues](https://github.com/terminator-ssh/terminator-desktop/issues/new) | [Discord](https://discord.gg/x7K9BRrQJE)
 
 ## Screenshots
 <img src="assets/term-en-white.png" width="800" alt="Terminator main screen"/>
