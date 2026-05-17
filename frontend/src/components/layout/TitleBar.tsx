@@ -74,7 +74,7 @@ export function TitleBar() {
                 ))}
             </div>
 
-            <WindowControls/>
+            <WindowControls className="ml-12"/>
 
         </header>
     );

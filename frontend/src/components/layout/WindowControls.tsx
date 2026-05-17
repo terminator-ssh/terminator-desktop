@@ -17,7 +17,7 @@ const windowControlStyles = cva(
     }
 );
 
-export function WindowControls() {
+export function WindowControls({className = ""}) {
     const [isMaximised, setIsMaximised] = useState(false);
 
     useEffect(() => {
@@ -41,7 +41,10 @@ export function WindowControls() {
     };
 
     return (
-        <div className="wails-no-drag flex h-full items-center">
+        <div className={cn(
+            "wails-no-drag flex h-full items-center",
+                    className)}
+        >
             <button
                 type="button"
                 tabIndex={-1}
