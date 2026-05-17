@@ -1,59 +1,82 @@
-# Welcome to Your New Wails3 Project!
+<h1 align="center">
 
-Congratulations on generating your Wails3 application! This README will guide you through the next steps to get your project up and running.
+Terminator
 
-## Getting Started
+   <img src="build/appicon.png" width=250 alt="Terminator logo"/>
 
-1. Navigate to your project directory in the terminal.
+</h1>
 
-2. To run your application in development mode, use the following command:
+<!-- TODO links here -->
+<!-- or like below idk -->
 
-   ```
-   wails3 dev
-   ```
+<h3 align="center">
+   Self-hostable SSH client with sync
+</h3>
 
-   This will start your application and enable hot-reloading for both frontend and backend changes.
+Terminator is a cross-platform SSH client built with [Wails v3](https://v3.wails.io/) and Go. Supports self-hosted servers for sync.
 
-3. To build your application for production, use:
+## Features
+- **Encryption.** All sensitive data is encrypted locally using Argon2id and AES-256GCM.
+- **Sync** encrypted data across multiple devices. Data is encrypted *before* it leaves the client!
+- **Lightweight.** ~15MB binaries, ~10MB RAM.
+- Cross-platform:
+   - [Windows](https://github.com/terminator-ssh/terminator-desktop/releases/latest/download/Terminator-windows-stable-Setup.exe)
+   - [Linux](https://github.com/terminator-ssh/terminator-desktop/releases/latest/download/Terminator-linux-stable.AppImage)
+   - [MacOS](https://github.com/terminator-ssh/terminator-desktop/releases/latest/download/Terminator-macos-stable-Setup.pkg)
+- Local first. You *don't have to* use a server!
 
-   ```
-   wails3 build
-   ```
+## Server
+Terminator is designed as a local-first app, but it supports E2E encrypted sync. Grab the server [here](https://github.com/terminator-ssh/terminator-server)!
 
-   This will create a production-ready executable in the `build` directory.
+## Roadmap
+- [x] Encryption
+- [x] Sync
+- [x] SSH keys
+- [ ] Host groups
+- [ ] Interactive passwords
+- [ ] Multiple profiles (teams?)
+- [ ] Custom themes
+- [ ] Shortcuts
+- [ ] CLI client
+- [ ] SFTP
 
-## Exploring Wails3 Features
+Something missing? Suggest more!
 
-Now that you have your project set up, it's time to explore the features that Wails3 offers:
+## Screenshots
+<img src="assets/term-en-white.png" width="800" alt="Terminator main screen"/>
+<img src="assets/term-t-white.png" width="800" alt="Terminator terminal"/>
 
-1. **Check out the examples**: The best way to learn is by example. Visit the `examples` directory in the `v3/examples` directory to see various sample applications.
+## Development
 
-2. **Run an example**: To run any of the examples, navigate to the example's directory and use:
+### Prerequisites
 
-   ```
-   go run .
-   ```
+1. [**Go**](https://go.dev/dl/) (1.25+)
+2. [**Node.js**](https://nodejs.org/en/download/current) (v24+)
+3. *Preferrably* [**pnpm**](https://pnpm.io/installation#using-corepack)
+4. [**Wails3 CLI**](https://v3.wails.io/getting-started/installation/)
 
-   Note: Some examples may be under development during the alpha phase.
+### Build
 
-3. **Explore the documentation**: Visit the [Wails3 documentation](https://v3.wails.io/) for in-depth guides and API references.
+For development: just
+```
+wails3 dev
+```
 
-4. **Join the community**: Have questions or want to share your progress? Join the [Wails Discord](https://discord.gg/JDdSxwjhGf) or visit the [Wails discussions on GitHub](https://github.com/wailsapp/wails/discussions).
+Debug: use remote debug and [delve](https://github.com/go-delve/delve/tree/master/Documentation/installation):
+```sh
+dlv debug --headless --listen=:2345 ./backend/cmd/terminator-desktop -- dev
+```
 
-## Project Structure
 
-Take a moment to familiarize yourself with your project structure:
+Package:
+```
+wails3 task package
+```
 
-- `frontend/`: Contains your frontend code (HTML, CSS, JavaScript/TypeScript)
-- `main.go`: The entry point of your Go backend
-- `app.go`: Define your application structure and methods here
-- `wails.json`: Configuration file for your Wails project
+### Acknowledgements
 
-## Next Steps
+Inspired by: [Termius](https://termius.com)
 
-1. Modify the frontend in the `frontend/` directory to create your desired UI.
-2. Add backend functionality in `main.go`.
-3. Use `wails3 dev` to see your changes in real-time.
-4. When ready, build your application with `wails3 build`.
+Built on: [Wails](https://v3.wails.io)
 
-Happy coding with Wails3! If you encounter any issues or have questions, don't hesitate to consult the documentation or reach out to the Wails community.
+Beautiful UI: [shadcn](https://ui.shadcn.com)
