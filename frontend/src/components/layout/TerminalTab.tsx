@@ -25,7 +25,7 @@ const closeButtonStyles = cva(
         variants: {
             state: {
                 active: "opacity-100",
-                inactive: "opacity-0 group-hover:opacity-100",
+                inactive: "opacity-0 group-hover:opacity-100 focus-visible:opacity-100",
             },
         },
         defaultVariants: {
@@ -45,10 +45,22 @@ export function TerminalTab({session, isActive, onClick, onClose}: TerminalTabPr
     const state = isActive ? "active" : "inactive";
 
     return (
-        <div onClick={onClick} className={cn(tabStyles({state}))}>
+        <div onClick={onClick}
+             tabIndex={0}
+             role="tab"
+             aria-selected={isActive}
+             onKeyDown={(e) => {
+                 if (e.key === "Enter" || e.key === " ") {
+                     e.preventDefault();
+                     onClick();
+                 }
+             }}
+             className={cn(tabStyles({state}))}>
             <span className="truncate">{session.title}</span>
             <button
                 type="button"
+                title="Close tab"
+                aria-label={`Close ${session.title}`}
                 onClick={(e) => {
                     e.stopPropagation();
                     onClose();
