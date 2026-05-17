@@ -24,6 +24,9 @@ out
 # local preferences
 settings.json
 
+# log
+terminator.log
+
 # wails
 .task
 bin
@@ -31,5 +34,6 @@ frontend/dist
 frontend/node_modules
 build/linux/appimage/build
 build/windows/nsis/MicrosoftEdgeWebview2Setup.exe
+webview2
 
 __debug_bin.exe

@@ -3,11 +3,13 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"io"
 	"log"
 	"log/slog"
 	"os"
 	"path/filepath"
 	"terminator-desktop/backend/cmd/terminator-desktop/emitters"
+	"terminator-desktop/backend/cmd/terminator-desktop/env"
 	"terminator-desktop/backend/internal/api"
 	"terminator-desktop/backend/internal/dbgen"
 	"terminator-desktop/backend/internal/migration"
@@ -45,15 +47,10 @@ func init() {
 const AppName = "Terminator"
 const dbFile = "terminator.db"
 const devDbFile = "dev.db"
+const logFile = "terminator.log"
 const updateUrl = "https://github.com/terminator-ssh/terminator-desktop/releases/latest/download/"
 
 func main() {
-	//logHandler := slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
-	//	Level: slog.LevelInfo,
-	//})
-	//logger := slog.New(logHandler)
-	//slog.SetDefault(logger)
-
 	velopack.Run(velopack.App{
 		AutoApplyOnStartup: true,
 	})
@@ -67,6 +64,35 @@ func main() {
 		}
 	}
 
+	isDebug := env.IsDebug
+
+	appDir, err := getAppDir(isDebug)
+	if err != nil {
+		log.Fatal(fmt.Errorf("error getting app directory: %w", err))
+	}
+
+	logPath := filepath.Join(appDir, logFile)
+	logFile, err := os.OpenFile(logPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatal(fmt.Errorf("error opening log file: %w", err))
+	}
+	defer func(logFile *os.File) {
+		_ = logFile.Close()
+	}(logFile)
+
+	var multiWriter io.Writer
+	if isDebug {
+		multiWriter = io.MultiWriter(os.Stdout, logFile)
+	} else {
+		multiWriter = io.MultiWriter(logFile)
+	}
+	logger := slog.New(slog.NewTextHandler(multiWriter, &slog.HandlerOptions{
+		Level: slog.LevelInfo,
+	}))
+	slog.SetDefault(logger)
+
+	slog.Info("Environment", "IsDebug", isDebug)
+
 	var mainWindow *application.WebviewWindow
 
 	// Create a new Wails application by providing the necessary options.
@@ -77,6 +103,7 @@ func main() {
 	app := application.New(application.Options{
 		Name:        AppName,
 		Description: "SSH client",
+		Logger:      logger,
 		//Services: []application.Service{
 		//},
 		Assets: application.AssetOptions{
@@ -84,6 +111,9 @@ func main() {
 		},
 		Mac: application.MacOptions{
 			ApplicationShouldTerminateAfterLastWindowClosed: true,
+		},
+		Windows: application.WindowsOptions{
+			WebviewUserDataPath: filepath.Join(appDir, "webview2"),
 		},
 		SingleInstance: &application.SingleInstanceOptions{
 			UniqueID: "com.terminator.desktop",
@@ -99,14 +129,6 @@ func main() {
 			},
 		},
 	})
-
-	slog.SetDefault(app.Logger)
-
-	isDebug := app.Env.Info().Debug
-	appDir, err := getAppDir(isDebug)
-	if err != nil {
-		log.Fatal(fmt.Errorf("error getting app directory: %w", err))
-	}
 
 	dbPath := getDbDir(appDir, isDebug)
 	db, err := sql.Open("sqlite3", dbPath)
