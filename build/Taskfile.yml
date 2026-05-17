@@ -17,7 +17,7 @@ tasks:
     generates:
       - node_modules
     preconditions:
-      - sh: pnpm version
+      - sh: pnpm --version
         msg: "Looks like pnpm isn't installed. https://pnpm.io/installation#using-corepack"
     cmds:
       - pnpm install
