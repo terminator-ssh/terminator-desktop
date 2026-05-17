@@ -6,6 +6,7 @@ import { TerminalTab } from "@/components/layout/TerminalTab";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { useAuthStore } from "@/store/authStore.ts";
+import React, { useRef } from "react";
 
 export function TitleBar() {
     const {sessions, activeSessionId, setActiveSession, removeSession} = useSessionStore();
@@ -15,6 +16,15 @@ export function TitleBar() {
     const showSidebarStyling = isTerminalView ? isSidebarVisible : true;
 
     const {isUnlocked} = useAuthStore();
+
+    const scrollRef = useRef<HTMLDivElement>(null);
+
+    const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+        if (scrollRef.current && e.deltaY !== 0) {
+            const scrollAmount = e.deltaY;
+            scrollRef.current.scrollLeft += scrollAmount;
+        }
+    };
 
     return (
         <header className="wails-drag flex h-10 shrink-0 items-end justify-between bg-background pr-0">
