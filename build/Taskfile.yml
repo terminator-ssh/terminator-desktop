@@ -14,6 +14,7 @@ tasks:
       - package.json
       #- package-lock.json
       - pnpm-lock.yaml
+      - pnpm-workspace.yaml
     generates:
       - node_modules
     preconditions:
