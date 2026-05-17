@@ -20,6 +20,7 @@ import (
 	"terminator-desktop/backend/internal/vault"
 
 	_ "github.com/mattn/go-sqlite3"
+	"github.com/quaadgras/velopack-go/velopack"
 
 	root "terminator-desktop"
 
@@ -52,6 +53,19 @@ func main() {
 	//})
 	//logger := slog.New(logHandler)
 	//slog.SetDefault(logger)
+
+	velopack.Run(velopack.App{
+		AutoApplyOnStartup: true,
+	})
+
+	for _, arg := range os.Args {
+		switch arg {
+		case "--veloapp-install",
+			"--veloapp-uninstall",
+			"--veloapp-obsolete":
+			os.Exit(0)
+		}
+	}
 
 	var mainWindow *application.WebviewWindow
 
