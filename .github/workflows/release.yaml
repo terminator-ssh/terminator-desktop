@@ -72,10 +72,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v5
 
-      - uses: ./.github/actions/setup
-
       - name: Install Linux deps
         run: sudo apt-get update && sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev
+
+      - uses: ./.github/actions/setup
 
       - name: Build Wails App
         run: wails3 task build
