@@ -16,6 +16,7 @@ import (
 	"terminator-desktop/backend/internal/services/settings"
 	"terminator-desktop/backend/internal/services/ssh"
 	"terminator-desktop/backend/internal/services/sync"
+	"terminator-desktop/backend/internal/services/updater"
 	"terminator-desktop/backend/internal/vault"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -36,11 +37,14 @@ func init() {
 
 	application.RegisterEvent[emitters.SSHDataPayload](emitters.SSHDataEvent)
 	application.RegisterEvent[emitters.SSHClosedPayload](emitters.SSHClosedEvent)
+
+	application.RegisterEvent[uint](emitters.UpdaterProgressEvent)
 }
 
 const AppName = "Terminator"
 const dbFile = "terminator.db"
 const devDbFile = "dev.db"
+const updateUrl = "https://github.com/terminator-ssh/terminator-desktop/releases/latest/download/"
 
 func main() {
 	//logHandler := slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
@@ -110,6 +114,7 @@ func main() {
 
 	syncEmitter := emitters.NewWailsSyncEmitter(app)
 	sshEmitter := emitters.NewWailsSSHEmitter(app)
+	updaterEmitter := emitters.NewWailsUpdaterEmitter(app)
 
 	authService := auth.NewAuthService(queries, v, client)
 	syncService := sync.NewSyncService(queries, client, v, syncEmitter, nil)
@@ -117,6 +122,7 @@ func main() {
 	hostService := blob.NewHostService(queries, v)
 	keyService := blob.NewKeyService(queries, v)
 	settingsService := settings.NewSettingsService(appDir)
+	updaterService := updater.NewUpdaterService(updateUrl, updaterEmitter)
 
 	app.RegisterService(application.NewService(authService))
 	app.RegisterService(application.NewService(syncService))
@@ -124,6 +130,7 @@ func main() {
 	app.RegisterService(application.NewService(hostService))
 	app.RegisterService(application.NewService(keyService))
 	app.RegisterService(application.NewService(settingsService))
+	app.RegisterService(application.NewService(updaterService))
 	app.RegisterService(application.NewService(&WindowControls{mainWindow}))
 
 	// Create a new window with the necessary options.

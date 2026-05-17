@@ -5,9 +5,10 @@ import { cn } from "@/lib/utils";
 import { SyncStatus } from "../../../bindings/terminator-desktop/backend/internal/services/sync";
 import { useSyncStore } from "@/store/syncStore.ts";
 import { useTranslation } from "react-i18next";
+import { UpdatePopover } from "@/components/layout/UpdatePopover.tsx";
 
 export function Sidebar() {
-    const {t} = useTranslation("hosts");
+    const {t} = useTranslation(["hosts", "update"]);
     const {activeView, setActiveView, isSidebarVisible} = useUIStore();
     const {status} = useSyncStore();
 
@@ -47,6 +48,8 @@ export function Sidebar() {
             </nav>
 
             <nav className="flex flex-col gap-2">
+                <UpdatePopover/>
+
                 <div className="relative">
                     <Button
                         variant={activeView === ViewType.Settings ? "secondary" : "ghost"}

@@ -10,7 +10,16 @@ void i18n
     .init({
         fallbackLng: "en",
         debug: false,
-        ns: ["common", "errors", "hosts", "keys", "settings", "terminal"],
+        ns:
+            [
+                "common",
+                "errors",
+                "hosts",
+                "keys",
+                "settings",
+                "terminal",
+                "update"
+            ],
         defaultNS: "common",
         interpolation: {
             escapeValue: false,

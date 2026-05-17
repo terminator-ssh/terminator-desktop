@@ -20,6 +20,7 @@ declare module "@wailsio/runtime" {
             "sync:error": emitters$0.SyncErrorPayload;
             "sync:status": sync$0.SyncStatus;
             "sync:updates-available": boolean;
+            "updater:progress": number;
         }
     }
 }

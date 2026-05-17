@@ -4,4 +4,5 @@ export enum AppEvent {
     SyncError = "sync:error",
     SshData = "ssh:data",
     SshClosed = "ssh:closed",
+    UpdaterProgress = "updater:progress",
 }
