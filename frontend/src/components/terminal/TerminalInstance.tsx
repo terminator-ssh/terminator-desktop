@@ -39,6 +39,7 @@ export function TerminalInstance({sessionId, isActive, config}: TerminalInstance
 
     useEffect(() => {
         if (!containerRef.current || terminalRef.current) return;
+        const container = containerRef.current;
 
         const term = new Terminal(TERMINAL_THEME);
         const fitAddon = new FitAddon();
@@ -48,6 +49,47 @@ export function TerminalInstance({sessionId, isActive, config}: TerminalInstance
 
         terminalRef.current = term;
         fitAddonRef.current = fitAddon;
+
+        term.attachCustomKeyEventHandler((arg) => {
+            if (arg.type === "keydown") {
+                if (arg.ctrlKey && arg.shiftKey && arg.code === "KeyC") {
+                    arg.preventDefault();
+                    const selection = term.getSelection();
+                    if (selection) {
+                        navigator.clipboard.writeText(selection).catch(console.error);
+                    }
+                    return false;
+                }
+
+                if (arg.ctrlKey && arg.shiftKey && arg.code === "KeyV") {
+                    arg.preventDefault();
+                    navigator.clipboard.readText().then((text) => {
+                        if (text && isReadyRef.current) {
+                            SshService.Input(sessionId, text).catch(printErrorToTerminal);
+                        }
+                    }).catch(console.error);
+                    return false;
+                }
+            }
+            return true;
+        });
+
+        const handleContextMenu = (e: MouseEvent) => {
+            e.preventDefault();
+
+            const selection = term.getSelection();
+            if (selection) {
+                navigator.clipboard.writeText(selection).catch(console.error);
+                term.clearSelection();
+            } else {
+                navigator.clipboard.readText().then((text) => {
+                    if (text && isReadyRef.current) {
+                        SshService.Input(sessionId, text).catch(printErrorToTerminal);
+                    }
+                }).catch(console.error);
+            }
+        };
+        containerRef.current.addEventListener("contextmenu", handleContextMenu);
 
         if (!hasConnectedRef.current) {
             hasConnectedRef.current = true;
@@ -76,6 +118,7 @@ export function TerminalInstance({sessionId, isActive, config}: TerminalInstance
         });
 
         return () => {
+            container.removeEventListener("contextmenu", handleContextMenu);
             onDataDisposable.dispose();
             term.dispose();
             terminalRef.current = null;
