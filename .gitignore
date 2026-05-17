@@ -36,4 +36,7 @@ build/linux/appimage/build
 build/windows/nsis/MicrosoftEdgeWebview2Setup.exe
 webview2
 
+# velopack
+releases/
+
 __debug_bin.exe

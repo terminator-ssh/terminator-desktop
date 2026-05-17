@@ -8,6 +8,7 @@ import (
 	"log/slog"
 	"os"
 	"path/filepath"
+	"runtime/debug"
 	"terminator-desktop/backend/cmd/terminator-desktop/emitters"
 	"terminator-desktop/backend/cmd/terminator-desktop/env"
 	"terminator-desktop/backend/internal/api"
@@ -47,7 +48,8 @@ func init() {
 const AppName = "Terminator"
 const dbFile = "terminator.db"
 const devDbFile = "dev.db"
-const logFile = "terminator.log"
+const logFileName = "terminator.log"
+const crashLogFileName = "crash.log"
 const updateUrl = "https://github.com/terminator-ssh/terminator-desktop/releases/latest/download/"
 
 func main() {
@@ -71,7 +73,7 @@ func main() {
 		log.Fatal(fmt.Errorf("error getting app directory: %w", err))
 	}
 
-	logPath := filepath.Join(appDir, logFile)
+	logPath := filepath.Join(appDir, logFileName)
 	logFile, err := os.OpenFile(logPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 	if err != nil {
 		log.Fatal(fmt.Errorf("error opening log file: %w", err))
@@ -90,6 +92,16 @@ func main() {
 		Level: slog.LevelInfo,
 	}))
 	slog.SetDefault(logger)
+
+	crashPath := filepath.Join(appDir, crashLogFileName)
+	crashFile, err := os.OpenFile(crashPath, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	if err != nil {
+		log.Fatal(fmt.Errorf("error opening crash log file: %w", err))
+	}
+	err = debug.SetCrashOutput(crashFile, debug.CrashOptions{})
+	if err != nil {
+		log.Fatal(fmt.Errorf("error setting crash output: %w", err))
+	}
 
 	slog.Info("Environment", "IsDebug", isDebug)
 
