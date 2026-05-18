@@ -188,7 +188,7 @@ EXT=""
 LDFLAGS="-s -w"
 if [ "$GOOS" = "windows" ]; then
     EXT=".exe"
-    LDFLAGS="-s -w -H windowsgui"
+    LDFLAGS="-s -w -H windowsgui -lntdll -static -static-libgcc -static-libstdc++"
 fi
 
 TAGS="production"
