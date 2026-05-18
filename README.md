@@ -46,8 +46,8 @@ Terminator is designed as a local-first app, but it supports E2E encrypted sync.
 Something missing? Suggest more! [Issues](https://github.com/terminator-ssh/terminator-desktop/issues/new) | [Discord](https://discord.gg/x7K9BRrQJE)
 
 ## Screenshots
-<img src="assets/term-en-white.png" width="800" alt="Terminator main screen"/>
-<img src="assets/term-t-white.png" width="800" alt="Terminator terminal"/>
+<img src="assets/term-en-white.png" width="1600" alt="Terminator main screen"/>
+<img src="assets/term-t-white.png" width="1600" alt="Terminator terminal"/>
 
 ## Development
 
