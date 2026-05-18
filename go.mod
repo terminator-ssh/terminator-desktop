@@ -55,4 +55,5 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace github.com/quaadgras/velopack-go => github.com/terminator-ssh/velopack-go v0.0.2
+//replace github.com/quaadgras/velopack-go => ./backend/lib/velopack-go
+replace github.com/quaadgras/velopack-go => github.com/terminator-ssh/velopack-go v0.0.3

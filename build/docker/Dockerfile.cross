@@ -188,7 +188,8 @@ EXT=""
 LDFLAGS="-s -w"
 if [ "$GOOS" = "windows" ]; then
     EXT=".exe"
-    LDFLAGS="-s -w -H windowsgui -lntdll -static -static-libgcc -static-libstdc++"
+    LDFLAGS="-s -w -H windowsgui -linkmode external"
+    export CGO_LDFLAGS="-static -static-libgcc -static-libstdc++ -lntdll"
 fi
 
 TAGS="production"
