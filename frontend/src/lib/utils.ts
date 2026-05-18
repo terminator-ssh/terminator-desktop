@@ -7,9 +7,17 @@ export function cn(...inputs: ClassValue[]) {
 
 export function formatServerUrl(inputUrl: string): string {
     let cleanUrl = inputUrl.trim();
+
+    if (!cleanUrl.startsWith("http://")) {
+        cleanUrl = `https://${cleanUrl}`;
+    }
+
     if (!cleanUrl.endsWith("/api/v1")) {
         cleanUrl = `${cleanUrl.replace(/\/$/, "")}/api/v1`;
     }
+
+    console.log(`${inputUrl} -> ${cleanUrl}`)
+
     return cleanUrl;
 }
 

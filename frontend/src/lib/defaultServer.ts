@@ -1,1 +1,1 @@
-export const defaultServerUrl = "PLACEHOLDER_API_URL"
+export const defaultServerUrl = "terminator.sh"

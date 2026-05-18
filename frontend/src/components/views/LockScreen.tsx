@@ -22,7 +22,7 @@ export function LockScreen() {
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
-    const [url, setUrl] = useState("");
+    const [url, setUrl] = useState(defaultServerUrl);
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {

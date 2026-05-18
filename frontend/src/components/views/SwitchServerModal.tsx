@@ -20,7 +20,7 @@ interface SwitchServerModalProps {
 
 export function SwitchServerModal({isOpen, onClose, currentUrl, onSuccess}: SwitchServerModalProps) {
     const {t} = useTranslation(["settings", "common"]);
-    const [url, setUrl] = useState("");
+    const [url, setUrl] = useState(defaultServerUrl);
     const [isLoading, setIsLoading] = useState(false);
 
     const isSwitching = !!currentUrl;
@@ -51,7 +51,9 @@ export function SwitchServerModal({isOpen, onClose, currentUrl, onSuccess}: Swit
 
     return (
         <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-            <DialogContent className="sm:max-w-md">
+            <DialogContent className="sm:max-w-md"
+                           onOpenAutoFocus={(e) => e.preventDefault()}
+            >
                 <DialogHeader>
                     <DialogTitle>{
                         isSwitching
