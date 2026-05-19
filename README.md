@@ -40,6 +40,7 @@ Terminator is designed as a local-first app, but it supports E2E encrypted sync.
 - [ ] Multiple profiles (teams?)
 - [ ] Custom themes
 - [ ] Shortcuts
+- [ ] Android client
 - [ ] CLI client
 - [ ] SFTP
 
