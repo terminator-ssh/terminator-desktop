@@ -58,6 +58,14 @@ func NewSshService(emitter SSHEmitter) *SshService {
 }
 
 func (s *SshService) connectOpenSSH(config *SSHConnectionConfig) error {
+	sshPath, err := exec.LookPath("ssh")
+	if err != nil {
+		return apperror.SSHConnectionFailed(
+			"OpenSSH client not found. Hardware key connections require the system ssh command.",
+			err,
+		)
+	}
+
 	keyPath := expandPath(config.PrivateKeyPath)
 	addr := fmt.Sprintf("%s@%s", config.Username, config.Host)
 	args := []string{
@@ -69,7 +77,7 @@ func (s *SshService) connectOpenSSH(config *SSHConnectionConfig) error {
 		addr,
 	}
 
-	cmd := exec.Command("ssh", args...)
+	cmd := exec.Command(sshPath, args...)
 	cmd.Env = os.Environ()
 
 	ptmx, err := pty.StartWithSize(cmd, &pty.Winsize{Rows: 24, Cols: 80})
