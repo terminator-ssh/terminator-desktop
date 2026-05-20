@@ -11,5 +11,6 @@ export {
 export {
     Host,
     ItemType,
+    KeyKind,
     SavedKey
 } from "./models.js";

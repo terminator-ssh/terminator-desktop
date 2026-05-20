@@ -7,7 +7,7 @@ import {
     DropdownMenuSeparator,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SavedKey } from "../../../bindings/terminator-desktop/backend/internal/services/blob";
+import { SavedKey, KeyKind } from "../../../bindings/terminator-desktop/backend/internal/services/blob";
 import { useTranslation } from "react-i18next";
 
 interface KeyCardProps {
@@ -44,6 +44,9 @@ export function KeyCard({savedKey, onEdit, onDelete}: KeyCardProps) {
                     <h3 className="truncate font-semibold text-card-foreground">
                         {savedKey.name}
                     </h3>
+                    <p className="truncate text-xs text-muted-foreground">
+                        {savedKey.kind === KeyKind.KeyKindHardwareKey ? t("key_type_hardware_key", {ns: "keys"}) : t("ssh_private_key", {ns: "keys"})}
+                    </p>
                 </div>
             </div>
 

@@ -14,6 +14,7 @@ export interface CreateSessionParams {
     username: string;
     password?: string;
     privateKey?: string;
+    privateKeyPath?: string;
     title?: string;
 }
 
@@ -40,6 +41,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
             username: params.username,
             password: params.password,
             privateKey: params.privateKey,
+            privateKeyPath: params.privateKeyPath,
         });
 
         const newSession: TerminalSession = {
@@ -57,6 +59,11 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     }),
 
     removeSession: (id) => set((state) => {
+        const sessionExists = state.sessions.some((s) => s.id === id);
+        if (sessionExists) {
+            SshService.Disconnect(id).catch(console.error);
+        }
+
         const newSessions = state.sessions.filter((s) => s.id !== id);
         let newActiveId = state.activeSessionId;
 

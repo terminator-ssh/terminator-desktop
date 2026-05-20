@@ -22,9 +22,18 @@ type Host struct {
 	KeyID    string   `json:"keyId,omitempty"`
 }
 
+type KeyKind string
+
+const (
+	KeyKindPrivateKey  KeyKind = "private_key"
+	KeyKindHardwareKey KeyKind = "hardware_key"
+)
+
 type SavedKey struct {
-	ID         string   `json:"id"`
-	Type       ItemType `json:"type"`
-	Name       string   `json:"name"`
-	PrivateKey string   `json:"privateKey"`
+	ID             string   `json:"id"`
+	Type           ItemType `json:"type"`
+	Name           string   `json:"name"`
+	Kind           KeyKind  `json:"kind,omitempty"`
+	PrivateKey     string   `json:"privateKey,omitempty"`
+	PrivateKeyPath string   `json:"privateKeyPath,omitempty"`
 }

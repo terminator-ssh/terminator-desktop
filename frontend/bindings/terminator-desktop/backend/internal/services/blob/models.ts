@@ -58,11 +58,23 @@ export enum ItemType {
     TypeKey = "key",
 };
 
+export enum KeyKind {
+    /**
+     * The Go zero value for the underlying type of the enum.
+     */
+    $zero = "",
+
+    KeyKindPrivateKey = "private_key",
+    KeyKindHardwareKey = "hardware_key",
+};
+
 export class SavedKey {
     "id": string;
     "type": ItemType;
     "name": string;
-    "privateKey": string;
+    "kind"?: KeyKind;
+    "privateKey"?: string;
+    "privateKeyPath"?: string;
 
     /** Creates a new SavedKey instance. */
     constructor($$source: Partial<SavedKey> = {}) {
@@ -74,9 +86,6 @@ export class SavedKey {
         }
         if (!("name" in $$source)) {
             this["name"] = "";
-        }
-        if (!("privateKey" in $$source)) {
-            this["privateKey"] = "";
         }
 
         Object.assign(this, $$source);
