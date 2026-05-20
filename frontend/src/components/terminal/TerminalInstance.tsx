@@ -91,6 +91,22 @@ export function TerminalInstance({sessionId, isActive, config}: TerminalInstance
         };
         containerRef.current.addEventListener("contextmenu", handleContextMenu);
 
+        const unsubscribeSshData = Events.On(AppEvent.SshData, (event) => {
+            if (event.data.id === sessionId && terminalRef.current) {
+                const rawBytes = decodeBase64ToUint8Array(event.data.data);
+
+                terminalRef.current.write(rawBytes);
+            }
+        });
+
+        const onDataDisposable = term.onData((data) => {
+            if (!isReadyRef.current) return;
+
+            SshService.Input(sessionId, data).catch((err) => {
+                printErrorToTerminal(err);
+            });
+        });
+
         if (!hasConnectedRef.current) {
             hasConnectedRef.current = true;
             SshService.Connect(config)
@@ -109,35 +125,15 @@ export function TerminalInstance({sessionId, isActive, config}: TerminalInstance
                 });
         }
 
-        const onDataDisposable = term.onData((data) => {
-            if (!isReadyRef.current) return;
-
-            SshService.Input(sessionId, data).catch((err) => {
-                printErrorToTerminal(err);
-            });
-        });
-
         return () => {
             container.removeEventListener("contextmenu", handleContextMenu);
+            unsubscribeSshData();
             onDataDisposable.dispose();
             term.dispose();
             terminalRef.current = null;
             fitAddonRef.current = null;
-            SshService.Disconnect(sessionId).catch(() => {
-            });
         };
     }, [sessionId, config]);
-
-    useEffect(() => {
-        const unsubscribe = Events.On(AppEvent.SshData, (event) => {
-            if (event.data.id === sessionId && terminalRef.current) {
-                const rawBytes = decodeBase64ToUint8Array(event.data.data);
-
-                terminalRef.current.write(rawBytes);
-            }
-        });
-        return () => unsubscribe();
-    }, [sessionId]);
 
     useEffect(() => {
         if (!containerRef.current) return;

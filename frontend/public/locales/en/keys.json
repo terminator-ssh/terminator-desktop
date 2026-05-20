@@ -17,5 +17,10 @@
   "save_key": "Save Key",
   "delete_title": "Delete SSH Key?",
   "delete_desc": "Are you sure you want to delete the key \"{{name}}\"? This action cannot be undone and may break hosts relying on this key.",
-  "ssh_private_key": "SSH Private Key"
+  "ssh_private_key": "SSH Private Key",
+  "key_type_label": "Key Type",
+  "key_type_private_key": "Private key file",
+  "key_type_hardware_key": "Hardware key",
+  "hardware_key_path_label": "Security key private key path",
+  "hardware_key_description": "Uses your system OpenSSH client for this key. This supports FIDO2/U2F security keys that need PIN and touch prompts."
 }

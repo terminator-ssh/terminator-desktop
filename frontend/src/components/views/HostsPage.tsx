@@ -9,7 +9,7 @@ import { ConfirmModal } from "@/components/ui/confirm-modal";
 import { useHosts, useSaveHost, useDeleteHost } from "@/hooks/useHosts";
 import { useKeys } from "@/hooks/useKeys";
 import { useSessionStore } from "@/store/sessionStore";
-import { Host } from "../../../bindings/terminator-desktop/backend/internal/services/blob";
+import { Host, KeyKind } from "../../../bindings/terminator-desktop/backend/internal/services/blob";
 
 export function HostsPage() {
     const {t} = useTranslation(["hosts", "common"]);
@@ -50,10 +50,15 @@ export function HostsPage() {
 
     const handleConnect = (host: Host) => {
         let keyString: string | undefined = undefined;
+        let privateKeyPath: string | undefined = undefined;
 
         if (host.keyId && keys) {
             const foundKey = keys.find(k => k.id === host.keyId);
-            if (foundKey) keyString = foundKey.privateKey;
+            if (foundKey?.kind === KeyKind.KeyKindHardwareKey) {
+                privateKeyPath = foundKey.privateKeyPath;
+            } else if (foundKey) {
+                keyString = foundKey.privateKey;
+            }
         }
 
         addSession({
@@ -62,6 +67,7 @@ export function HostsPage() {
             username: host.username,
             password: host.password,
             privateKey: keyString,
+            privateKeyPath,
             title: host.name || host.host,
         });
     };

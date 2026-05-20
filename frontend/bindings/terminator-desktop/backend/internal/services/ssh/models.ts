@@ -12,6 +12,7 @@ export class SSHConnectionConfig {
     "username": string;
     "password"?: string;
     "privateKey"?: string;
+    "privateKeyPath"?: string;
 
     /** Creates a new SSHConnectionConfig instance. */
     constructor($$source: Partial<SSHConnectionConfig> = {}) {

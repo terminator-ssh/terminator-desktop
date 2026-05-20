@@ -3,10 +3,16 @@ package ssh
 import (
 	"fmt"
 	"io"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"strconv"
+	"strings"
 	"sync"
 	"terminator-desktop/backend/internal/apperror"
 	"time"
 
+	"github.com/creack/pty"
 	"golang.org/x/crypto/ssh"
 )
 
@@ -16,18 +22,21 @@ type SSHEmitter interface {
 }
 
 type SSHConnectionConfig struct {
-	ID         string `json:"id"`
-	Host       string `json:"host"`
-	Port       int    `json:"port"`
-	Username   string `json:"username"`
-	Password   string `json:"password,omitempty"`
-	PrivateKey string `json:"privateKey,omitempty"`
+	ID             string `json:"id"`
+	Host           string `json:"host"`
+	Port           int    `json:"port"`
+	Username       string `json:"username"`
+	Password       string `json:"password,omitempty"`
+	PrivateKey     string `json:"privateKey,omitempty"`
+	PrivateKeyPath string `json:"privateKeyPath,omitempty"`
 }
 
 type activeSession struct {
 	client  *ssh.Client
 	session *ssh.Session
 	stdin   io.WriteCloser
+	pty     *os.File
+	cmd     *exec.Cmd
 }
 
 type SshService struct {
@@ -48,7 +57,72 @@ func NewSshService(emitter SSHEmitter) *SshService {
 	}
 }
 
+func (s *SshService) connectOpenSSH(config *SSHConnectionConfig) error {
+	sshPath, err := exec.LookPath("ssh")
+	if err != nil {
+		return apperror.SSHConnectionFailed(
+			"OpenSSH client not found. Hardware key connections require the system ssh command.",
+			err,
+		)
+	}
+
+	keyPath := expandPath(config.PrivateKeyPath)
+	addr := fmt.Sprintf("%s@%s", config.Username, config.Host)
+	args := []string{
+		"-tt",
+		"-o", "StrictHostKeyChecking=accept-new",
+		"-o", "IdentitiesOnly=yes",
+		"-i", keyPath,
+		"-p", strconv.Itoa(config.Port),
+		addr,
+	}
+
+	cmd := exec.Command(sshPath, args...)
+	cmd.Env = os.Environ()
+
+	ptmx, err := pty.StartWithSize(cmd, &pty.Winsize{Rows: 24, Cols: 80})
+	if err != nil {
+		return apperror.SSHConnectionFailed(fmt.Sprintf("failed to start OpenSSH for %s:%d", config.Host, config.Port), err)
+	}
+
+	currentSession := &activeSession{
+		stdin: ptmx,
+		pty:   ptmx,
+		cmd:   cmd,
+	}
+
+	s.mu.Lock()
+	s.sessions[config.ID] = currentSession
+	s.mu.Unlock()
+
+	go s.streamOutput(config.ID, ptmx, currentSession)
+	go func() {
+		_ = cmd.Wait()
+		_ = ptmx.Close()
+	}()
+
+	return nil
+}
+
+func expandPath(path string) string {
+	if path == "~" {
+		if home, err := os.UserHomeDir(); err == nil {
+			return home
+		}
+	}
+	if strings.HasPrefix(path, "~/") {
+		if home, err := os.UserHomeDir(); err == nil {
+			return filepath.Join(home, path[2:])
+		}
+	}
+	return path
+}
+
 func (s *SshService) Connect(config *SSHConnectionConfig) error {
+	if config.PrivateKeyPath != "" {
+		return s.connectOpenSSH(config)
+	}
+
 	var authMethods []ssh.AuthMethod
 
 	if config.PrivateKey != "" {
@@ -57,7 +131,9 @@ func (s *SshService) Connect(config *SSHConnectionConfig) error {
 			return apperror.DecryptionFailed(err)
 		}
 		authMethods = append(authMethods, ssh.PublicKeys(signer))
-	} else if config.Password != "" {
+	}
+
+	if config.Password != "" {
 		authMethods = append(authMethods, ssh.Password(config.Password))
 	}
 
@@ -153,6 +229,10 @@ func (s *SshService) Resize(sessionID string, rows, cols int) error {
 		return apperror.SSHSessionNotFound()
 	}
 
+	if active.pty != nil {
+		return pty.Setsize(active.pty, &pty.Winsize{Rows: uint16(rows), Cols: uint16(cols)})
+	}
+
 	return active.session.WindowChange(rows, cols)
 }
 
@@ -165,8 +245,18 @@ func (s *SshService) Disconnect(sessionID string) {
 	s.mu.Unlock()
 
 	if exists {
-		_ = active.session.Close()
-		_ = active.client.Close()
+		if active.session != nil {
+			_ = active.session.Close()
+		}
+		if active.client != nil {
+			_ = active.client.Close()
+		}
+		if active.pty != nil {
+			_ = active.pty.Close()
+		}
+		if active.cmd != nil && active.cmd.Process != nil {
+			_ = active.cmd.Process.Kill()
+		}
 		s.emitter.EmitClosed(sessionID)
 	}
 }
@@ -238,6 +328,12 @@ func (s *SshService) cleanupSession(sessionID string, current *activeSession) {
 		}
 		if current.client != nil {
 			_ = current.client.Close()
+		}
+		if current.pty != nil {
+			_ = current.pty.Close()
+		}
+		if current.cmd != nil && current.cmd.Process != nil {
+			_ = current.cmd.Process.Kill()
 		}
 		s.emitter.EmitClosed(sessionID)
 	} else {
