@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { Terminal } from "@xterm/xterm";
 import { FitAddon } from "@xterm/addon-fit";
-import { Events } from "@wailsio/runtime";
+import { Events, Clipboard } from "@wailsio/runtime";
 import { TERMINAL_THEME } from "@/lib/terminalTheme";
 import { parseAppError } from "@/lib/error";
 import { cn, decodeBase64ToUint8Array } from "@/lib/utils";
@@ -56,14 +56,14 @@ export function TerminalInstance({sessionId, isActive, config}: TerminalInstance
                     arg.preventDefault();
                     const selection = term.getSelection();
                     if (selection) {
-                        navigator.clipboard.writeText(selection).catch(console.error);
+                        Clipboard.SetText(selection).catch(console.error);
                     }
                     return false;
                 }
 
                 if (arg.ctrlKey && arg.shiftKey && arg.code === "KeyV") {
                     arg.preventDefault();
-                    navigator.clipboard.readText().then((text) => {
+                    Clipboard.Text().then((text) => {
                         if (text && isReadyRef.current) {
                             term.paste(text);
                         }
@@ -79,10 +79,10 @@ export function TerminalInstance({sessionId, isActive, config}: TerminalInstance
 
             const selection = term.getSelection();
             if (selection) {
-                navigator.clipboard.writeText(selection).catch(console.error);
+                Clipboard.SetText(selection).catch(console.error);
                 term.clearSelection();
             } else {
-                navigator.clipboard.readText().then((text) => {
+                Clipboard.Text().then((text) => {
                     if (text && isReadyRef.current) {
                         SshService.Input(sessionId, text).catch(printErrorToTerminal);
                     }
