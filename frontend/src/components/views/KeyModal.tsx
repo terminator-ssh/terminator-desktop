@@ -92,7 +92,7 @@ export function KeyModal({isOpen, onClose, onSave, initialData, isSaving}: KeyMo
                         <Textarea
                             id="privateKey"
                             required
-                            className="min-h-37.5 font-mono text-xs"
+                            className="min-h-37.5 max-h-64 overflow-y-auto font-mono text-xs"
                             value={privateKey}
                             onChange={(e) => setPrivateKey(e.target.value)}
                             placeholder="-----BEGIN OPENSSH PRIVATE KEY-----"
