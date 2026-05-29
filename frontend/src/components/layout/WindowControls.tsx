@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Minus, Square, Copy, X } from "lucide-react";
-import { Window } from "@wailsio/runtime";
+import { Window, System } from "@wailsio/runtime";
 import { cva } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
@@ -19,14 +19,15 @@ const windowControlStyles = cva(
 
 export function WindowControls({className = ""}) {
     const [isMaximised, setIsMaximised] = useState(false);
+    const [isWindows, setIsWindows] = useState(true);
 
     useEffect(() => {
-        Window.IsMaximised().then(setIsMaximised);
+        setIsWindows(System.IsWindows());
 
+        Window.IsMaximised().then(setIsMaximised);
         const handleResize = () => {
             Window.IsMaximised().then(setIsMaximised);
         };
-
         window.addEventListener("resize", handleResize);
         return () => window.removeEventListener("resize", handleResize);
     }, []);
@@ -39,6 +40,8 @@ export function WindowControls({className = ""}) {
         }
         setIsMaximised(!isMaximised);
     };
+
+    if (!isWindows) return null;
 
     return (
         <div className={cn(

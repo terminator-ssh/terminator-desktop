@@ -8,6 +8,7 @@ import (
 	"log/slog"
 	"os"
 	"path/filepath"
+	"runtime"
 	"runtime/debug"
 	"terminator-desktop/backend/cmd/terminator-desktop/emitters"
 	"terminator-desktop/backend/cmd/terminator-desktop/env"
@@ -189,7 +190,7 @@ func main() {
 	mainWindow = app.Window.NewWithOptions(application.WebviewWindowOptions{
 		Title:          AppName,
 		EnableFileDrop: true,
-		Frameless:      true,
+		Frameless:      runtime.GOOS == "windows",
 		Mac: application.MacWindow{
 			InvisibleTitleBarHeight: 50,
 			Backdrop:                application.MacBackdropTranslucent,
