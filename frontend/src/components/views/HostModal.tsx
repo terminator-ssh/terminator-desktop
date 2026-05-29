@@ -95,9 +95,11 @@ export function HostModal({isOpen, onClose, onSave, initialData, isSaving}: Host
                                 id="port"
                                 type="number"
                                 required
-                                value={formData.port || 22}
-                                onChange={(e) =>
-                                    setFormData({...formData, port: parseInt(e.target.value)})}
+                                value={formData.port === undefined ? "" : formData.port}
+                                onChange={(e) => {
+                                    const val = parseInt(e.target.value);
+                                    setFormData({...formData, port: isNaN(val) ? undefined : val});
+                                }}
                             />
                         </div>
                     </div>
